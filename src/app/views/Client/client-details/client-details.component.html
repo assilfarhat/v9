@@ -1,0 +1,299 @@
+<div class="card">
+  <h5 class="card-title">
+    <div class="card-header">
+      <b>Détail client </b>
+    </div>
+  </h5>
+  <div class="card-body" style="font-family:Arial, sans-serif;font-size:12px; font-weight:normal;">
+    <div class="row">
+      <div class="col-sm" style="font-family:Arial, sans-serif;font-size:12px; font-weight:normal;">
+        <span> <b>Code Client : </b> {{client?.codeClient }} </span>
+        <br>
+        <span> <b>Raison sociale : </b> {{client?.raisonSociale }} </span>
+        <!-- <span> <b>Statut Client : </b> {{client?.ville }} </span> -->
+        <br>
+        <span> <b>Adresse : </b> {{client?.adresse }} </span>
+        <br>
+        <span> <b>Statut juridique : </b> {{client?.status =="0" ? "Active" : (client?.status =="1" ? "Bloqué" :
+          client?.status )}} </span>
+        <br>
+        <span> <b>Ville : </b> {{client?.ville }} </span>
+        <br>
+        <span> <b>Code Postal : </b> {{client?.codePostal }} </span>
+        <br>
+        <span> <b>Contact : </b> {{client?.contact }} </span>
+        <br>
+        <span> <b>Téléphone : </b> {{client?.telephone }} </span>
+        <br>
+        <span> <b>Email: </b> {{client?.email }} </span>
+        <br>
+        <span> <b>Secteur d'activité : </b> {{client?.secteurActivite }} </span>
+        <br>
+        <span> <b>Secteur géographique : </b> {{client?.secteurGeographique }} </span>
+        <br>
+        <span> <b>Représentant : </b> {{client?.representant }} </span>
+        <br>
+
+        <div *ngIf="Actif =='1' ">
+          <span> <b>Statut client : </b> {{"Bloqué"}} </span>
+        </div>
+        <div *ngIf="Actif =='2' ">
+          <span> <b>Statut client : </b> {{"Activé"}} </span>
+        </div>
+
+      </div>
+
+      <div class="col-6">
+        <style type="text/css">
+          .tg {
+            border-collapse: collapse;
+            border-spacing: 0;
+          }
+
+          .tg td {
+            border-color: #ffffff;
+            border-style: solid;
+            border-width: 1px;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            overflow: hidden;
+            padding: 10px 5px;
+            word-break: normal;
+          }
+
+          .tg th {
+            border-color: #ffffff;
+            border-style: solid;
+            border-width: 1px;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            font-weight: normal;
+            overflow: hidden;
+            padding: 10px 5px;
+            word-break: normal;
+          }
+
+          .tg .tg-baqh {
+            text-align: left;
+            vertical-align: top
+          }
+
+          .tg .tg-0lax {
+            text-align: left;
+            vertical-align: top
+          }
+        </style>
+        <table class="tg">
+          <thead>
+            <tr>
+              <th class="tg-baqh"> </th>
+              <th class="tg-baqh" style="text-decoration: underline;color: #2870D8;"> <span> <b>Dma Globale : </b>
+                  {{client?.encoursGlobal | amountpipe }} </span></th>
+              <th class="tg-baqh"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="tg-0lax"> <span> <b>Dma PS : </b> {{client?.dmaps | amountpipe }} </span></td>
+              <td class="tg-baqh"> <span> <b>Dma PP : </b> {{client?.dmapp | amountpipe }} </span></td>
+              <td class="tg-0lax"> <span> <b>Dma PPE : </b>{{client?.dmappe | amountpipe }} </span> </td>
+            </tr>
+            <tr>
+              <td class="tg-8jgo"></td>
+              <td class="tg-baqh" style="text-decoration: underline;color: #2870D8;"> <span> <b> Total encours : </b>
+                  {{client?.totalEncours | amountpipe }} </span> </td>
+              <td class="tg-8jgo"></td>
+            </tr>
+            <tr>
+              <td class="tg-0lax"> <span> <b>Encours Ps : </b> {{client?.encoursPs | amountpipe }} </span></td>
+              <td class="tg-baqh"> <span> <b>Encours PP : </b> {{client?.encoursPp | amountpipe }} </span> </td>
+              <td class="tg-0lax"> <span> <b>Encours PPE : </b> {{client?.encoursPpe | amountpipe }} </span> </td>
+            </tr>
+            <tr>
+              <td class="tg-8jgo"></td>
+              <td class="tg-8jgo" style="text-decoration: underline;color: #2870D8;"> <b>Solde Carte Globale :</b>
+                {{client?.encoursGlobal | amountmillierpipe }} </td>
+              <td class="tg-8jgo"></td>
+            </tr>
+            <tr>
+              <td class="tg-0lax"> <span> <b>Solde carte PS : </b>{{soldePsP | amountmillierpipe }} &nbsp;&nbsp; </span>
+              </td>
+              <td class="tg-baqh"> <span> <b>Solde carte PPE : </b> {{client?.soldePPE | amountmillierpipe }}
+                  &nbsp;&nbsp;</span> </td>
+              <td class="tg-0lax"> <span> <b>Solde carte PP : </b> {{client?.soldePP | amountmillierpipe }} </span>
+              </td>
+            </tr>
+            <br>
+
+            <tr>
+              <td class="tg-baqh" colspan="3"><span> <b>Délai paiement : </b> {{client?.echeance }} jours</span> </td>
+            </tr>
+          </tbody>
+
+        </table>
+
+      </div>
+      <!-- <div class="col-6">
+               <div class="row ">
+                <div  style="text-decoration: underline;color: #2870D8;">
+                  <span>  <b>Dma Globale : </b> {{client?.encoursGlobal }} </span>
+                </div>
+                <br>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <span> <b>Dma PS : </b> {{client?.dmaps }} </span>
+                </div>
+                <div class="col">
+                  <span> <b>Dma PP : </b> {{client?.dmapp }} </span>
+                </div>
+                <div class="col">
+                  <span> <b>Dma PPE : </b>{{client?.dmappe }} </span>
+                </div>
+              </div>
+                <br>
+                <br>
+
+              <div class="row justify-content-md-center">
+                  <div class="col-md-auto" style="text-decoration: underline;color: #2870D8;">
+                    <span> <b> Total encours: </b> {{client?.totalEncours }} </span>
+                  </div>
+                  <br>
+              </div>
+              <div class="row">
+                  <div class="col">
+                    <span> <b>Encours Ps : </b> {{client?.encoursPs }} </span>
+                  </div>
+                  <div class="col">
+                    <span> <b>&nbsp; Encours PP : </b> {{client?.encoursPp }} </span>
+                  </div>
+                  <div class="col">
+                    <span> <b>Encours PPE : </b> {{client?.encoursPpe }} </span>
+                  </div>
+              </div>
+              <br>
+              <br>
+              <div class="row justify-content-md-center">
+                    <div class="col-md-auto" style="text-decoration: underline;color: #2870D8;">
+                      <b>Solde Carte Globale : </b> {{client?.encoursGlobal }}
+                    </div>
+                    <br>
+              </div>
+              <div class="row">
+                    <div class="col">
+                      <span> <b>Solde carte PS : </b>{{soldePsP }} </span>
+                    </div>
+                    <div class="col">
+                      <span> <b>Solde carte PPE : </b> {{client?.soldePPE }} </span>
+                    </div>
+                    <div class="col">
+                      <span> <b>Solde carte PP : </b> {{client?.soldePP }} </span>
+                    </div>
+              </div>
+               
+              <br>
+              <div class="row justify-content-md-center">
+                <div class="col-md-auto">
+                  <span> <b>Délai paiement : </b> {{client?.echeance }} jours</span>
+                </div>
+                <br>
+              </div>
+            </div>
+-->
+
+      <div class="col-sm">
+        <span style="text-decoration: underline;color: #2870D8;">
+          <b>Garantie </b>
+        </span>
+        <br>
+        <span> <b>Caution : </b> {{client?.caution}} </span>
+        <br>
+        <span> <b>Assurance : </b> {{client?.assurance }} </span>
+        <br>
+        <span> <b>Autre : </b> {{client?.autre }} </span>
+        <br>
+        <br>
+        <span style="text-decoration: underline;color: #2870D8;">
+          <b>Date échéance garanties </b>
+        </span>
+        <br>
+        <div *ngIf="Autre!=0">
+          <span> <b>Date autre : </b> {{client?.dateAutre |date:'dd-MM-yyyy ' }} </span>
+        </div>
+        <span> <b>Date caution : </b> {{client?.dateCaution |date:'dd-MM-yyyy' }} </span>
+        <br>
+        <br>
+        <br>
+        <span> <b>Nombre jrs alerte expiration caution : </b> {{client?.nbJrAlerte }} </span>
+        <br>
+        <span> <b>Nombre maximum du carte : </b> {{client?.nbCarteMax }} </span>
+        <br>
+        <!-- <div *ngIf="Fluxps == true ">
+                    <span> <b>Plafond mensuel PS : </b> {{client?.plafondPsintial }} </span>
+                  </div> -->
+        <br>
+        <br>
+        <!-- <span> <b>Date expiration garantie : </b> {{client?.expirationGrantie }} jours</span>
+                  <br> -->
+        <span> <b>Date création : </b> {{client?.dateCreation |dateSql }} </span>
+
+
+
+
+
+        <!-- <div  *ngIf="Fluxps == true  && Assurance == 0">
+                  <span> <b>  Date d'expiration garantie : </b> {{client?.expirationGrantie }} </span>
+                  </div> -->
+      </div>
+
+
+      <br>
+      <br>
+      <div class=" col-md-12">
+        <br>
+        <span> <b> Remarque : </b> {{client?.remarque }} </span>
+      </div>
+    </div>
+  </div>
+  <br>
+  <br>
+  <hr>
+  <div style="overflow-x:auto; overflow-y:auto; max-height: 500px;  padding: 15px;" >
+    <h4> Historique de paiement par chèque </h4>
+    <table class="table table-striped" align="center" >
+      <thead align="center">
+        <tr>
+          <th>Numéro chèque</th>
+          <th>Banque</th>
+          <th>Montant</th>
+          <th>Date de rechargement </th>
+          <th>Date écheance</th>
+          <th>Date chéque</th>
+          <th>Reférence</th> 
+          <th>Status banque</th> 
+        </tr>
+      </thead>
+
+
+      <tbody align="center" *ngIf="DemandeReglementList2 && DemandeReglementList2.length > 0">
+        <tr *ngFor="let item of DemandeReglementList2">
+          <td>{{item.numChequeTraite}}</td>
+          <td>{{item.banque}}</td>
+          <td>{{item.montantRecharge | amountmillierpipe}}</td>
+          <td>{{item.dateTimeTransaction | dateSql }} </td>
+          <td>{{item.dateEcheance|dateSql}}</td>
+          <td>{{item.dateEcheance2|dateSql}}</td>
+          <td>{{item.bonRecharge}}</td> 
+          <td>{{item.statusBank}}</td>
+        </tr>
+      </tbody>
+      
+    </table>
+    <div *ngIf="NoDataMessage" align="center">
+      <br>
+      <div style="text-align: center;"><h5> Aucune donnée disponible. </h5></div>
+      <br>
+      <hr>
+    </div>
+  </div>
+</div>

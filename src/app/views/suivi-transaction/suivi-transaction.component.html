@@ -1,0 +1,298 @@
+<div class="animated fadeIn">
+  <div class="card">
+    <h5 class="card-title">
+      <div class="card-header"><b>Liste transactions </b></div>
+    </h5>
+    <div class="card-body">
+      <form class="form-horizontal" [formGroup]="form">
+        <div class="form-group row" style="margin-top: 10px">
+          <div class="col-xl-3 col-md-6">
+            <div style="text-align:center;margin-top: 10px;">
+              <input class="form-control" list="Client" placeholder="{{'Client'}}" formControlName="clientId">
+              <datalist id="Client">
+                <option *ngFor="let item of ClientList" [value]="item.raisonSociale">{{ item.raisonSociale }} </option>
+              </datalist>
+            </div>
+          </div>
+          <div class="col-xl-3 col-md-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Date début</mat-label>
+              <input matInput formControlName="dateDebut" type="date" />
+              <mat-error>la Date début doit être inférieur ou égale à la date fin
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-xl-3 col-md-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Date Fin</mat-label>
+              <input matInput formControlName="dateFin" type="date" />
+              <mat-error>la Date fin doit être supérieur ou égale à la date début
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <!-- <div class="col-xl-3 col-md-6">
+                <mat-form-field appearance="outline">
+                    <mat-label>Statut</mat-label>
+                    <mat-select formControlName="status">
+                        <mat-option value=""> Tous  </mat-option>
+                        <mat-option value="confirmer"> confirmer  </mat-option>
+                        <mat-option value="demandé"> demander </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div> -->
+          <div class="col-xl-3 col-md-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Type compte</mat-label>
+              <mat-select formControlName="typeCompte">
+                <mat-option value="">Tous</mat-option>
+                <mat-option value="prépayé">Prépayé</mat-option>
+                <mat-option value="prépayé à terme">Prépayé à terme</mat-option>
+                <mat-option value="postpayé">Postpayé</mat-option>
+              </mat-select> </mat-form-field>&nbsp;
+          </div>
+
+          <div class="col-xl-3 col-md-6">
+            <input class="form-control" list="Station" placeholder="{{'Station'}}" formControlName="idStation">
+            <datalist id="Station">
+              <option *ngFor="let item of StationList" [value]="item.stationName">{{ item.stationName }} </option>
+            </datalist>
+          </div>
+
+          <div class="col-xl-3 col-md-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Etat Transaction</mat-label>
+              <mat-select formControlName="etattransaction">
+                <mat-option value="">Tous</mat-option>
+                <mat-option value="Transaction Autourisée">Transaction Autourisée</mat-option>
+                <mat-option value="Transaction Annulée">Transaction Annulée</mat-option>
+                <mat-option value="Transaction Rejeté">Transaction Rejeté</mat-option>
+              </mat-select> </mat-form-field>&nbsp;
+          </div>
+          <div class="col-xl-3 col-md-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Numéro carte </mat-label>
+              <input type="text" matInput formControlName="NumCarte" placeholder="Num Carte " />
+            </mat-form-field>
+          </div>
+          <!-- <div class="col-xl-3 col-md-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Montant Min </mat-label>
+              <input type="number" min="1" step="1" matInput formControlName="montantMin" placeholder="Montant Min" />
+              <mat-error> Le montant maximum doit être supérieur ou égal au montant minimum!</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-xl-3 col-md-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Montant Max </mat-label>
+              <input type="number" min="1" step="1" matInput formControlName="montantMax" placeholder="Montant Max" />
+            </mat-form-field>
+          </div> -->
+
+          <div class="col-xl-3 col-md-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Porteur carte</mat-label>
+              <input type="text" matInput formControlName="porteur" placeholder="Nom Porteur" />
+            </mat-form-field>
+          </div>
+
+          <!-- <div class="col-xl-3 col-md-6">
+            <mat-form-field appearance="outline">
+              <mat-label> ID Station </mat-label>
+              <input type="text" matInput formControlName="idStation" placeholder="ID station" />
+            </mat-form-field>
+          </div> -->
+             <div class="col-md-12 text-right">
+       <button class="btn btn-primary btn-ladda" data-style="expand-left" 
+           (click)="getListTransaction()">
+           <i class="fa fa-search"> Chercher </i>
+       </button>
+   </div>
+
+        </div>
+
+      </form>
+
+      <!-- <form class="form-horizontal" [formGroup]="form">
+        <div class="form-group row" class="pull-right">
+          <div class="col-md-12">
+            <input type="text" class="form-control" placeholder="{{'chercher'}}..." formControlName="search">
+          </div>
+          <br>
+          <div class="col-md-12">
+            <button class="btn btn-primary btn-ladda" [ladda]='isLoading' (click)="rerender()">
+              <i class="fa fa-search"> {{'Chercher'}} </i>
+            </button>
+
+          </div>
+        </div>
+      </form> -->
+   
+      <br>
+      <div class="row" style="margin-top: 30px">
+        <div class="col-6">
+          <div class="row">
+            <div class="col-sm-10">
+              <div class="callout callout-orange">
+                <small class="text-muted">Nombre transaction totale</small><br /><strong class="h4">{{
+                  stat?.nbrTotal}}</strong>
+              </div>
+            </div>
+          </div>
+          <hr class="mt-0" />
+          <div class="progress-group">
+            <div class="progress-group-header align-items-end">
+              <i class="fa fa-exchange color-success" aria-hidden="true"></i>
+              <div class="progress-title">Nombre transaction succès</div>
+              <div class="mfs-auto font-weight-bold mfe-2">
+                {{ calculePercent(stat?.nbrSucess, stat?.nbrTotal) | number : "1.0-1" }}%
+              </div>
+              <div class="text-muted small">({{ stat?.nbrSucess }})</div>
+            </div>
+            <div class="progress-group-bars">
+              <div class="progress progress-xs">
+                <div class="progress-bar bg-gradient-success" role="progressbar"
+                  [style.width.%]="calculePercent(stat?.nbrSucess, stat?.nbrTotal)" aria-valuenow="8" aria-valuemin="0"
+                  aria-valuemax="100"></div>
+              </div>
+            </div>
+          </div>
+          <div class="progress-group">
+            <div class="progress-group-header align-items-end">
+              <i class="fa fa-exchange color-danager" aria-hidden="true"></i>
+              <div class="progress-title">Nombre transaction échec</div>
+              <div class="mfs-auto font-weight-bold mfe-2" [style.width.%]>
+                {{ calculePercent(stat?.nbrFail, stat?.nbrTotal) | number : "1.0-1" }}%
+              </div>
+              <div class="text-muted small">({{ stat?.nbrFail }})</div>
+            </div>
+            <div class="progress-group-bars">
+              <div class="progress progress-xs">
+                <div class="progress-bar bg-gradient-danger" role="progressbar"
+                  [style.width.%]="calculePercent(stat?.nbrFail, stat?.nbrTotal)" aria-valuenow="15" aria-valuemin="0"
+                  aria-valuemax="100"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="row">
+            <div class="col-sm-10">
+              <div class="callout callout-info">
+                <small class="text-muted">Montant transtaction totale</small><br /><strong class="h4">{{
+                  stat?.amountTotal | amount }}</strong>
+              </div>
+            </div>
+          </div>
+          <hr class="mt-0" />
+          <div class="progress-group">
+            <div class="progress-group-header align-items-end">
+              <i class="fa fa-money color-success" aria-hidden="true"></i>
+              <div class="progress-title">Montant succès</div>
+              <div class="mfs-auto font-weight-bold mfe-2">
+                {{ calculePercent(stat?.amountsucess, stat?.amountTotal) | number : "1.0-1" }}%
+              </div>
+              <div class="text-muted small">
+                ({{ stat?.amountsucess | amount }})
+              </div>
+            </div>
+            <div class="progress-group-bars">
+              <div class="progress progress-xs">
+                <div class="progress-bar bg-gradient-success" role="progressbar"
+                  [style.width.%]="calculePercent(stat?.amountsucess, stat?.amountTotal )" aria-valuenow="15"
+                  aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </div>
+          </div>
+          <div class="progress-group">
+            <div class="progress-group-header align-items-end">
+              <i class="fa fa-money color-danager" aria-hidden="true"></i>
+              <div class="progress-title">Montant échec</div>
+              <div class="mfs-auto font-weight-bold mfe-2">
+                {{ calculePercent(stat?.amountFail, stat?.amountTotal) | number : "1.0-1" }}%
+              </div>
+              <div class="text-muted small">
+                ({{ stat?.amountFail | amount }})
+              </div>
+            </div>
+            <div class="progress-group-bars">
+              <div class="progress progress-xs">
+                <div class="progress-bar bg-gradient-warning" role="progressbar"
+                  [style.width.%]="calculePercent(stat?.amountFail, stat?.amountTotal )" aria-valuenow="15"
+                  aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="overflow-x: auto">
+        
+        
+        
+        <div *ngIf=" telechargement =='télécharger' && accessTelechargement == true" class="col-md-12 text-right">
+          <button (click)="exporttoexcel()" class="btn btn-success"> Export excel</button>
+        </div>
+        <br>
+
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" width="100%" style="overflow: auto;" class="table-container">
+          <thead style="position: sticky; top: 0;">
+            <tr>
+              <th>Date</th>
+              <th>ID client</th>
+              <th>Client</th>
+              <th>Porteur carte</th>
+              <th>ID station</th>
+              <th>Station</th>
+              <th>ID Terminal</th>
+              <th>Num° carte</th>
+              <th>Type</th>
+              <th>Num° ticket</th>
+              <th>Kilométrage</th>
+              <th>Produit</th>
+              <th>Montant</th>
+              <th>Solde restant </th>
+              
+              <th>Code autorisation</th>
+              <th>Etat Transaction</th>
+            </tr>
+          </thead>
+          <tbody style="overflow-y: scroll;">
+            <tr *ngFor="let item of lisTransaction">
+              <td >{{ item.date }}</td>
+              <td>{{item.idClient}}</td>
+              <td>{{ item.client }}</td>
+              <td>{{ item.porteur }}</td>
+              <td>{{ item.idStation}}</td>
+              <td>{{ item.nom }}</td>
+              <td>{{ item.idterminal }}</td>
+              <td>{{ item.numCarte }}</td>
+              <td>{{ item.typeCarte }}</td>
+              <td>{{ item.numTicket }}</td>
+              <td> {{ item.kilometrage }} </td>
+              <td>{{ item.produit }}</td>
+              <td align="center">{{ item.montant | amountmillierpipe }}</td>
+              <td> {{ item.soldeCarteDispo | amountmillierpipe}} </td>
+              
+              <td>{{ item.codeAutorisation }}</td>
+
+              <td *ngIf='item.reversal == "0" && item.codeReponse =="00 "'>
+                Transaction Autourisée
+              </td>
+              <td *ngIf='item.reversal == "0" && item.codeReponse =="00"'>
+                Transaction Autourisé
+              </td>
+              <td *ngIf='item.reversal == "1" && item.codeReponse =="00 "'>
+                Transaction Annulée
+              </td>
+              <td *ngIf='item.reversal == "1" && item.codeReponse =="00"'>
+                Transaction Annulée
+              </td>
+              <td *ngIf=' item.codeReponse !="00 "'>
+                Transaction Rejeté : {{ item.codeReponseDes }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,128 @@
+<div class="animated fadeIn">
+  <div class="card">
+    <h5 class="card-title">
+      <div class="card-header">Liste des affiliés</div>
+    </h5>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-sm-12 text-right">
+          <a class="btn btn-success btn-ladda" data-style="expand-left" [routerLink]="[ '/affilation/add']">
+            <i class="fa fa-plus"></i> Ajouter
+          </a>
+        </div>
+      </div>
+      <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped datatable"
+        width="100%">
+        <thead>
+          <tr>
+            <th>
+              Affilié
+            </th>
+            <th>
+              Code core pass
+            </th>
+            <th>
+              Nom
+            </th>
+            <th>
+              Raison sociale
+            </th>
+            <th>
+              Adresse
+            </th>
+            <th>
+              Ville
+            </th>
+            <th>
+              Gouvernerat
+            </th>
+            <th>
+              Code postal
+            </th>
+            <th>
+              Famille
+            </th>
+            <th>
+              Groupe
+            </th>
+            <!-- <th>
+              Frais de gestion EXP
+            </th> -->
+            <th>
+              Etat
+            </th>
+            <th>
+              <i class="icon-pencil"></i>
+            </th>
+          </tr>
+        </thead>
+        <tbody *ngIf="affils?.length != 0">
+          <tr *ngFor="let item of affils">
+            <td>{{item.idAffilie}}</td>
+            <td>{{item.codeCorePass}}</td>
+            <td>{{item.nom}}</td>
+            <td>{{item.raisonSociale}}</td>
+            <td>{{item.adresse}}</td>
+            <td>{{item.ville}}</td>
+            <td>{{item.gouvernerat}}</td>
+            <td>{{item.codePostal}}</td>
+            <td>{{item.famille}}</td>
+            <td>{{item.groupe}}</td>
+            <td>
+              <i class="icon-lock  " title="Activer" style="color: red; font-size:18px" *ngIf="item.actif==0"
+                (click)="ActiverModal.show();selectUser(item.idAffilie)"></i>
+              <i class="icon-lock-open" title=" Désactiver" style="color: green;font-size:18px" *ngIf=" item.actif "
+                (click)="DesactiverModal.show();selectUser(item.idAffilie)"></i>
+            </td>
+            <td><i class="icon-pencil" (click)="update(item.idAffilie)"></i></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<div bsModal #ActiverModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-danger" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Activer Affilie</h4>
+        <button type="button" class="close" (click)="ActiverModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Êtes-vous sûr de vouloir activer cet affilié ? </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="ActiverModal.hide()">Annuler</button>
+        <button type="button" class="btn btn-danger" (click)="activer()">Oui</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+<div bsModal #DesactiverModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-danger" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Désactiver affilié</h4>
+        <button type="button" class="close" (click)="DesactiverModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Êtes-vous sûr de vouloir désactiver cet affilié ? </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="DesactiverModal.hide()">Annuler</button>
+        <button type="button" class="btn btn-danger" (click)="activer()">Oui</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

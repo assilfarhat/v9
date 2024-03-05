@@ -1,0 +1,336 @@
+<div class="card">
+  <h5 class="card-title">
+    <div class="card-header"> <b> Détail de la carte </b></div>
+  </h5>
+  <div class="card-body">
+    <div class="row">
+
+      <div class="col">
+        <span> <b>Client : </b> {{ carte.raisonSociale }} </span>
+        <br>
+        <span> <b>Porteur : </b> {{ carte.nomPrenom }} </span>
+        <br>
+        <span> <b>Identifiant 2 : </b> {{ carte.identifiant2 }} </span>
+        <br>
+        <span> <b>Type carte : </b> {{ carte.typeCarte }} </span>
+        <br>
+        <span> <b>Gestion carte : </b> {{ carte.flux }} </span>
+        <br>
+        <span><b> Statut : </b> {{ carte.descriptionStatus }} </span>
+        <br>
+        <span><b> Autoriser transfert : </b> {{ carte.autoriserTransfert? 'Oui' : 'Non'}} </span>
+      </div>
+      <div class="col">
+        <div class="row justify-content-md-center">
+          <div class="col-md-auto" style="text-decoration: underline;color: #2870D8;">
+            <b>Solde carte globale : </b> {{this.somme | amountmillierpipe }}
+          </div>
+          <br>
+        </div>
+        <div class="row">
+          <div class="col">
+            <span> <b>Solde carte PS : </b> {{carte.plafondPs | amountmillierpipe }} </span>
+          </div>
+          <div class="col">
+            <span> <b>Solde carte PPE : </b> {{carte.soldePPE | amountmillierpipe}} </span>
+          </div>
+          <div class="col">
+            <span> <b>Solde carte PP : </b> {{carte.soldePP | amountmillierpipe }} </span>
+          </div>
+        </div>
+        <br><br>
+        <div class="row justify-content-md-center">
+          <div class="col-md-auto" style="text-decoration: underline;color: #2870D8;">
+            <b>Les plafonds : </b>
+          </div>
+          <br>
+        </div>
+        <div class="row">
+          <div class="col">
+            <span><b>journalier : </b> {{ carte.plafondJournalier | amountmillierpipe}} </span>
+          </div>
+          <div class="col">
+            <span><b> hebdomadaire : </b> {{ carte.plafondHebdo | amountmillierpipe }} </span>
+          </div>
+          <div class="col">
+            <span><b> mensuel : </b> {{ carte.plafondMensuel | amountmillierpipe }} </span>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col">
+            <span><b> trimestriel : </b> {{ carte.plafondTrimestriel | amountmillierpipe }} </span>
+          </div>
+          <div class="col">
+            <span><b> carburant : </b> {{ carte.plafondCarburant | amountmillierpipe }} </span>
+          </div>
+          <div class="col">
+            <span> <b> lubrifiant : </b> {{ carte.plafondHorsCarburant | amountmillierpipe }} </span>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col">
+            <span> <b> service : </b> {{ carte.plafondAutre | amountmillierpipe }} </span>
+          </div>
+          <div class="col">
+            <span><b> Plafond mensuel PS : </b> {{ carte.plafondPs | amountmillierpipe }} </span>
+          </div>
+          <div class="col">
+            <span><b> Plafond par transaction : </b> {{ carte.plafondPaiement | amountmillierpipe }} </span>
+          </div>
+        </div>
+        <br>
+        <span><b>Plafond temporaire : </b>{{ carte.plafondTemporaire }}</span>
+        <br>
+        <span style="color: #3dbd21;"><b> Nombre d'heure désactivation du plafond temporaire :</b> {{
+          carte.nbrHeurplafondTemporaire }} </span>
+        <br>
+      </div>
+      <div class="col">
+        <span><b> Date activation : </b> {{ carte.dateActivation | dateSql }} </span>
+        <br>
+        <span><b> Date écheance : </b> {{carte.echeance}} jours </span>
+        <br>
+        <span><b> Tag : </b> {{ carte.tag? 'Oui' : 'Non'}} </span>
+        <br>
+        <span><b> Saisie Klm : </b> {{ carte.saisieKlm? 'Oui' : 'Non'}} </span>
+        <br>
+        <span><b> Hors parc : </b> {{ carte.flux == 'Hors parc' ? 'Oui' : 'Non'}} </span>
+        <br>
+        <span><b> Jours : </b>{{ carte.jours }}</span>
+        <br>
+        <span><b> Jours fériés : </b>{{ carte.jourFerier }}</span>
+        <br>
+        <span><b> Plage horaire : </b>{{ carte.heurDebut }} -> {{ carte.heurFin }}</span>
+        <br>
+        <span><b>Zone géographique : </b>{{ carte.zoneGeographique }}</span>
+        <!-- <br>
+                      <span><b> Klm : </b> {{ carte.klm}} </span> -->
+        <br>
+      </div>
+    </div>
+  </div>
+  <br>
+  <br>
+
+  <div class="card-header"><b> Porteur actuel de la carte </b> </div>
+  <div class="card-body">
+    <div class="row">
+      <div class=" col-md-4">
+        <span> <b> Nom : </b> {{ carte.nom }} </span>
+      </div>
+      <div class=" col-md-4">
+        <span> <b> Cin : </b> {{ carte.cin }} </span>
+      </div>
+      <div class=" col-md-4">
+        <span> <b> Matricule : </b> {{ carte.matrculeP }} </span>
+      </div>
+      <div class=" col-md-4">
+        <span> <b> Contact : </b> {{ carte.contact }} </span>
+      </div>
+      <div class=" col-md-4">
+        <span> <b> Numéro Gsm : </b> {{ carte.numeroGsm }} </span>
+      </div>
+    </div>
+
+    <br>
+    <br>
+    <div class=" row pull-right">
+      <!-- Changer plafond temporaire -->
+      
+      
+      
+      
+
+
+      <button *ngIf="carte.statutCarte=='0' && PlafondTemporaire === 'Changer plafond temporaire' && accessPlafondT ==true" mat-raised-button class="btn btn-warning "
+    (click)="ChangerPlafondTemporaire.show()">
+    <i class="fa fa-clock-o" aria-hidden="true"></i> Changer plafond temporaire
+   </button>
+   <!-- Remplacer Carte  -->
+     
+      
+      
+
+      <button *ngIf="carte.statutCarte=='0' &&  replaceCarte === 'remplacer' && accessReplaceCarte ==true" mat-raised-button class="btn btn-success " (click)="ReplaceModal.show()">
+        <i class="fa fa-undo" aria-hidden="true"></i> Remplacer
+      </button>
+      <!-- Renouveler -->
+      
+      
+      
+
+      <button *ngIf="carte.statutCarte=='0' && renouvelerCarte === 'Renouveler' && accessRenouvelerCarte ==true" mat-raised-button class="btn btn-info " (click)="RenouvelmentModal.show()">
+        <i class="fa fa-id-card-o" aria-hidden="true"></i> Renouveler
+      </button>
+      <!--  Mise en opposition-->
+    
+    
+    
+    
+
+      <button *ngIf="carte.statutCarte=='0' &&  miseEnPosition === 'mise en opposition' && accessMiseEnPosition ==true" mat-raised-button class="btn btn-danger"
+  (click)="MiseEnOppositionModal.show()">
+  <i class="fa fa-window-close-o" aria-hidden="true"></i> Mise en opposition
+</button>
+
+
+
+    <button *ngIf="carte.statutCarte=='11' && miseEnPosition === 'mise en opposition' && accessMiseEnPosition ==true" mat-raised-button class="btn btn-danger"
+    (click)="activateModal.show()">
+    <i class="fa fa-window-close-o" aria-hidden="true"></i> Activé Carte
+  </button>
+      
+    </div>
+  </div>
+
+</div>
+
+
+
+<div bsModal #RenouvelmentModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-info" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Renouvellement Carte</h4>
+        <button type="button" class="close" (click)="RenouvelmentModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Êtes-vous sûre de vouloir renouveler la carte de {{carte?.nomPrenom}}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="RenouvelmentModal.hide()">Annuler</button>
+        <button type="button" class="btn btn-info" (click)="RenouvlerCarte()">Oui, renouveler </button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div bsModal #ChangerPlafondModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-info" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h4 class="modal-title">Changer plafond temporaire</h4>
+        <button type="button" class="close" (click)="ChangerPlafondModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <p>Êtes-vous sûre de vouloir renouveler la Carte de {{carte?.nomPrenom}}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="ChangerPlafondModal.hide()">Annuler</button>
+        <button type="button" class="btn btn-info" (click)="RenouvlerCarte()">Oui, </button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div bsModal #ReplaceModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-success" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Remplacer carte</h4>
+        <button type="button" class="close" (click)="ReplaceModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Êtes-vous sûre de vouloir remplacer la carte de {{carte?.nomPrenom}} ? </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="ReplaceModal.hide()">Annuler</button>
+        <button type="button" class="btn btn-success" (click)="ReplaceCarte()">Oui, Remplacer</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div bsModal #activateModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-success" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"> Activer Carte</h4>
+                <button type="button" class="close" (click)="activateModal.hide()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Êtes-vous sûre de vouloir activer la carte </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="activateModal.hide()">Annuler</button>
+                <button type="button" class="btn btn-success" (click)="activer()">Activer</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div bsModal #MiseEnOppositionModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-danger" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Mise en opposition carte</h4>
+        <button type="button" class="close" (click)="MiseEnOppositionModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Êtes-vous sûre de vouloir Mise en opposition la carte de {{carte?.nomPrenom}}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="MiseEnOppositionModal.hide()">Annuler</button>
+        <button type="button" class="btn btn-danger" (click)="MiseEnOppostion()">Oui, mise en opposition</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div bsModal #ChangerPlafondTemporaire="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-warning" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Changer plafond carte temporaire</h4>
+        <button type="button" class="close" (click)="ChangerPlafondTemporaire.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Êtes-vous sûre de vouloir Changer le plafond de la carte de {{carte?.nomPrenom}} temporairement ?
+        </p>
+        <form [formGroup]="form" autocomplete="off">
+          <div class="row">
+            <div class="col-sm-6">
+              <mat-form-field appearance="outline">
+                <mat-label>Plafond temporaire</mat-label>
+                <input matInput type="number" formControlName="plafond" placeholder="Plafond Temporaire">
+              </mat-form-field>&nbsp;
+            </div>
+            <div class="col-sm-6">
+              <mat-form-field appearance="outline">
+                <mat-label>Nombre d'heures</mat-label>
+                <input matInput type="number" formControlName="NbrHeur" placeholder="Nombre d'heurs">
+              </mat-form-field>&nbsp;
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="ChangerPlafondTemporaire.hide()">Annuler</button>
+        <button type="button" class="btn btn-warning" [disabled]='form.invalid'
+          (click)="changerPlafondTemporaire()">Oui, Changer</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

@@ -1,0 +1,242 @@
+<div class="animated fadeIn">
+  <div class="animated fadeIn">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card">
+          <h5 class="card-title">
+            <div class="card-header"><strong>Suivi des réclamations</strong></div>
+          </h5>
+          <div class="card-body">
+           
+           
+    
+           
+           
+           
+           
+
+            <div *ngIf="  ajoutReclamation =='ajout' && accessajoutRecalamation == true" class="row">
+              <div class="col-sm-12 text-right">
+                <a class="btn btn-success btn-ladda" data-style="expand-left" [routerLink]="[ '/reclamations/Add']">
+                  <i class="fa fa-plus"></i> Ajouter
+                </a>
+              </div>
+            </div>
+            <form class="form-horizontal" [formGroup]="form">
+              <div class="form-group row" style="margin-top: 10px;">
+
+                <div class="col-xl-3 col-md-6">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Date début</mat-label>
+                    <input matInput formControlName="dateStart" type="date">
+                    <mat-error>la Date début doit être inférieur ou égale à la date fin </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Date Fin</mat-label>
+                    <input matInput formControlName="dateEnd" type="date">
+                    <mat-error>la Date fin doit être supérieur ou égale à la date début </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-xl-3 col-md-6">
+
+                  <mat-form-field appearance="outline">
+
+                    <mat-label>Statut</mat-label>
+                    <mat-select formControlName="statut">
+                      <mat-option value=""> Tous </mat-option>
+                      <mat-option value="Nouvelle"> Nouvelle </mat-option>
+                      <mat-option value="En cours de traitement"> En cours de traitement </mat-option>
+                      <mat-option value="Traitée"> Traitée </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+
+                
+                <div class="col-xl-3 col-md-6" *ngIf=" ActualUser != 'GERANT' ">
+                  <div style="text-align:center;margin-top: 10px;">
+                    <input class="form-control" list="Station" placeholder="{{'Station'}}" formControlName="IdStation">
+                    <datalist id="Station">
+                      <option *ngFor="let item of StationList" [value]="item.idStation">{{ item.stationName }} </option>
+                    </datalist>
+                  </div>
+                </div>
+
+                <!-- <div class="col-xl-3 col-md-6"> -->
+
+                  <!-- <mat-form-field appearance="outline">
+
+                          <mat-label>Client</mat-label>
+                          <mat-select formControlName="IdClient">
+                            <mat-option value=""> Tous  </mat-option>
+
+                              <mat-option *ngFor="let item of ClientList" [value]="item.idClient">
+                                  {{item.raisonSociale}}
+                              </mat-option>
+                          </mat-select>
+                      </mat-form-field> -->
+                  <!-- <div style="text-align:center;margin-top: 10px;">
+
+
+
+                    <input class="form-control" list="Client" placeholder="{{'Client'}}" formControlName="IdClient">
+
+                    <datalist id="Client">
+
+                      <option *ngFor="let item of ClientList" [value]="item.idClient">{{ item.raisonSociale }} </option>
+                    </datalist>
+
+                  </div> -->
+                <!-- </div> -->
+
+
+             
+
+
+                <!--
+                    <div class="col-xl-3 col-md-6">
+
+                      <mat-form-field appearance="outline">
+                        <mat-label>Prénom de client </mat-label>
+                        <input type="text" matInput formControlName="prenomclient"   placeholder="Prénom de client">
+                      </mat-form-field>
+                  </div>
+
+
+                <div class="col-xl-3 col-md-6">
+
+                  <mat-form-field appearance="outline">
+                    <mat-label>Nom de client </mat-label>
+                    <input type="text" matInput formControlName="nomclient"   placeholder="Nom de client">
+                  </mat-form-field>
+              </div>
+
+
+
+                  <div class="col-xl-3 col-md-6">
+
+                    <mat-form-field appearance="outline">
+
+                        <mat-label>Role</mat-label>
+                        <mat-select formControlName="role">
+                            <mat-option value=""> - Choisir -  </mat-option>
+                            <mat-option value="GERANT"> GERANT  </mat-option>
+                            <mat-option value="CLIENT"> CLIENT </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div> -->
+
+               
+
+
+                <div class="col-md-12 text-right">
+                  <button class="btn btn-primary btn-ladda" data-style="expand-left" (click)="rerender()">
+                    <i class="fa fa-search"> Chercher </i>
+                  </button>
+                </div>
+              </div>
+            </form>
+
+            <!-- {{reclamations| json}} -->
+            <div style="overflow-x:auto;">
+              <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover" width="100%">
+                <thead align="center">
+                  <tr>
+                    <th>
+                      Nom d'utilisateur
+                    </th>
+                    <th>Date </th>
+                    <th class="text-center">
+                      Rôle
+                    </th>
+                    <!-- <th *ngIf="ActualUser != 'GERANT' ">
+                      Client
+                    </th> -->
+                    <th>
+                      Station
+                    </th>
+                    <th>
+                      Object
+                    </th>
+
+                    <th>
+                      Message
+                    </th>
+                    <th class="text-center">
+                      Statut
+                    </th>
+                   
+                   
+
+                   
+                    <th *ngIf=" modifReclamation =='modifier' && accessModifReclamation == true"  class="text-center">
+                      <i class="fa fa-edit"></i>
+                    </th>
+
+                  </tr>
+                </thead>
+                <tbody *ngIf="listReclm?.length != 0">
+                  <tr *ngFor="let item of listReclm  " >
+                    <td>{{item.userName }}</td>
+                    <td>{{item.dateCreation | dateSql}}</td>
+                    <td>{{item.roleUser}}</td>
+                    <!-- <td *ngIf="ActualUser != 'GERANT' ">
+                      <span class="fa fa-ban" *ngIf=" item.client == null "></span>
+                      {{item.idClient}}
+                    </td> -->
+                    <td>
+                      <span class="fa fa-ban" *ngIf=" item.station == null "></span>
+                      {{item.station}}
+                    </td>
+                    <td>{{item.objectReclamation}}</td>
+                    <td align="left">{{item.messageReclamation | longMsg}} </td>
+                    <td><span class="badge badge-danger" *ngIf=" item.statut == 'Nouvelle' "
+                        style="width: 120px;">{{item.statut}}</span>
+                      <span class="badge badge-info" *ngIf=" item.statut == 'En cours de traitement' "
+                        style="width: 120px;">{{item.statut}}</span>
+                      <span class="badge badge-success" *ngIf=" item.statut == 'Traitée' "
+                        style="width: 120px;">{{item.statut}}</span>
+                    </td>
+
+                 
+                    
+                    
+
+                        <td *ngIf="  modifReclamation =='modifier' && accessModifReclamation == true"  class="text-center" > <i class="fa fa-edit" title="Modifier"
+                          (click)="selectReclamation(item.id);updateModal.show()"
+                          style="color: #01509B; font-size:17px"></i></td>
+                  </tr>
+                </tbody>
+
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div bsModal #updateModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Traiter une réclamation</h4>
+        <button type="button" class="close" (click)="updateModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-edit-reclmation *ngIf="selectedRec != null" [submitted]="submitted"
+          [formUpdate]="formUpdate"></app-edit-reclmation>
+      </div>
+      <div class="modal-footer">
+
+        <button *ngIf="ActualUser != 'GERANT' " type="button" class="btn btn-primary" (click)="update()">Modifier</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

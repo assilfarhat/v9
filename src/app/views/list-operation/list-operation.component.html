@@ -1,0 +1,239 @@
+<div class="animated fadeIn">
+    <div class="card">
+      <h5 class="card-title"><div class="card-header"><strong> Historique des opérations </strong></div></h5>
+      <div class="card-body">
+        <form class="form-horizontal" [formGroup]="form">
+          <div class="form-group row" style="margin-top: 10px;">
+
+            <div class="col-xl-3 col-md-6">
+              <label class="col-md-12 control-label" for="date-input">Date début</label>
+              <div class="col-md-12">
+                <input class="form-control" type="date" formControlName="dateStart" placeholder="date debut"
+                  [max]="dateString">
+              </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+              <label class="col-md-12 control-label" for="date-input">Date fin</label>
+              <div class="col-md-12">
+                <input class="form-control" type="date" formControlName="dateEnd" placeholder="date fin"
+                  [max]="dateString">
+                <div *ngIf="form.get('dateStart').value > form.get('dateEnd').value" class="help-block text-danger">Date
+                  fin doit être supérieur à date début !!!</div>
+                <div *ngIf="form.get('dateEnd').value > dateString" class="help-block text-danger">Date fin ne doit
+                  pasdépasser la date d'aujourd'hui !!!</div>
+              </div>
+            </div>
+            <!-- <div class="col-xl-3 col-md-6" [hidden]="!isAdmin">
+              <label class="col-md-12 control-label" for="date-input">Banque</label>
+              <div class="col-md-12">
+                <select class="form-control" formControlName="bank" (change)="filter()">
+                  <option value="">Tous</option>
+                  <option *ngFor="let bk of banks" [ngValue]="bk.banque">{{bk.banque}}</option>
+                </select>
+              </div>
+            </div> -->
+            <!-- <div class="col-xl-3 col-md-6" [hidden]="isAgent">
+              <label class="col-md-12 control-label" for="date-input">Agence</label>
+              <div class="col-md-12">
+                <select class="form-control" formControlName="agence">
+                  <option value="">Tous</option>
+                  <option *ngFor="let ag of agences" [ngValue]="ag.name">{{ag.name}}</option>
+                </select>
+              </div>
+            </div> -->
+            <div class="col-xl-3 col-md-6">
+              <label class="col-md-12 control-label" for="date-input">Type d'opération</label>
+              <div class="col-md-12">
+                <select class="form-control" formControlName="typeOperation">
+                  <option value="">Tous</option>
+                  <option value="Inscription Client">Inscription Client</option>
+                  <option value="Delete User">Supprimer l'utilisateur</option>
+                  <option value="Change Password">Changer le mot de passe</option>
+                  <option value="Update profile"> Mettre à jour le profil</option>
+                  <option value="Update User"> Mettre à jour l'utilisateur</option>
+                  <option value="Recover Password">Récupérer mot de passe</option>
+                  <option value="Lokout User">Utilisateur de verrouillage</option>
+                  <option value="Update Rolest">Mettre à jour les rôles</option>
+                  <option value="Modifier Affilié">Modifier Affilié</option>
+                  <option value="Ajouter Affilié">Ajouter Affilié</option>
+                  <option value="Activation/Désactivation Affilié">Activation/Désactivation affilié</option>
+                  <option value="Suppression Affilié">Suppression affilié</option>
+                  <option value="Bloquage débloquage carte">Bloquage débloquage carte</option>
+                  <option value="Ajout en masse des cartes">Ajout en masse des cartes</option>
+                  <option value="Raplacer carte"> Raplacer carte</option>
+                  <option value="Mise en opposition">Mise en opposition</option>
+                  <option value="Renouvellement des cartes">Renouvellement des cartes</option>
+                  <option value="Activation carte">Activation carte</option>
+                  <option value="Modification carte">Modification carte</option>
+                  <option value="Affectation Produit">Affectation Produit</option>
+                  <option value="Modification carte">Ajouter carte</option>
+                  <option value="Delete carte">Delete carte</option>
+                  <option value="Bloquage débloquage client">Bloquage débloquage client</option>
+                  <option value="Modifier client">Modifier client</option>
+                  <option value="Create client">Create client</option>
+                  <option value="Create client Account">Create client account</option>
+                  <!-- <option value="Delete client">Delete client</option> -->
+                  <option value="Modifier jour férié">Modifier jour férié</option>
+                  <option value="Ajouter jour férié">Ajouter jour férié</option>
+                  <option value="Supprimer jour férié">Supprimer jour férié</option>
+                  <option value="Ajouter porteur">Ajouter porteur</option>
+                  <option value="Modifier Porteur carte">Modifier Porteur carte</option>
+                  <option value="Confirmer recharge">Confirmer la recharge</option>
+                  <option value="Modifier produits">Modifier produits</option>
+                  <option value="Ajouter produit">Ajouter produit</option>
+                  <option value="Delete produit">Supprimer le produit</option>
+                  <option value="Upload file">Téléverser un fichier</option>
+                  <option value="Demande recharge">Demande recharge</option>
+                  <option value="Confirmer recharge">Confirmer la recharge</option>
+                  <option value="Ajouter réclamation">Ajouter réclamation</option>
+                  <option value="Modifier réclamation">Modifier réclamation</option>
+                  <option value="Recharge Carte">Recharge Carte</option>
+                  <option value="Recharge en masse des cartes">Recharge en masse des cartes</option>
+                 <option value="Modifier solde carte">Modifier solde carte</option>
+                  <option value="Ajouter solde carte">Ajouter solde carte</option>
+                  <option value="Delete solde carte">Delete solde carte</option>
+                  <option value="Modifier Tpe">Modifier Tpe</option>
+                  <option value="Ajouter Tpe">Ajouter Tpe</option>
+                  <option value="Modifier Station">Modifier Station</option>
+                  <option value="Supprimer Station">Supprimer Station</option>
+                  <option value="Ajouter Terminal">Ajouter Terminal</option>
+                  <option value="Activer Terminal">Activer Terminal</option>
+                  <option value="Activer/Désactiver Terminal">Activer/Désactiver Terminal</option>
+                  <option value="Modifier TPE">Modifier TPE</option>
+                  <option value="Ajouter TPE">Ajouter TPE</option>
+                  <option value="Supprimmer TPE">Supprimmer TPE</option>
+                  <option value="Modifier Accès utilisateur">Modifier Accès utilisateur</option>
+                  <option value="Modifier zone Géographique">Modifier zone Géographique</option>
+                  <option value="Ajouter zone Géographique">Ajouter zone Géographique</option>
+                  <option value="Supprimer zone Géographique">Supprimer zone Géographique</option>
+                  <option value="transfert Solde PS ->PP"> transfert PS -> PP </option>
+                  <option value="transfert Solde PS ->PS"> transfert PS -> PS </option>
+                  <option value="transfert PPE"> transfert PPE </option>
+                  <option value="transfert PP"> transfert PP </option>
+                  <option value="Recharge PP"> Recharge PP </option>
+                  <option value="Recharge PPE"> Recharge PPE </option>
+                  
+                </select>
+              </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+              <label class="col-md-12 control-label" for="date-input">Nom d'utilisateur</label>
+              <div class="col-md-12">
+                <input formControlName="nom" type="text" class="form-control" />
+              </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+              <label class="col-md-12 control-label" for="date-input">Numéro téléphone</label>
+              <div class="col-md-12">
+                <input formControlName="msisdn" type="text" class="form-control" />
+              </div>
+            </div>
+            <!-- <div class="col-xl-3 col-md-6">
+              <label class="col-md-12 control-label" for="date-input">Affiliation</label>
+              <div class="col-md-12">
+                <input [readOnly]="affiliation !== null " formControlName="affiliation" type="text" class="form-control" />
+              </div>
+            </div> -->
+
+            <div class="col-md-12 text-right">
+              <button class="btn btn-primary btn-ladda" style="margin-top: 20px; margin-right: 15px;"
+                data-style="expand-left" [ladda]='isLoading' (click)="rerender()">
+                <i class="fa fa-search"> Chercher </i>
+              </button>
+              <!-- <div style="padding: 15px;">
+                <div class="col-md-12 text-right">
+                  <button class="btn btn-success btn-ladda"
+                    style="margin-right: -15px;padding-right: 28px;padding-left: 15px;" data-style="expand-left"
+                    [ladda]='isDownloading' (click)="downloadFile()">
+                    <i class="fa fa-download"> Excel </i>
+                  </button>
+                </div>
+              </div> -->
+            </div>
+            <!-- <br> -->
+          </div>
+        </form>
+
+        <div style="overflow-x:auto;">
+
+          <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table-striped datatable display nowrap"
+            width="100%">
+            <thead>
+              <tr>
+                <th>
+                  Date d'opération
+                </th>
+                <th>
+                  Nom utilisateur
+                </th>
+                <th>
+                  Numéro de Carte
+                </th>
+                <th>
+                  Montant
+                </th>
+
+                <th>
+                  Numéro téléphone
+                </th>
+                <!-- <th>
+                 Affilation
+                </th> -->
+                <th>
+                  Type d'opération
+                </th>
+
+
+                <!-- <th>
+                  Résultat
+                </th>
+                 <th>
+                  Déscription
+                </th>  -->
+
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let op of operations">
+                <td>{{op.dateOperation|date :'dd/MM/yyyy'}}</td>
+                <td>{{op.userName}}</td>
+                <td>{{op.numCarte}}</td>
+                <td>{{op.montant | amountmillierpipe}}</td>
+
+                
+                <!-- <td [hidden]="!isAdmin">{{op.banque}}</td>
+                <td>{{op.agence}}</td>
+   -->
+
+                <td>{{op.msisdnClient}}</td>
+                <!-- <td>{{op.affiliation}}</td> -->
+                <td>{{op.typeOperation}}</td>
+                <!-- <td class="text-right">{{op.soldInitial|amountPipe}}</td>
+                <td class="text-right">{{op.soldFinal|amountPipe}}</td>
+                <td (click)='download(op.path)'>
+
+                  <i class="fa fa-download" title="Télécharger" (click)="download(op.path)"
+                    style="color: green; font-size:17px" *ngIf="op.path != null"></i>
+                  <i
+                     *ngIf="op.path == null"></i>
+                     &nbsp;{{op.path }}</td> -->
+
+                  <!-- <td > <i class="fa fa-download" title="Télécharger" (click)="download(op.pathError)"
+                  style="color: green; font-size:17px" *ngIf="op.pathError != null"></i>
+                <i
+                   *ngIf="op.pathError == null"></i>
+                   &nbsp;{{op.pathError}}</td> -->
+
+              </tr>
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+    </div>
+  </div>

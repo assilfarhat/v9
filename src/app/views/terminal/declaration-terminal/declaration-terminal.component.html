@@ -1,0 +1,147 @@
+
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title"> <strong>Déclaration  Terminal Réseau Bancaire</strong></h5>
+            </div>
+            <div class="card-body">
+              <form class="form-horizontal" [formGroup]="form">
+               
+                 <div class="row">
+                  <div class="col-sm-6">
+                    <div class="form-group row">
+                      <label class="col-form-label col-sm-4" for="name">IdTerminal</label>
+                      <div class="col-sm-8">
+                        <input formControlName="IdTerminal" type="text" class="form-control" />
+                        <div class="help-block text-danger" *ngIf="f.IdTerminal.errors && f.IdTerminal.errors.required && submitted">
+                            Ce champ est obligatoire.
+                        </div>
+                        <div class="help-block text-danger" *ngIf="f.IdTerminal.errors && f.IdTerminal.errors.maxlength && submitted">
+                          L'ID Terminal doit avoir au plus 16 caractères.
+                      </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+               
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <div class="form-group row">
+                        <label class="col-form-label col-sm-4" for="name">Affilié</label>
+                        <div class="col-sm-8">
+                          <select class="form-control" formControlName="IdAffilie" #t (change)="getPoints(t.value)">
+                            <option value=""> - Choisir - </option>
+                            <option *ngFor="let item of affils" value="{{item.IdAffilie}}"  >{{ item.CodeCorePass }}-{{ item.Nom }}</option>
+                          </select>
+                          <div class="help-block text-danger" *ngIf="f.IdAffilie.errors && f.IdAffilie.errors.required && submitted">
+                              Ce champ est obligatoire.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <div class="form-group row">
+                        <label class="col-form-label col-sm-4" for="name">Point De Vente</label>
+                        <div class="col-sm-8">
+                          <select  class="form-control" formControlName="IdPointDeVente" #p (change)="getTpesByPoint(p.value)">
+                            <option value="" >  - Choisir -  </option>
+                            <option *ngFor="let item of points" value="{{item.IdPointDeVente}}">{{item.IdPointDeVente}}-{{ item.Nom }}</option>
+                          </select>
+                           <div class="help-block text-danger" *ngIf="f.IdPointDeVente.errors && f.IdPointDeVente.errors.required && submitted">
+                              Ce champ est obligatoire.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-sm-6">
+                        <div class="form-group row">
+                          <label class="col-form-label col-sm-4" for="name">Serial Number</label>
+                          <div class="col-sm-8">
+                              <select  class="form-control" formControlName="SerialNumber">
+                                  <option value="" >  - Choisir -  </option>
+                                  <option *ngFor="let item of tpes" value="{{item.SerialNumber}}">{{ item.SerialNumber }}</option>
+                              </select>                          
+                              <div class="help-block text-danger" *ngIf="f.SerialNumber.errors && f.SerialNumber.errors.required && submitted">
+                                Ce champ est obligatoire.
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                 <!-- <div class="row">
+                    <div class="col-sm-6">
+                      <div class="form-group row">
+                        <label class="col-form-label col-sm-4" for="name">IdBancaire</label>
+                        <div class="col-sm-8">
+                          <input formControlName="IdBancaire" type="text" class="form-control" />
+                          <div class="help-block text-danger" *ngIf="f.IdBancaire.errors && f.IdBancaire.errors.required && submitted">
+                              Ce champ est obligatoire.
+                          </div>
+                         
+                        </div>
+                      </div>
+                    </div>
+                  </div>-->
+                
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <div class="form-group row">
+                        <label class="col-form-label col-sm-4" for="name">Designation</label>
+                        <div class="col-sm-8">
+                          <input formControlName="Designation" type="text" class="form-control" />
+                          <div class="help-block text-danger" *ngIf="f.Designation.errors && f.Designation.errors.required && submitted">
+                              Ce champ est obligatoire.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!--<div class="row">
+                    <div class="col-sm-6">
+                      <div class="form-group row">
+                        <label class="col-form-label col-sm-4" for="name">Code Responsable</label>
+                        <div class="col-sm-8">
+                          <input formControlName="CodeResponsable" type="text" class="form-control" />
+                          <div class="help-block text-danger" *ngIf="f.CodeResponsable.errors && f.CodeResponsable.errors.required && submitted">
+                              Ce champ est obligatoire.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>-->
+                 
+                  
+                 
+  
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <div class="form-group row">
+                        <label class="col-form-label col-sm-4" for="name">Etat Terminal</label>
+                        <div class="col-sm-8">
+                          <input class="" name="EtatTerminal" id="EtatTerminal" type="checkbox" formControlName="EtatTerminal"> Actif
+  
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                
+                 
+                  <div class="row">
+                    <div class="col-sm-12 text-right">
+                        <a class="btn btn-secondary btn-ladda" data-style="expand-left" style="margin-right:20px; color: rgb(42, 42, 44);" [routerLink]="[ '/terminal/list']">
+                          <i class="fa fa-undo"></i>  Annuler
+                      </a>
+                      <button class="btn btn-success btn-ladda" data-style="expand-left" [ladda]='isLoading'(click)="checkAndSave()">
+                        <i class="fa fa-plus"></i>  Ajouter
+                      </button>
+                    </div>
+                  </div>
+  
+                 
+              </form>
+            </div>
+          </div>
+  

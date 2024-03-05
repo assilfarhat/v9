@@ -1,0 +1,48 @@
+<header class="app-header navbar">
+  <button class="navbar-toggler d-lg-none" type="button" appMobileSidebarToggler>
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="#"></a>
+  <button class="navbar-toggler d-md-down-none mr-auto" type="button" appSidebarToggler>
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  
+  <ul class="nav navbar-nav ml-auto" style="margin-right: 20px">
+
+    <li class="nav-item dropdown" dropdown placement="bottom right">
+      <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle (click)="false">
+        <i class="icon-bell"></i><span class="badge badge-pill badge-danger">{{AllReclamation}}</span></a>
+        <div *dropdownMenu aria-labelledby="simple-dropdown" class="dropdown-menu dropdown-menu-right " style="inset: 100% 0px auto auto; transform: translateY(0px);">
+          <div class="dropdown-header text-center">
+            <strong>vous avez {{AllReclamation}} réclamations</strong>
+          </div>
+          <a  class="dropdown-item">
+            <i class="icon-user text-success"></i> {{AllGerantReclamation}}  réclamations du gérant</a>
+            <a  class="dropdown-item"><i class="icon-user text-info"></i> {{AllclientReclamation}}  réclamations du client</a>
+          
+          
+         <!-- <a href="#" class="dropdown-item"><div class="text-uppercase mb-1"><small><b>CPU Usage</b></small></div><span class="progress progress-xs">
+            <div role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-info" style="width: 25%;"></div></span><small class="text-muted">348 Processes. 1/4 Cores.</small></a>
+            <a href="#" class="dropdown-item"><div class="text-uppercase mb-1"><small><b>Memory Usage</b></small></div><span class="progress progress-xs"><div role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-warning" style="width: 70%;"></div></span><small class="text-muted">11444GB/16384MB</small></a>
+            <a href="#" class="dropdown-item"><div class="text-uppercase mb-1"><small><b>SSD 1 Usage</b></small></div><span class="progress progress-xs"><div role="progressbar" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-danger" style="width: 95%;"></div></span><small class="text-muted">243GB/256GB</small>
+          </a>--></div></li>
+    &nbsp;&nbsp;
+    <li class="nav-item dropdown" dropdown placement="bottom right">
+      
+      <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle (click)="false" style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; font-size: 16px;cursor: pointer;">
+        {{ user?.userName | uppercase}}
+        <img src="assets/img/avatars/userlogo.png" class="img-avatar" />
+       </a>
+      <div class="dropdown-menu dropdown-menu-right" *dropdownMenu aria-labelledby="simple-dropdown">
+        <div class="dropdown-header text-center"><strong>{{'HEADER.COMPTE'|translate}}</strong></div>
+        <a class="dropdown-item" routerLink="/home"><i class="fa fa-user"></i> {{'HEADER.PROFIL'|translate}}</a>
+        <a class="dropdown-item" routerLink="/changer/password"><i class="fa fa-lock"></i> {{'HEADER.PSWD'|translate}}</a>
+        <div class="divider"></div>
+        <!--<a  class="dropdown-item" *ngIf="showLang==false" (click)="translate.use('en');switch()"><i class="flag-icon flag-icon-gb "></i>Anglais</a>
+        <a  class="dropdown-item" *ngIf="showLang==true" (click)="translate.use('fr');switch()"><i class="flag-icon flag-icon-fr "></i> Frensh</a>-->
+        <a class="dropdown-item" (click)="logout()"><i class="fa fa-sign-out"></i> {{'HEADER.LOGOUT'|translate}}</a>
+      </div>
+    </li>
+  </ul>
+
+</header>

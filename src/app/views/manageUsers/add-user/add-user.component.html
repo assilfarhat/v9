@@ -1,0 +1,270 @@
+<div class="card">
+  <h5 class="card-title">
+    <div class="card-header">
+      <strong>Formulaire d'ajout</strong>
+    </div>
+  </h5>
+  <div class="card-body">
+    <form class="form-horizontal" [formGroup]="form">
+      <div *ngIf="hasError" class="alert alert-danger" role="alert">
+        <ul>
+          <li *ngFor="let item of errorMessage">
+            {{item | translateMsg}}
+          </li>
+        </ul>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group row">
+            <label class="col-form-label col-sm-4" for="name">{{'ADDU.PRENOM'|translate}}</label>
+            <div class="col-sm-8">
+              <input formControlName="firstname" type="text" class="form-control" />
+              <div class="help-block text-danger" *ngIf="firstname.errors && firstname.errors.required && submitted">
+                Ce champ est obligatoire.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group row">
+            <label class="col-form-label col-sm-4" for="name">{{'ADDU.NOM'|translate}}</label>
+            <div class="col-sm-8">
+              <input formControlName="lastname" type="text" class="form-control" />
+              <div class="help-block text-danger" *ngIf="lastname.errors && lastname.errors.required && submitted">
+                {{'ADDU.REQ'|translate}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group row">
+            <label class="col-form-label col-sm-4" for="name">{{'ADDU.USERNAME'|translate}}</label>
+            <div class="col-sm-8">
+              <input formControlName="userName" type="text" class="form-control" />
+              <div class="help-block text-danger" *ngIf="userName.errors && userName.errors.required && submitted">
+                {{'ADDU.REQ'|translate}}
+              </div>
+              <div class="help-block text-danger" *ngIf="userName.errors && userName.errors.minlength && submitted">
+                {{'ADDU.NOMERR'|translate}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group row">
+            <label class="col-form-label col-sm-4" for="name"> {{'ADDU.PHONE'|translate}}</label>
+            <div class="col-sm-8">
+              <input formControlName="phonenumber" type="text" class="form-control" />
+              <div class="help-block text-danger"
+                *ngIf="phonenumber.errors && phonenumber.errors.required && submitted">
+                {{'ADDU.REQ'|translate}}
+              </div>
+              <div class="help-block text-danger"
+                *ngIf="phonenumber.value != '' && phonenumber.errors && phonenumber.errors.pattern && submitted">
+                {{'ADDU.PHONERR'|translate}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group row">
+            <label class="col-form-label col-sm-4">{{'ADDU.ROLE'|translate}}</label>
+            <div class="col-sm-8">
+              <select class="form-control" formControlName="role" #t (change)="getOrganisation(t.value)">
+                <option value=""> - Choisir - </option>
+
+                <ng-container *ngIf="userRole === 'OPERATEUR'">
+                  <ng-container *ngFor="let role of roles">
+                    <option [value]="role" *ngIf="role !== 'ADMIN STAROIL' && role !== 'VALIDATEUR'">
+                      {{ role }}
+                    </option>
+                  </ng-container>
+                </ng-container>
+
+                <ng-container
+                  *ngIf="userRole === 'ADMIN STAROIL' || userRole === 'VALIDATEUR' || userRole === 'GERANT'">
+                  <ng-container *ngFor="let role of roles">
+                    <option [value]="role">
+                      {{ role }}
+                    </option>
+                  </ng-container>
+                </ng-container>
+              </select>
+              <div class="help-block text-danger" *ngIf="role.errors && role.errors.required && submitted">
+                {{'ADDU.REQ'|translate}}
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="row" *ngIf="roleX=='GERANT'">
+        <div class="col-sm-6">
+          <div class="form-group row">
+            <label class="col-form-label col-sm-4"> {{'ADDU.STATION'|translate}}</label>
+            <div class="col-sm-8">
+
+              <!-- <select class="form-control" formControlName="idStation">
+                <option value=""> {{'ADDU.CHOOSE'|translate}} </option>
+                <option *ngFor="let station of stations" value="{{ station.idStation }}">{{ station.nom }}</option>
+              </select> -->
+
+             
+                <input class="form-control" list="Station" placeholder="{{'Station'}}" formControlName="idStation">
+                <datalist id="Station">
+                  <option *ngFor="let item of StationList" [value]="item.stationName">{{ item.stationName }} </option>
+                </datalist>
+              
+
+              <div class="help-block text-danger" *ngIf="idStation.errors && idStation.errors.required && submitted">
+                {{'ADDU.REQ'|translate}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" *ngIf="roleX=='CLIENT' || roleX=='PORTEUR'">
+        <div class="col-sm-6">
+          <div class="form-group row">
+            <label class="col-form-label col-sm-4"> {{'ADDU.CLIENT'|translate}}</label>
+            <div class="col-sm-8">
+              <select class="form-control" formControlName="idclient" #c (change)="getCurrentClient(c.value)">
+                <option value=""> {{'ADDU.CHOOSE'|translate}} </option>
+
+                <option *ngFor="let client of clients" value="{{ client.idClient }}">{{ client.raisonSociale }}</option>
+              </select>
+              <div class="help-block text-danger" *ngIf="idclient.errors && idclient.errors.required && submitted">
+                {{'ADDU.REQ'|translate}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" *ngIf="roleX=='PORTEUR'">
+        <div class="col-sm-6">
+          <div class="form-group row">
+            <label class="col-form-label col-sm-4"> {{'ADDU.PORTEUR'|translate}}</label>
+            <div class="col-sm-8">
+              <select class="form-control" formControlName="idPorteur">
+                <option value=""> {{'ADDU.CHOOSE'|translate}} </option>
+                <option *ngFor="let client of Porteur" value="{{ client.idPorteur }}">{{ client.nom }}</option>
+              </select>
+              <div class="help-block text-danger" *ngIf="idclient.errors && idclient.errors.required && submitted">
+                {{'ADDU.REQ'|translate}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--<div class="row" *ngIf="roleX=='MERCHANT' || roleX=='MAGASIN'">
+                    <div class="col-sm-6">
+                      <div class="form-group row">
+                        <label class="col-form-label col-sm-4" > {{'ADDU.MERCHANT'|translate}}</label>
+                        <div class="col-sm-8">
+                          <select  class="form-control" formControlName="marchand" #x (change)="getMagasinByMerchant(x.value);setMerchant(x.value)">
+                            <option value="" > - Choisir - </option>
+
+                            <option *ngFor="let org of listMerchant" value="{{org.id}}">{{ org.name }}</option>
+                          </select>
+                          <div *ngIf="submitted && f.marchand.errors" class="help-block text-danger">
+                            <div *ngIf="f.marchand.errors.requiredBy">  {{'ADDU.REQ'|translate}}</div>
+  
+                        </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <span *ngFor="let item of merchantsOrgs; index as i" style="background-color: palegreen;padding: 10px; margin:10px; border-radius: 5px;" #d>{{ item}}  <i class="fa fa-times" aria-hidden="true"  (click)="deleteMerchant(i)" ></i></span>
+                     </div>
+                  </div>
+
+
+
+                  <div class="row" *ngIf=" roleX=='MAGASIN'" >
+                    <div class="col-sm-6">
+                      <div class="form-group row">
+                        <label class="col-form-label col-sm-4" > {{'ADDU.MAGASIN'|translate}}</label>
+                        <div class="col-sm-8">
+                          <select  class="form-control" formControlName="magasin" #y (change)="setMagasin(y.value)">
+                            <option value="" > {{'ADDU.CHOOSE'|translate}} </option>
+
+                            <option *ngFor="let org of listMagasin" value="{{org.gwMagasinId}}">{{ org.gwMagasinLabel }}</option>
+                          </select>
+                          <div *ngIf="submitted && f.magasin.errors" class="help-block text-danger">
+                            <div *ngIf="f.magasin.errors.requiredBy"> {{'ADDU.REQ'|translate}}</div>
+  
+                        </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                      <span *ngFor="let item of magasinsOrgs; index as i" style="background-color: rgb(114, 142, 235);padding: 10px; margin:10px; border-radius: 5px;" #h>{{ item}}  <i class="fa fa-times" aria-hidden="true"  (click)="deleteMagasin(i)" ></i></span>
+                     </div>
+
+                  </div>
+
+
+
+                  
+
+                  <div class="row" *ngIf="roleX!='MERCHANT' && roleX!='MAGASIN'">
+                      <div class="col-sm-6">
+                          <div class="form-group row">
+                            <label class="col-form-label col-sm-4" > {{'ADDU.ORG'|translate}}</label>
+                            <div class="col-sm-8">
+                              <select  class="form-control" formControlName="organizationId">
+                                <option value="" selected="selected"> {{'ADDU.CHOOSE'|translate}}</option>
+
+                                <option *ngFor="let org of organizations" value="{{org.id}}">{{ org.name }}</option>
+                              </select>
+                              <div *ngIf="submitted && f.organizationId.errors" class="help-block text-danger">
+                                <div *ngIf="f.organizationId.errors.requiredBy">  {{'ADDU.REQ'|translate}}</div>
+      
+                            </div>
+                            </div>
+                          </div>
+                        </div>
+                  </div>-->
+
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group row">
+            <label class="col-form-label col-sm-4" for="name"> {{'ADDU.EMAIL'|translate}}</label>
+            <div class="col-sm-8">
+              <input formControlName="email" type="text" class="form-control" />
+              <div class="help-block text-danger" *ngIf="email.errors && email.errors.required && submitted">
+                {{'ADDU.REQ'|translate}}
+              </div>
+              <div class="help-block text-danger"
+                *ngIf="email.value != '' && email.errors && email.errors.email && submitted">
+                {{'ADDU.MAILERR'|translate}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <app-menu-item></app-menu-item>
+      <div class="row">
+        <div class="col-sm-12 text-right">
+          <button class="btn btn-success btn-ladda" data-style="expand-left" [ladda]='isLoading'
+            (click)="checkAndSave()">
+            <i class="fa fa-plus"></i> {{'ADDU.AJOUTER'|translate}}
+          </button>
+        </div>
+      </div>
+    </form>
+
+
+
+  </div>
+</div>

@@ -1,0 +1,288 @@
+<div class="card">
+  <h5 class="card-title">
+    <div class="card-header"><strong>Configuration Carte </strong></div>
+  </h5>
+  <div class="card-body" *ngIf="form">
+    <form [formGroup]="form" autocomplete="off">
+      <div class="row">
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Client</mat-label>
+            <input matInput formControlName="client" placeholder="Client">
+          </mat-form-field>&nbsp;
+        </div>
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Numéro carte</mat-label>
+            <input matInput formControlName="numCarte" placeholder="Numéro carte">
+          </mat-form-field>&nbsp;
+        </div>
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Porteur carte </mat-label>
+            <input matInput formControlName="nomPrenom" placeholder="Identifiant porteur">
+          </mat-form-field>&nbsp;
+        </div>
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Identifiant 2 </mat-label>
+            <input matInput formControlName="identifiant2" placeholder="Identifiant 2">
+          </mat-form-field>&nbsp;
+        </div>
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Numero TAG </mat-label>
+            <input matInput formControlName="numTag" placeholder="numTag">
+          </mat-form-field>&nbsp;
+        </div>
+        
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Plafond journalier</mat-label>
+            <input matInput type="number" formControlName="plafondJournalierInitial" placeholder="Plafond journalier ">
+            <mat-error>Le plafond ne dépasse pas le plafond mensuel Restant du client</mat-error>
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+
+        <div class="col-sm-6" *ngIf="f.flux.value!='prépayé'">
+          <mat-form-field appearance="outline">
+            <mat-label>Plafond mensuel Ps carte {{f.value?.clientPlafondMonsuel }}</mat-label>
+            <input matInput type="number" formControlName="clientPlafondMonsuel" placeholder="Plafond mensuel PS client">
+          </mat-form-field>&nbsp;
+        </div>
+        
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Plafond hebdomadaire</mat-label>
+            <input matInput type="number" formControlName="plafondHebdoInitial" placeholder="Plafond hebdomadaire">
+            <mat-error>Le plafond ne dépasse pas le plafond mensuel Restant du client</mat-error>
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+        <div class="col-sm-6" *ngIf="f.flux.value!='prépayé'">
+          <mat-form-field appearance="outline">
+            <mat-label>Plafond mensuel Ps client restant</mat-label>
+            <input matInput type="number" formControlName="clientPlafondMonsuelDispo" placeholder="Plafond mensuel PS client restant">
+          </mat-form-field>&nbsp;
+        </div>
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Plafond mensuel</mat-label>
+            <input matInput type="number" formControlName="plafondMensuelInitial" placeholder="Plafond Mensuel">
+            <mat-error>Le plafond ne dépasse pas le plafond mensuel Restant du client</mat-error>
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+        <!-- <div class="col-sm-6"> -->
+          <!-- <mat-form-field appearance="outline"> -->
+            <!-- <mat-label>Plafond mensuel Ps carte  </mat-label> -->
+            <!-- <input matInput type="number" formControlName="plafondMensuelInitial" placeholder="Plafond mensuel Ps carte "> -->
+            <!-- <mat-error>Le plafond ne dépasse pas le plafond mensuel Restant du client</mat-error> -->
+            <!-- <mat-error>ce champ est obligatoire</mat-error> -->
+          <!-- </mat-form-field>&nbsp; -->
+        <!-- </div> -->
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Plafond trimestriel</mat-label>
+            <input matInput type="number" formControlName="plafondTrimestrielInitial" placeholder="Plafond trimestriel">
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+               
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Plafond par transaction</mat-label>
+            <input matInput type="number"  formControlName="plafondPaiementInitial" placeholder="Plafond paiement par tansaction">
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+        <!-- <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Solde Départ </mat-label>
+            <input matInput formControlName="soldInitial" placeholder="Compte Facturation">
+          </mat-form-field>&nbsp;
+        </div> -->
+        <!-- <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Solde maximale </mat-label>
+            <input matInput type="number" formControlName="soldMaximal" placeholder="Solde Maximale">
+          </mat-form-field>&nbsp;
+        </div> -->
+        <!-- <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Cout Carte </mat-label>
+            <input matInput formControlName="coutCarte" placeholder="Cout Carte ">
+          </mat-form-field>&nbsp;
+        </div> -->
+        <!-- <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Capacité réservoir </mat-label>
+            <input matInput formControlName="capaciteReservoir" placeholder="Capacité réservoir">
+          </mat-form-field>&nbsp;
+        </div> -->
+        <div class="col-sm-6 row">
+          <div class="col-sm-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Heure début </mat-label>
+              <mat-select formControlName="heurDebut">
+                <mat-option value="">choisir </mat-option>
+                <mat-option value="00:00">00:00</mat-option>
+                <mat-option value="01:00">01:00</mat-option>
+                <mat-option value="02:00">02:00</mat-option>
+                <mat-option value="03:00">03:00</mat-option>
+                <mat-option value="04:00">04:00</mat-option>
+                <mat-option value="05:00">05:00</mat-option>
+                <mat-option value="06:00">06:00</mat-option>
+                <mat-option value="07:00">07:00</mat-option>
+                <mat-option value="08:00">08:00</mat-option>
+                <mat-option value="09:00">09:00</mat-option>
+                <mat-option value="10:00">10:00</mat-option>
+                <mat-option value="11:00">11:00</mat-option>
+                <mat-option value="12:00">12:00</mat-option>
+                <mat-option value="13:00">13:00</mat-option>
+                <mat-option value="14:00">14:00</mat-option>
+                <mat-option value="15:00">15:00</mat-option>
+                <mat-option value="16:00">16:00</mat-option>
+                <mat-option value="17:00">17:00</mat-option>
+                <mat-option value="18:00">18:00</mat-option>
+                <mat-option value="19:00">19:00</mat-option>
+                <mat-option value="20:00">20:00</mat-option>
+                <mat-option value="21:00">21:00</mat-option>
+                <mat-option value="22:00">22:00</mat-option>
+                <mat-option value="23:00">23:00</mat-option>
+               
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-6">
+            <mat-form-field appearance="outline">
+              <mat-label> Heure fin </mat-label>
+              <mat-select formControlName="heurFin">
+                <mat-option value=""> Choisir </mat-option>
+                <mat-option value="01:00">01:00</mat-option>
+                <mat-option value="02:00">02:00</mat-option>
+                <mat-option value="03:00">03:00</mat-option>
+                <mat-option value="04:00">04:00</mat-option>
+                <mat-option value="05:00">05:00</mat-option>
+                <mat-option value="06:00">06:00</mat-option>
+                <mat-option value="07:00">07:00</mat-option>
+                <mat-option value="08:00">08:00</mat-option>
+                <mat-option value="09:00">09:00</mat-option>
+                <mat-option value="10:00">10:00</mat-option>
+                <mat-option value="11:00">11:00</mat-option>
+                <mat-option value="12:00">12:00</mat-option>
+                <mat-option value="13:00">13:00</mat-option>
+                <mat-option value="14:00">14:00</mat-option>
+                <mat-option value="15:00">15:00</mat-option>
+                <mat-option value="16:00">16:00</mat-option>
+                <mat-option value="17:00">17:00</mat-option>
+                <mat-option value="18:00">18:00</mat-option>
+                <mat-option value="19:00">19:00</mat-option>
+                <mat-option value="20:00">20:00</mat-option>
+                <mat-option value="21:00">21:00</mat-option>
+                <mat-option value="22:00">22:00</mat-option>
+                <mat-option value="23:00">23:00</mat-option>
+                <mat-option value="00:00">00:00</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- <div class="col-sm-6" *ngIf="f.typeCarte.value=='Matricule'">
+          <mat-form-field appearance="outline">
+            <mat-label>Matricule </mat-label>
+            <input matInput formControlName="matricule" placeholder="Matricule">
+          </mat-form-field>&nbsp;
+        </div>
+     -->
+        <div class="col-sm-12">
+          <mat-error>Il faut choisir au moins une journée </mat-error>
+          <ng-multiselect-dropdown [placeholder]="'Jours'" [settings]="dropdownSettingsJours" [data]="jours"
+            formControlName="jours1">
+
+          </ng-multiselect-dropdown>&nbsp;
+
+        </div>
+        <div class="col-sm-12">
+          <ng-multiselect-dropdown [placeholder]="'zone Géographique'" [settings]="dropdownSettingsZone"
+            [data]="listZone" formControlName="zoneGeographique1" (onSelect)="filtreStation($event)"
+            (onSelectAll)="SelectAllStation($event)" (onDeSelectAll)="SelectAllStation($event) "
+            (onDeSelect)="filtreStation($event)">
+          </ng-multiselect-dropdown>&nbsp;
+        </div>
+        <div class="col-sm-12">
+          <ng-multiselect-dropdown [placeholder]="'Station'" [settings]="dropdownSettingsStations"
+            [data]="filtredStation" formControlName="Stations1">
+          </ng-multiselect-dropdown>&nbsp;
+        </div>
+        <div class="col-sm-12">
+          <ng-multiselect-dropdown [placeholder]="'Jours fériés'" [settings]="dropdownSettingsJours"
+            [data]="listeJourFerie" formControlName="JoursFerie1">
+          </ng-multiselect-dropdown>&nbsp;
+        </div>
+        <!--<div class="col-sm-12">
+          <mat-form-field appearance="outline">
+            <mat-select formControlName="produitcarburant" required>
+              <mat-option *ngFor="let item of produitsCarburant" [value]="item.idProduit">
+                {{item.produit}}</mat-option>
+            </mat-select>
+          </mat-form-field>&nbsp;
+        </div> -->
+
+        <div class="col-sm-12">
+          <ng-multiselect-dropdown [placeholder]="'produit carburant'" [settings]="dropdownSettings"
+            [data]="produitsCarburant" formControlName="produitcarburant">
+          </ng-multiselect-dropdown>&nbsp;
+        </div>
+        <div class="col-sm-12">
+          <ng-multiselect-dropdown [placeholder]="'lubrifiant'" [settings]="dropdownSettings"
+            [data]="produitsHCarburant"  formControlName="produithorsCarburant">
+          </ng-multiselect-dropdown>&nbsp;
+        </div>
+        <div class="col-sm-12">
+          <ng-multiselect-dropdown [placeholder]="'Service'" [settings]="dropdownSettings"
+            [data]="servicep"  formControlName="serviceP">
+          </ng-multiselect-dropdown>&nbsp;
+        </div>
+        <div class="col-sm-12">
+          <mat-checkbox matInput formControlName="partionnerPlafond">Plafond partitionner</mat-checkbox>&nbsp;
+          <mat-checkbox matInput formControlName="autoriserTransfert">Autoriser transfert</mat-checkbox>&nbsp;
+          &nbsp;
+        </div>
+        <div class="col-sm-6" *ngIf="f.partionnerPlafond.value">
+          <mat-form-field appearance="outline">
+            <mat-label>Plafond Carburant</mat-label>
+            <input matInput type="number" formControlName="plafondCarburantInitial" placeholder="Plafond Carburant">
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+        <div class="col-sm-6" *ngIf="f.partionnerPlafond.value">
+          <mat-form-field appearance="outline">
+            <mat-label>Plafond lubrifiant</mat-label>
+            <input matInput type="number" formControlName="plafondHorsCarburantInitial" placeholder="Plafond Hors Carburant" >
+              <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+        <div class="col-sm-6" *ngIf="f.partionnerPlafond.value">
+          <mat-form-field appearance="outline">
+            <mat-label>Plafond Service</mat-label>
+            <input matInput type="number" formControlName="plafondAutreInitial" placeholder="Plafond Autre">
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+
+      </div>
+    </form>
+    <button mat-raised-button class="btn btn-info pull-right" color="primary" [disabled]="form.invalid"
+      (click)="Ajouter()">
+      Modifier
+    </button>
+
+  </div>
+
+
+
+
+
+</div>

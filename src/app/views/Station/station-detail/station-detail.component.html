@@ -1,0 +1,35 @@
+<div class="card">
+    <h5 class="card-title"><div class="card-header"> <strong>Détail de la station </strong></div></h5>
+    <div class="card-body">
+        <!-- {{station| json}} -->
+        <div class="row">
+            <div class=" col-md-4">
+                <span> <b>Nom : </b> {{ station?.nom }} </span>
+                <br><span> <b>Matricule fiscal : </b> {{ station?.matriculeFiscal }} </span>
+                <br><span> <b>Nom/Prénom gérant : </b> {{ station?.nomGerant }} </span>
+                <br><span> <b>Email: </b> {{ station?.email }} </span>
+                <br><span> <b>GSM : </b> {{ station?.gsm }} </span>
+                <br><span> <b>Téléphone fixe : </b> {{ station?.fixe }} </span>
+                <br><span> <b>Fax : </b> {{ station?.fax }} </span>
+                <br><span> <b>Adresse: </b> {{ station?.adresse }} </span>
+                <br><span> <b>zone geographique: </b> {{ station?.zoneGeographique }} </span>
+                <br><span> <b>date création: </b> {{ station?.dateCreation }} </span>
+            </div>
+            <div class=" col-md-4">
+                <span><b>Compte facturation : </b> {{ station?.PlafondTrimestriel }} </span>
+                <br><span> <b>Entête tpe : </b> {{ station?.enteteTpe}} </span>
+                <br><span> <b>Ligne 1 Tpe : </b> {{ station?.ligne1Tpe}} </span>
+                <br><span> <b>Ligne 2 Tpe : </b> {{ station?.ligne2Tpe}} </span>
+                <br><span> <b>Ligne 3 Tpe : </b> {{ station?.ligne3Tpe}} </span>
+                <br><span> <b>Dépôt : </b> {{ station?.depot}} </span>
+            </div>
+            <div class=" col-md-4"   *ngIf="ActualUser != 'GERANT'" >
+                <br><span > <b>Crédit max : </b> {{ station?.creditMax}} </span>
+                <br><span> <b>Pourcentage comission: </b> {{ station?.pourcentageComission}} </span>
+                <br><span> <b>Commission par marge: </b> {{ station?.commissionParMarge}} </span>
+                <br><span> <b>Commission par volume: </b> {{ station?.commissionParVolume}} </span>
+            </div>
+            
+        </div>
+    </div>
+</div>

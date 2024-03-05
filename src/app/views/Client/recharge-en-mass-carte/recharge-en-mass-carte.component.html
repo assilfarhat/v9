@@ -1,0 +1,386 @@
+<div class="card">
+  <div class="card-header">
+    <h5 class="card-title"><strong>Recharger les cartes prépayés</strong></h5>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class=" col-md-4">
+        <span> <b>Client :</b> {{ client.raisonSociale }} </span>
+      </div>
+      <br>
+      <br>
+    </div>
+
+    <div class="row">
+      <div class=" col-md-4">
+        <span> <b>Bon Recharge :</b> {{ bonRecharge}} </span>
+      </div>
+      <br>
+      <br>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 text-right">
+        <button mat-raised-button class="btn btn-info pull-right" color="primary" [disabled]="groupsForms.invalid"
+          (click)="save(iDdIV)"> Valider
+        </button>
+      </div>
+    </div>
+    <div style="margin-top: 20px;" *ngIf="soldeInssifisantError" class="alert alert-danger" role="alert">
+      <ul>
+        <h5>Solde insuffisant!</h5>
+        <p>Merci d'assurer que toutes les soldes dispos sont positives.</p>
+      </ul>
+    </div>
+    <div class="row mb-3"> </div>
+    <div>
+      <form [formGroup]="formGroupes">
+        <div style="overflow-x:auto;">
+          <table class="table table-striped" formArrayName="groups">
+            <thead>
+              <tr>
+                <th scope="col" style="width: 20% !important;">Identifiant </th>
+                <th scope="col" style="width: 20% !important;;">Numéro carte</th>
+                <th scope="col" style="width: 10% !important;;">Solde PP disponible </th>
+                <th scope="col" style="width: 10% !important;;">Montant PP à recharger </th>
+                <th scope="col" style="width: 10% !important;;">Solde PPE disponible</th>
+                <th scope="col" style="width: 10% !important;;">Montant PPE à recharger</th>
+              </tr>
+              <tr>
+                <th scope="col" colspan="3">Solde disponible </th>
+                <th scope="col" style="width: 10% !important;;"
+                  [ngStyle]=" {'color': client.soldePP <= 0? 'red'  : 'green'}">{{client.soldePP | amountmillierpipe }}
+                  {{client.statusPP=='1'? 'Bloqué' : ''}}</th>
+                <th scope="col" style="width: 10% !important;;"></th>
+                <th scope="col" style="width: 10% !important;;"
+                  [ngStyle]=" {'color': client.soldePPE <= 0? 'red'  : 'green'}">{{client.soldePPE | amountmillierpipe}}
+                  {{client.statusPPE=='1'? 'Bloqué' : ''}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let groupe of groupsForms.controls; let i=index" [formGroupName]="i">
+                <td>{{groupe.value.nomPrenom}} </td>
+                <td>{{groupe.value.numCarte}} </td>
+                <td>
+                  <mat-form-field appearance="outline">
+                    <input matInput formControlName="soldeCartePP" type="number">
+                  </mat-form-field>
+                </td>
+
+                <td>
+                  <mat-form-field appearance="outline">
+                    <input matInput formControlName="montantRecharchePP" (focusout)="calculateSoldeDispo('PP')"
+                      type="number">
+                  </mat-form-field>
+                </td>
+                <td>
+                  <mat-form-field appearance="outline">
+                    <input matInput formControlName="soldeCartePPE" type="number">
+                    {{client.soldeCartePPE =='1'? 'Bloqué' : ''}}
+
+                  </mat-form-field>
+                </td>
+                <td>
+                  <mat-form-field appearance="outline">
+                    <input matInput formControlName="montantRecharchePPE" (focusout)="calculateSoldeDispo('PPE')"
+                      type="number">
+                  </mat-form-field>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<style>
+  @media print {
+    .page-break {
+      page-break-before: always;
+    }
+  }
+</style>
+<!-- ******************************************** les bons **************************************************** -->
+<!-- ******************************************** bon paiement **************************************************** -->
+<div class="container" #iDdIV hidden="true">
+  <div class="row">
+    <div class="col-xl-3 col-md-3">
+      <img src="assets/img/logo-symbol.png" style="align-self: center; float: left;">
+    </div>
+    <div class="col-xl-3 col-md-6">
+      <div style="align-self: center;">
+        <h2>
+        </h2>
+      </div>
+    </div>
+    <div class="col-xl-3 col-md-3">
+      <div style="align-self: center; float: right;">
+
+        <h4>Edité le : {{ dateString}}</h4>
+
+      </div>
+    </div>
+
+  </div>
+  <div class="col text-center">
+    <h2>
+      <strong>
+        Bon de Paiement
+      </strong>
+    </h2>
+    <br>
+    <br>
+  </div>
+  <div class="col text-left">
+
+
+    <h3>
+      Date Bon : {{ dateString}}
+    </h3>
+    <h3>
+      Numéro Bon : {{ bonRecharge}}
+    </h3>
+    <h3>
+      Client : {{RaisonSociale}}
+    </h3>
+    <h3>
+      Code Client : {{ codeClient}}
+    </h3>
+    <h3>
+      Type de paiement : {{typePayment}}
+    </h3>
+    <div *ngIf="typePayment=='chèque'|| typePayment=='cheque'||typePayment=='traite'">
+      <h3>
+        Numéro chèque/Traite : {{ numChequeTraite}}
+      </h3>
+    </div>
+    
+    
+
+    <div *ngIf="typePayment=='chèque'|| typePayment=='cheque'|| typePayment=='traite'">
+      <h3>
+        Date écheance : {{ dateEcheancesql  }}
+      </h3>
+    </div>
+
+    <div *ngIf="typePayment=='chèque'|| typePayment=='cheque'|| typePayment=='traite'">
+      <h3>
+        Date chèque : {{ datechequesql }}
+      </h3>
+    </div>
+    
+   
+
+    <!-- <h3>
+      Référence : {{ f.reference.value}}
+    </h3> -->
+    <h3>
+      Banque : {{ banque}}
+    </h3>
+    <!-- <h3>
+      Banque : {{ f.banque.value}}
+    </h3> -->
+    <h3>
+      Montant Recharge : {{ montantRecharge | amountmillierpipe}} DT
+    </h3>
+    <h3>
+      Montant de paiement : {{ Montant | amountmillierpipe }} DT
+    </h3>
+    <h3>
+      Etat : Confirmé
+    </h3>
+    <div class="col text-right">
+      <h4>Signature et cachet</h4>
+    </div>
+  </div>
+  <p style="page-break-after: always;">&nbsp;</p>
+  <!-- <div class="col text-right">
+    <h4>Signature et cachet</h4>
+  </div> -->
+
+
+    <!-- ******************************************** bon recharge   **************************************************** -->
+    
+
+    <div class="row" >
+      <div class="col-xl-3 col-md-3">
+        <img src="assets/img/logo-symbol.png" style="align-self: center; float: left;">
+      </div>
+      <div class="col-xl-3 col-md-6">
+        <div style="align-self: center;">
+          <h2>
+          </h2>
+        </div>
+      </div>
+      <div class="col-xl-3 col-md-3">
+        <div style="align-self: center; float: right;">
+
+          <h4>Edité le : {{ dateString }}</h4>
+
+        </div>
+      </div>
+
+    </div>
+    <div class="col text-center">
+      <h2>
+        <strong>
+          Bon de Recharge
+        </strong>
+      </h2>
+      <br>
+      <br>
+    </div>
+    <div class="col text-left">
+
+
+      <h3>
+        Date Bon : {{ dateString}}
+      </h3>
+      <h3>
+        Numéro Bon : {{ bonRecharge}}
+      </h3>
+      <h3>
+        Client : {{RaisonSociale}}
+      </h3>
+      <h3>
+        Code Client : {{ codeClient}}
+      </h3>
+      <h3>
+        Type de paiement : {{typePayment}}
+      </h3>
+      <div *ngIf="typePayment=='chèque' || typePayment=='cheque'|| typePayment=='traite'">
+        <h3>
+          Numéro chèque/Traite : {{ numChequeTraite}}
+        </h3>
+      </div>
+
+      <div *ngIf="typePayment=='chèque'|| typePayment=='cheque'|| typePayment=='traite'">
+        <h3>
+          Date écheance : {{ dateEcheancesql  }}
+        </h3>
+      </div>
+  
+      <div *ngIf="typePayment=='chèque'|| typePayment=='cheque'|| typePayment=='traite'">
+        <h3>
+          Date chèque : {{ datechequesql }}
+        </h3>
+      </div>
+      <!-- <h3>
+        Référence : {{ f.reference.value}}
+      </h3> -->
+      <h3>
+        Banque : {{ banque}}
+      </h3>
+      <!-- <h3>
+        Banque : {{ f.banque.value}}
+      </h3> -->
+      <h3>
+        Montant Recharge : {{montantRecharge | amountmillierpipe}} DT
+      </h3>
+      <h3>
+        Montant de paiement : {{ Montant | amountmillierpipe}} DT
+      </h3>
+      <h3>
+        Etat : Demandé
+      </h3>
+      <div class="col text-right">
+        <h4>Signature et cachet</h4>
+      </div>
+    </div>
+  <tr>
+    
+    <p style="page-break-after: always;">&nbsp;</p>
+        <!-- ******************************************** bon État de Rechargement Carte  **************************************************** -->
+
+    <div class="row">
+      <div class="col-xl-3 col-md-3">
+        <img src="assets/img/logo-symbol.png" style="align-self: center; float: left;">
+      </div>
+      <div class="col-xl-3 col-md-6">
+        <div style="align-self: center;">
+          <h2>
+          </h2>
+        </div>
+      </div>
+      <div class="col-xl-3 col-md-3">
+        <div style="align-self: center; float: right;">
+          <h4>Edité le : {{ dateString}}</h4>
+        </div>
+      </div>
+    </div>
+    <div class="col text-center">
+      <h2>
+        <strong>
+          État de Rechargement Carte
+        </strong>
+      </h2>
+      <br>
+      <br>
+    </div>
+    <div class="col text-left">
+    </div>
+    <h3>
+      Date Bon : {{ dateString }}
+    </h3>
+    <h3>
+      Numéro Bon : {{ bonRecharge}}
+    </h3>
+    <h3>
+      Client : {{RaisonSociale}}
+    </h3>
+    <h3>
+      Code client : {{ codeClient}}
+    </h3>
+    <h3>
+      Type de paiement : {{typePayment}}
+    </h3>
+
+    <br>
+    
+    <div class="row" style="border-bottom: solid 1px black;border-top: solid 1px black;">
+      <div class="col-md-4">
+        <h4>Nom Groupe : {{ nomPrenom }}</h4>
+      </div>
+    </div>
+    <br>
+
+    <form [formGroup]="formGroupes">
+      <div style="overflow-x:auto;">
+        <table class="table table-striped" formArrayName="groups">
+          <thead>
+            <tr>
+
+              <th scope="col" style="width: 20% !important;;">Numéro carte</th>
+              <th scope="col" style="width: 20% !important;">Nom Porteur </th>
+              <!-- <th scope="col" style="width: 10% !important;;">Solde PP disponible </th> -->
+              <th scope="col" style="width: 10% !important;;">Montant PP à recharger </th>
+              <!-- <th scope="col" style="width: 10% !important;;">Solde PPE disponible</th> -->
+              <th scope="col" style="width: 10% !important;;">Solde PPE à recharger</th>
+              <!-- <th  scope="col" style="width: 10% !important;;">Solde PS disponible</th>
+                  <th  scope="col" style="width: 10% !important;;">Solde PS à recharger</th> -->
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let groupe of listeCarte; let i=index" [formGroupName]="i">
+
+              <td>{{groupe.numCarte}} </td>
+              <td>{{groupe.nomPrenom}} </td>
+              <td>{{groupe.montantRecharchePP | amountmillierpipe}} </td>
+              <td>{{groupe.montantRecharchePPE | amountmillierpipe}} </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </form>
+    <br>
+    <div class="row" style="border-bottom: solid 1px black;">
+      <div class="col-md-4">
+        <h4>Total groupe : </h4>
+      </div>
+    </div> <br> <br>
+    <div class="col text-right">
+      <h4>Signature et cachet</h4>
+    </div>
+</div>

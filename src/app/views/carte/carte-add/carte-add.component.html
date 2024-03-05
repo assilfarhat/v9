@@ -1,0 +1,164 @@
+<!--{{ group }}-->
+<div class="card" style="height:auto;">
+  <div class="card-header">
+    <h5 class="card-title"><strong> Ajouter des cartes </strong></h5>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-xl-6 col-md-6">
+        <!-- <mat-select [(ngModel)]="idClient" [disabled]="addFromClient" (selectionChange)="changeClient()">
+            <mat-option>
+              Tous
+            </mat-option>
+            <mat-option *ngFor="let item of ClientList" [value]="item.idClient">
+              {{item.raisonSociale}}
+            </mat-option>
+          </mat-select> -->
+        <input class="form-control" [(ngModel)]="idClient" [disabled]="addFromClient" (change)="changeClient()"
+          list="Client" placeholder="{{'Client'}}">
+
+        <datalist id="Client">
+          <option *ngFor="let item of ClientList" [value]="item.raisonSociale">{{ item.raisonSociale }} </option>
+        </datalist>
+
+      </div>
+      <div class="col-md-4" *ngIf="this.idClient">
+        <div class="col-md-12">
+          <span> <b>Nombre de cartes utilisées:</b> {{ nbCarte }} / <b>Nombre de cartes maximales:</b> {{nbCarteIntial}}</span>
+        </div>
+        <div class="col-md-12">
+          <span> <b>FLux PS : </b> {{ fluxPs }} </span>
+        </div>
+      </div>
+      <div class="col-sm-12 text-right" *ngIf="this.idClient && groupsForms.length>0">
+        <button mat-raised-button class="btn btn-success btn-ladda" [disabled]="groupsForms.invalid || idClient==''"
+          (click)="save()"> Valider
+        </button>
+      </div>
+      <div *ngIf="this.idClient" style="margin-top: 20px;" class="col-sm-12 text-right">
+        <a class="btn btn-primary " data-style="expand-left" (click)="addNewGroup()">
+          <i class="fa fa-plus"></i>
+        </a>
+      </div>
+    </div>
+    <div class="row mb-3"> </div>
+    <div style="margin-top: 20px;" *ngIf="soldeInssifisantError" class="alert alert-danger" role="alert">
+      <ul>
+        <p>Voulez choisir un client</p>
+      </ul>
+    </div>
+    <div style="height:auto;" *ngIf="this.idClient">
+      <form [formGroup]="formGroupes">
+        <table class="table table-striped" formArrayName="groups">
+          <thead>
+            <tr align="center">
+              <th>Porteur </th>
+              <th>Identifiant 2 </th>
+              <th style="width: 12% !important;">Type Carte</th>
+              <th style="width: 5% !important;">Gestion parc </th>
+              <th>Immatriculation </th>
+              <th>Frais carte</th>
+              <th>Tag</th>
+              <th>Numéro Tag</th>
+              <th>Saisie Km</th>
+              <th style="width: 12% !important;">Produit</th>
+              <th> <i class="icon-trash"></i></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let groupe of groupsForms.controls; let i=index" [formGroupName]="i">
+              <td>
+                <mat-form-field appearance="outline">
+                  <input matInput formControlName="identifiant" required [placeholder]="'Saisie le nom du porteur'">
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field appearance="outline">
+                  <input matInput formControlName="identifiant2" [placeholder]="'Saisie le nom du porteur'">
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field appearance="outline">
+                  <mat-select formControlName="typeCarte" required [placeholder]="'Choisir le type carte '">
+                    <mat-option value="prépayé">Prépayé</mat-option>
+                    <mat-option value="postpayé" [disabled]="fluxPs!='Activé'">Postpayé </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </td>
+
+              <td>
+                <mat-radio-group (change)="showMatriculation(i)" formControlName="flux" aria-label=""
+                  style="position: relative;top: 4px;">
+                  <mat-radio-button value="Hors parc">Hors parc</mat-radio-button>
+                  <mat-radio-button value="Matricule">Matricule</mat-radio-button>
+                </mat-radio-group>&nbsp;
+              </td>
+              <td>
+                <mat-form-field appearance="outline" *ngIf="groupe.value.flux=='Matricule'">
+                  <input matInput formControlName="matricule" [placeholder]="'Saisie numéro matricule'">
+                  <mat-error>{{groupe.matricule?.errors?.required ? 'ce champ est obligatoire': 'l immatriculation doit contenir au moins 6 chiffres'}} </mat-error>
+                </mat-form-field>
+              </td>
+              <td>
+                
+                
+              <mat-checkbox (change)="showfraisCarte(i)" matInput formControlName="fraisCarteCheck"> </mat-checkbox>
+              <div *ngIf=" groupe.value.fraisCarteCheck==true">
+                  <div *ngFor="let item of TarifList">
+                    <b *ngIf="item.produit == 'FRAI_CRE'">Frais carte: {{ item.prixUnitaire }} Dt</b>
+                  </div>
+              </div>
+
+              <!-- <td>
+                <mat-form-field appearance="outline" *ngIf="groupe.value.typeCarte=='tag'">
+                  <input matInput formControlName="numTAG">
+                  <mat-error>{{groupe.tag?.errors?.required ? 'ce champ est obligatoire': 'numéro tag doit contenir au moins 6 chiffres'}} </mat-error>
+                </mat-form-field>
+              </td> -->
+
+              <td>
+                <mat-checkbox (change)="showtag(i)" matInput formControlName="tag"> </mat-checkbox> &nbsp;
+              </td>
+              <td>
+                <mat-form-field appearance="outline" *ngIf="groupe.value.tag==true">
+                  <input matInput formControlName="numTAG" required [placeholder]="'Saisie numéro TAG '">
+                  <mat-error>{{groupe.numTAG?.errors?.required ? 'ce champ est obligatoire':'Le numéro tag est obligatoire '}} </mat-error>
+                </mat-form-field>
+
+                
+                  <mat-checkbox (change)="showfraisTag(i)" *ngIf="groupe.value.tag==true " formControlName="fraisTagCheck"> Frais Tag</mat-checkbox>
+                  <div *ngIf=" groupe.value.fraisTagCheck==true">
+                    <div *ngFor="let item of TarifList">
+                      <b *ngIf="item.produit == 'FRAI_TAG'">Frais Tag: {{ item.prixUnitaire }} Dt</b>
+                    </div>
+                  </div>
+              </td>
+
+              <td>
+                <mat-checkbox matInput formControlName="saisieKlm"></mat-checkbox>&nbsp;
+              </td>
+
+
+              <!-- <td>
+                <mat-form-field appearance="outline">
+                  <mat-select formControlName="produit" required>
+                    <mat-option *ngFor="let item of produits" [value]="item.idProduit">
+                      {{item.produit}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </td> -->
+              <td style=" width:18%;">
+                <ng-multiselect-dropdown [placeholder]="'Produit'" [settings]="dropdownSettings" [data]="produits"
+                  formControlName="produit" required style=" width:113%;text-align: left;">
+                </ng-multiselect-dropdown>&nbsp;
+              </td>
+              <td>
+                <a (click)="deleteRow(i)"> <i class="icon-trash"> </i> </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </form>
+    </div>
+  </div>

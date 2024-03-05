@@ -1,0 +1,25 @@
+<app-header></app-header>
+<div class="app-body">
+  <app-sidebar></app-sidebar>
+  <!-- Main content -->
+  <main class="main">
+    <!-- Breadcrumb -->
+    <ol class="breadcrumb">
+      <app-breadcrumbs></app-breadcrumbs>
+    </ol>
+    <div class="container-fluid">
+      <div class="animated fadeIn">
+        <!-- <div class="card">
+          <div class="card-body"> -->
+            <router-outlet></router-outlet>
+            <app-my-loader></app-my-loader>
+
+          <!-- </div>
+        </div> -->
+      </div>
+      <toaster-container [toasterconfig]="toasterconfig"></toaster-container>
+    </div><!-- /.conainer-fluid -->
+  </main>
+  <app-aside></app-aside>
+</div>
+<app-footer></app-footer>

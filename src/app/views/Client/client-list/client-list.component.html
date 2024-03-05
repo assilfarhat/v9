@@ -1,0 +1,330 @@
+<div class="card">
+
+  <div class="card-header">
+    <h5 class="card-title"> <strong>Liste des clients</strong> </h5>
+  </div>
+  <div class="card-body">
+    <!-- <div class="row">
+      <div class="col-sm-12 text-right">
+        <a class="btn btn-success btn-ladda" data-style="expand-left" [routerLink]="['/client/add']">
+          <i class="fa fa-plus"></i> Ajouter
+        </a>
+      </div>
+    </div> -->
+
+    <form class="form-horizontal" [formGroup]="formSearch">
+      <div class="form-group row" style="margin-top: 10px; ">
+        <div class="col-xl-3 col-md-6">
+          <div style="text-align:center;margin-top: 10px;">
+            <input class="form-control" list="Client" placeholder="Client" formControlName="clientId">
+            <datalist id="Client">
+              <option *ngFor="let item of ClientListDropdown" [value]="item.raisonSociale">{{item.raisonSociale }}
+              </option>
+            </datalist>
+          </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+          <div style="text-align:center;margin-top: 10px;">
+            <input class="form-control" list="Status" placeholder="Statut" formControlName="status">
+            <datalist id="Status">
+              <option *ngFor="let item of StatusListDropdown" [value]="item">{{item}}
+              </option>
+            </datalist>
+          </div>
+        </div>
+
+        <div class="col-md-12 text-right">
+          <button class="btn btn-primary btn-ladda" data-style="expand-left" [ladda]='isLoading'
+            (click)="getListClients();">
+            <i class="fa fa-search"> Chercher </i>
+          </button>
+        </div>
+
+      </div>
+
+    </form>
+    <div style="overflow-x:auto; margin-top: 20px;">
+      <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover display nowrap example"
+        width="100%">
+        <thead align="center">
+          <tr>
+            <!-- détail pour role operateur/validateur -->
+
+            <th
+              *ngIf=" DetailClient =='Détail Client' && accessDetail == true">
+              <i class="fa fa-info-circle" title="Détail client" aria-hidden="true"> </i>
+            </th>
+
+            <!-- bloque flux pour OPERATEUR/valdateur -->
+            <th
+              *ngIf=" bloquerFlux =='bloquer/débloquer flux' && accessBloquerFlux == true">
+              <i class="fa fa-times-circle-o" title="bloquer/débloquer flux" aria-hidden="true"></i>
+            </th>
+       
+            <!-- Modifier client pour OPERATEUR/valdateur -->
+            <th
+              *ngIf=" modifClient =='Modifier Client' && accessModifClient == true">
+              <i class="icon-pencil" title="Modifier client"></i>
+            </th>
+            <!-- recharge client pour operateur/valisateur -->
+            <th
+              *ngIf=" rechargeClient =='Recharger client' && accessRechargeClient == true">
+              <i class="fa fa-money" title="Recharge client "></i>
+            </th>
+            
+            <!-- information pour operateur/validateur -->
+            <th
+              *ngIf="iformationClient =='Information Client' && accessIformation == true">
+              <i class="fa fa-info" title="Informations client " aria-hidden="true"></i>
+            </th>
+
+
+           
+
+            <!-- Paiement facture PS client pour OPERATEUR-->
+            <th
+              *ngIf="paielentFacture =='Paiement facture PS client' && accessPaiementFac == true">
+              <i class="fa fa-dollar" title="Paiement facture PS client "></i>
+            </th>
+           
+           
+           
+
+            <th
+              *ngIf="historiqueRecharge =='Historique recharge client' && accessHistrique == true">
+              <i class="fa fa-history" title="Historique recharge client "></i>
+            </th>
+           
+           
+           
+            <th
+              *ngIf=" carteListe =='Liste Carte' && accessCarteListe == true">
+              <i class="fa fa-list" title="Liste des porteurs" aria-hidden="true"></i></th>
+
+
+            <td
+              *ngIf="  rechargeCarte =='recharger Cartes client' && accessRecharge == true">
+              <i class="fa fa-credit-card" aria-hidden="true" title="recharger Cartes client"></i></td>
+            <!-- <th> <i class="icon-lock-open" title="Bloquer/Activer Client"></i></th> -->
+            <th>Statut</th>
+            <th>Flux PS</th>
+            <th>Code client </th>
+            <th>Raison sociale </th>
+            <th>Matricule fiscale </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of ClientList">
+            <!--<td> {{item.idClient }} </td>-->
+            <!-- détail  -->
+
+
+
+
+            <th
+              *ngIf="DetailClient =='Détail Client' && accessDetail == true">
+              <i class="fa fa-info-circle" [routerLink]="['/client/Details',item.idClient]" title="Détail client"
+                aria-hidden="true"></i>
+            </th>
+
+            <!-- bloque flux -->
+
+
+            <td
+              *ngIf="  bloquerFlux =='bloquer/débloquer flux' && accessBloquerFlux == true">
+              <i class="fa fa-times-circle-o" title="bloquer/débloquer flux"
+                (click)="getClientWithSolde(item.idClient);" style="color: orange; font-size:15px"
+                *ngIf=" item.actif=='2' ">
+              </i>
+            </td>
+
+            <td
+              *ngIf=" modifClient =='Modifier Client' && accessModifClient == true">
+              <i *ngIf=" item.actif=='2'" class="icon-pencil" title="Modifier client "
+                (click)="updateClient(item.idClient)">
+              </i>
+            </td>
+            <!-- Recharge Client -->
+
+            <th
+              *ngIf="  rechargeClient =='Recharger client' && accessRechargeClient == true">
+              <i *ngIf=" item.actif=='2' " class="fa fa-money" title="Recharge client "
+                [routerLink]="['/client/RechargeClient/',item.idClient]">
+              </i>
+            </th>
+            <!-- information client -->
+
+            <th
+            *ngIf=" iformationClient =='Information Client' && accessIformation == true">
+              <i *ngIf="item.actif=='2' && item.fluxPs" [routerLink]="['/client/paramétrePlafondPS/',item.idClient]"
+                class="fa fa-info" title="Informations client" aria-hidden="true">
+              </i>
+            </th>
+            <!-- Paiement facture PS -->
+
+            <th
+              *ngIf=" paielentFacture =='Paiement facture PS client' && accessPaiementFac == true">
+              <i class="fa fa-dollar" *ngIf="item.actif=='2' && item.fluxPs" title="Paiement facture PS "
+                [routerLink]="['/client/paiementPs/',item.idClient]">
+              </i>
+            </th>
+            <!-- historique recharge client -->
+
+            <td
+              *ngIf="  historiqueRecharge =='Historique recharge client' && accessHistrique == true">
+              <i class="fa fa-history" title="historique recharge client"
+                [routerLink]="['/client/historiqueRecharge',item.idClient]">
+              </i>
+            </td>
+            <!-- liste des cartes  -->
+
+            <td
+              *ngIf=" carteListe =='Liste Carte' && accessCarteListe == true">
+              <i class="fa fa-list" aria-hidden="true" title="Liste cartes client "
+                [routerLink]="['/carte/list/',item.raisonSocialee]" routerLink="">
+              </i>
+            </td>
+            <!-- rechargeCarte -->
+            <td
+              *ngIf=" rechargeCarte =='recharger Cartes client' && accessRecharge == true">
+              <i *ngIf=" item.actif=='2' " class="fa fa-credit-card" aria-hidden="true" title="recharger cartes client"
+                [routerLink]="['/client/rechargeCarte/',item.idClient]">
+              </i>
+            </td>
+
+            <td><span class="badge badge-success" *ngIf=" item.actif=='2' ">activé</span>
+              <span class="badge badge-danger" *ngIf="item.actif=='1'  ">Inactif</span>
+            </td>
+            <td>
+              <i style="color: red;font-size:15px" *ngIf="!item.fluxPs" class="fa fa-times" aria-hidden="true"></i>
+              <i style="color: green;font-size:15px" *ngIf="item.fluxPs" class="fa fa-check" aria-hidden="true"></i>
+            </td>
+            <td>{{item.codeClient }}</td>
+            <td>{{item.raisonSociale }}</td>
+            <td>{{item.registreCommerce }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div bsModal #desactivateModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-danger" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Bloquer/Débloquer flux</h4>
+        <button type="button" class="close" (click)="desactivateModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class=" col-md-6">
+            <span><b>Raison sociale : </b>{{ clienttobeBlocked?.raisonSociale }}</span>
+          </div>
+          <div class=" col-md-6">
+            <span> <b>Numéro compte : </b> {{ clienttobeBlocked?.numCompte }} </span>
+          </div>
+        </div>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Solde</th>
+              <th>Montant </th>
+              <th>Statut </th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Solde PP</td>
+              <td>{{clienttobeBlocked?.soldePP }}</td>
+              <td>
+                <span class="badge badge-success" *ngIf=" clienttobeBlocked.statusPP=='0' ">Activé</span>
+                <span class="badge badge-danger" *ngIf="clienttobeBlocked.statusPP=='1' ">Bloqué</span>
+              </td>
+              <td>
+                <section class="example-section">
+                  <mat-checkbox class="example-margin" [(ngModel)]="statusPP">Bloquer</mat-checkbox>
+                </section>
+              </td>
+            </tr>
+            <tr>
+
+              <td>Solde PPE</td>
+              <td>{{clienttobeBlocked?.soldePPE }}</td>
+              <td>
+                <span class="badge badge-success" *ngIf=" clienttobeBlocked.statusPPE=='0' ">activé</span>
+                <span class="badge badge-danger" *ngIf="clienttobeBlocked.statusPPE=='1'  ">bloqué</span>
+              </td>
+              <td>
+                <section class="example-section">
+                  <mat-checkbox class="example-margin" [(ngModel)]="statusPPE">Bloquer</mat-checkbox>
+                </section>
+              </td>
+            </tr>
+            <tr *ngIf="clienttobeBlocked.fluxPs">
+              <td>Flux Ps</td>
+              <td>{{clienttobeBlocked?.plafondPs }}</td>
+              <td><span class="badge badge-success" *ngIf=" clienttobeBlocked.statusPs=='0' ">Activée</span>
+                <span class="badge badge-danger" *ngIf="clienttobeBlocked.statusPs=='1'  ">bloquée</span>
+              </td>
+              <td>
+                <section class="example-section">
+                  <mat-checkbox class="example-margin" [(ngModel)]="statusPsP">Bloquer</mat-checkbox>
+                </section>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="desactivateModal.hide()">Annuler</button>
+        <button type="button" class="btn btn-safe" (click)="BloquerDebloquer()">Enregistrer</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div bsModal #activateModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-success" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title"> Activer Client</h4>
+        <button type="button" class="close" (click)="activateModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Êtes-vous sûre de vouloir activer le client {{selectedClient?.raisonSociale}}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="activateModal.hide()">Annuler</button>
+        <button type="button" class="btn btn-success" (click)="activer()">Activer</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div bsModal #BloquerModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-danger" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Bloquer Client</h4>
+        <button type="button" class="close" (click)="BloquerModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Êtes-vous sûre de vouloir activer le client {{selectedClient?.raisonSociale}}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="BloquerModal.hide()">Annuler</button>
+        <button type="button" class="btn btn-safe" (click)="Bloquer()">Bloquer</button>
+      </div>
+    </div>
+  </div>
+</div>

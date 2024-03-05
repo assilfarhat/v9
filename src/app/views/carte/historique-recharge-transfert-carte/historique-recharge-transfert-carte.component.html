@@ -1,0 +1,120 @@
+<div class="animated fadeIn">
+  <div class="card">
+    <h5 class="card-title">
+      <div class="card-header"><strong> Liste des recharges / Transfert </strong></div>
+    </h5>
+    <div class="card-body">
+      <form class="form-horizontal" [formGroup]="form">
+        <form class="form-horizontal" [formGroup]="form">
+          <div class="form-group row" style="margin-top: 10px;">
+            <div class="col-xl-3 col-md-6">
+              <div style="text-align:center;margin-top: 10px;">
+                <input class="form-control" list="Client" placeholder="{{'Client'}}" formControlName="clientId">
+                <datalist id="Client">
+                  <option *ngFor="let item of ClientList" [value]="item.raisonSociale">{{ item.raisonSociale }}
+                  </option>
+                </datalist>
+              </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+              <mat-form-field appearance="outline">
+                <mat-label>Date début</mat-label>
+                <input matInput formControlName="dateDebut" type="date">
+                <mat-error>la Date début doit être inférieur ou égale à la date fin </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-xl-3 col-md-6">
+              <mat-form-field appearance="outline">
+                <mat-label>Date Fin</mat-label>
+                <input matInput formControlName="dateFin" type="date">
+                <mat-error>la Date fin doit être supérieur ou égale à la date début </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-xl-3 col-md-6">
+              <mat-form-field appearance="outline">
+                <mat-label>Type opération</mat-label>
+                <mat-select formControlName="typeTransaction">
+                  <mat-option value=""> Tous </mat-option>
+                  <mat-option value="transfert PS->PP"> transfert PS -> PP </mat-option>
+                  <mat-option value="transfert PS->PS"> transfert PS -> PS </mat-option>
+                  <mat-option value="transfert PP"> transfert PP </mat-option>
+                  <mat-option value="transfert PPE"> transfert PPE </mat-option>
+                  <mat-option value="Recharge PPE"> Recharge PPE </mat-option>
+                  <mat-option value="Recharge PP"> Recharge PP </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-xl-3 col-md-6">
+              <mat-form-field appearance="outline">
+                <mat-label>Type compte</mat-label>
+                <mat-select formControlName="typeSolde">
+                  <mat-option value="">Tous</mat-option>
+                  <mat-option value="20">PP</mat-option>
+                  <mat-option value="21">PPE</mat-option>
+                  <mat-option value="22">PS</mat-option>
+                </mat-select>
+                <mat-error>ce champ est obligatoire</mat-error>
+              </mat-form-field>&nbsp;
+            </div>
+            <div class="col-xl-3 col-md-6">
+              <mat-form-field appearance="outline">
+                <mat-label>Montant Min </mat-label>
+                <input type="number" min="1" step="1" matInput formControlName="montantMin" placeholder="Montant Min">
+              </mat-form-field>
+            </div>
+            <div class="col-xl-3 col-md-6">
+              <mat-form-field appearance="outline">
+                <mat-label>Montant Max </mat-label>
+                <input type="number" min="1" step="1" matInput formControlName="montantMax" placeholder="Montant Max">
+              </mat-form-field>
+            </div>
+            <div class="col-xl-3 col-md-6">
+              <mat-form-field appearance="outline">
+                <mat-label>Nom Porteur </mat-label>
+                <input type="text" matInput formControlName="Porteur" placeholder="Nom Porteur">
+              </mat-form-field>
+            </div>
+            <div class="col-md-12 text-right">
+              <button class="btn btn-primary btn-ladda" data-style="expand-left" (click)="rerender()">
+                <i class="fa fa-search"> Chercher </i>
+              </button>
+            </div>
+          </div>
+        </form>
+      </form>
+      <div style="overflow-x:auto;">
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table-striped datatable display nowrap"
+          width="100%">
+          <thead align="center">
+            <tr>
+              <th>Date d'opération</th>
+              <th>Type d'opération </th>
+              <th>Type solde</th>
+              <th> Montant </th>
+              <th>Numéro de carte</th>
+              <th>Carte réceptrice</th>
+              <th>Client</th>
+              <th>Code client </th>
+              <th>Nom émetteur </th>
+              <th>Nom récepteur </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let op of operations" align="center">
+              <td>{{op.dateTimeSystem | dateSql }}</td>
+              <td>{{op.typeTransaction}}</td>
+              <td>{{op.typeSolde=='20'? 'PP':(op.typeSolde=='21'? 'PPE': (op.typeSolde=='22'? 'PS':'-' )) }}</td>
+              <td>{{op.montant | amountmillierpipe }}</td>
+              <td>{{op.numCarte}}</td>
+              <td>{{op.numCarteR}}</td>
+              <td>{{op.client}}</td>
+              <td>{{op.codeClient}}</td>
+              <td>{{op.porteur}}</td>
+              <td>{{op.emetteur}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

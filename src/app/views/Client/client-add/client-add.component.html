@@ -1,0 +1,229 @@
+<div class="card">
+  <h5 class="card-title">
+    <div class="card-header"><strong>{{editMode?'Modifier Client': 'Nouveau client'}}</strong> </div>
+  </h5>
+  <div class="card-body" *ngIf="clientForm">
+
+
+
+    <form [formGroup]="clientForm" autocomplete="off">
+
+
+      <div class="row">
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Code Client</mat-label>
+            <input matInput formControlName="codeClient" required placeholder="Code Client">
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Raison Sociale</mat-label>
+            <input matInput formControlName="raisonSociale" required placeholder="Raison Sociale">
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+        <!-- <div class="col-sm-6" *ngIf="!editMode">
+        <mat-form-field appearance="outline">
+          <mat-label>Nom d'utlisateur</mat-label>
+          <input matInput formControlName="userName"  placeholder="Nom d'utlisateur">
+        </mat-form-field>&nbsp;
+        </div> -->
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Registre commerce</mat-label>
+            <input matInput formControlName="registreCommerce" required placeholder="Registre commerce">
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label> Secteur d'activité</mat-label>
+            <input matInput formControlName="secteurActivite" placeholder="Secteur d'activité">
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Adresse</mat-label>
+            <input matInput formControlName="adresse" required placeholder="Adresse">
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Ville</mat-label>
+            <input matInput formControlName="ville" required placeholder="Ville">
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Code Postal</mat-label>
+            <input matInput formControlName="codePostal" required placeholder="Code Postal">
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Contact</mat-label>
+            <input matInput formControlName="contact" required placeholder="Contact">
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Responsable</mat-label>
+            <input matInput formControlName="responsable" required placeholder="Responsable">
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Téléphone</mat-label>
+            <input matInput formControlName="telephone" required placeholder="Téléphone" pattern="[1-9][0-9]{7}">
+            <mat-error>Numéro de téléphone invalide</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input type="text" matInput formControlName="email" required placeholder="Email">
+            <mat-error>Email invalide</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label> Représentant</mat-label>
+            <input type="text" matInput formControlName="representant" required placeholder="Représentant">
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>secteur géographique</mat-label>
+            <input type="text" matInput formControlName="secteurGeographique" required
+              placeholder="Secteur géographique">
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+
+        <!-- <div class="col-sm-6">
+        <mat-form-field appearance="outline">
+          <mat-label>Prix Remplacement Carte</mat-label>
+          <input type="number" matInput formControlName="prixRempCarte" required placeholder="Prix Remplacement Carte">
+          <mat-error>ce champ est obligatoire</mat-error>
+        </mat-form-field>&nbsp;
+      </div> -->
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Type Taxe</mat-label>
+            <mat-select formControlName="typeTax">
+              <mat-option value="Client TTC">Client TTC</mat-option>
+              <mat-option value="Client HT">Client HT</mat-option>
+            </mat-select>
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+        <div  class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Nombre de carte </mat-label>
+            <input type="number" matInput formControlName="nbCarteMax" required placeholder="Nombre de carte " >
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+
+        <div class="col-sm-6" >
+          <mat-form-field appearance="outline">
+            <mat-label> échéance (en jours)</mat-label>
+            <input type="number" matInput formControlName="echeance" placeholder="échéance (en jours) ">
+          </mat-form-field>&nbsp;
+        </div>
+
+        <div class="form-check col-sm-6" >
+          <mat-checkbox matInput formControlName="FluxPs" (change)="changeFluxPS($event)"> Postpayé </mat-checkbox>&nbsp;
+        </div>
+
+        <!-- 
+        <div class="col-sm-6 ">
+          <div class="form-check checkbox mb-4">
+            <input class="form-check-input" name="FluxPs" id="FluxPs" type="checkbox" formControlName="FluxPs">
+            <label class="form-check-label" for="FluxPs"> Postpaye </label>
+          </div>
+        </div> -->
+
+        <div class="col-sm-6 ">
+        </div>
+
+        <br>
+        <div class="col-sm-6"*ngIf=" f.FluxPs.value">
+          <br>
+          <mat-form-field appearance="outline">
+            <mat-label>Plafond mensuel PS client </mat-label>
+            <input type="number" matInput formControlName="plafondPSIntial" placeholder="Plafond Mensuel">
+          </mat-form-field>&nbsp;
+        </div>
+        <div class="col-sm-6" *ngIf=" f.FluxPs.value">
+          <br>
+          <mat-form-field appearance="outline">
+            <mat-label>DMA PS </mat-label>
+            <input type="number" matInput formControlName="dmaps" placeholder="DMA PS ">
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>        
+
+        <div class="col-sm-6" *ngIf=" f.FluxPs.value  ">
+          <mat-form-field appearance="outline">
+            <mat-label>Date d'expiration garantie </mat-label>
+            <input type="date" matInput formControlName="expirationGrantie" placeholder="Date d'expiration garantie">
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+
+        <div class="col-sm-6" *ngIf=" f.FluxPs.value ">
+          <mat-form-field appearance="outline">
+            <mat-label>Nombre de jours avant alerte </mat-label>
+            <input type="number" matInput formControlName="nbJourAlert" placeholder="Nombre de jours avant alerte">
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+
+
+        
+
+        <br>
+        <div class="col-sm-12">
+          <mat-form-field appearance="outline">
+            <mat-label>Remarque</mat-label>
+            <textarea matInput formControlName="remarque" placeholder="remarque"></textarea>
+
+          </mat-form-field>&nbsp;<br />
+        </div>
+
+
+      </div>
+      <!--<div class="col-sm-6">
+        <mat-form-field appearance="outline">
+          <mat-label>Type Tax</mat-label>
+          <mat-select formControlName="typeClient">
+            <mat-option value="Prépayé">Prépayé</mat-option>
+            <mat-option value="Postpayé">Postpayé</mat-option>
+          </mat-select>
+          <mat-error>ce champ est obligatoire</mat-error>
+        </mat-form-field>&nbsp;
+      </div>-->
+
+      <button mat-raised-button *ngIf="ActualUser != 'VALIDATEUR'" class="btn btn-info pull-right" color="primary" [disabled]="clientForm.invalid"
+        (click)="AjouterClient()" type="submit">
+        {{editMode?'Modifier ': 'Ajouter '}}
+      </button>
+
+    </form>
+    <!-- /.box-body -->
+
+    <!-- /.box-footer -->
+
+  </div>
+
+</div>

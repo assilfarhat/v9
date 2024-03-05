@@ -1,0 +1,40 @@
+<div style="overflow-x:auto;">
+  
+    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+    class="row-border hover display nowrap" width="100%">
+        <thead>
+        <tr>
+          <th>Date  </th>
+          <th>Produit  </th>
+          <th>Montant  </th>
+          <th>Commision</th>
+          <th>Client  </th>
+          <th>Numéro carte </th>
+          <th>Porteur Carte  </th>
+          <th>Type carte</th>
+          <th>Terminal</th>
+          <th>Code autorisation</th>
+          <th>Code retour</th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of listTransaction">
+     <td>{{item.dateTimeSystem | dateSql     }}</td>
+     <td>{{item.produit   }}</td>
+     <td>{{item.montant | amount   }}</td>
+     <td>{{item.commision   }}</td>
+      <td>{{item.client}}</td>
+      <td>{{item.numCarte   }}</td>
+      <td>{{item.porteur   }}</td>
+      <td>{{item.typeSolde   }}</td>
+       <td>{{item.idterminal   }}</td>
+      <td>{{item.codeAutorisation   }}</td>
+      <td>{{item.codeReponse   }}</td>
+
+ 
+
+        </tr>
+      </tbody>
+    </table>
+
+
+  </div>

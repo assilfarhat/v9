@@ -1,0 +1,288 @@
+<div class="animated fadeIn">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title"><strong>Liste notes débit </strong></h5>
+        </div>
+        <div class="card-body">
+            <form class="form-horizontal" [formGroup]="form">
+
+                <div class="form-group row" style="margin-top: 10px;">
+                    <div class="col-xl-3 col-md-6">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Date début</mat-label>
+                            <input matInput formControlName="dateDebut" type="date">
+                            <mat-error>la Date début doit être inférieur ou égale à la date fin </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Date fin</mat-label>
+                            <input matInput formControlName="dateFin" type="date">
+                        </mat-form-field>
+                    </div>
+                    <!-- <div class="col-xl-3 col-md-6">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Date Fin</mat-label>
+                            <input matInput formControlName="dateFin" type="date">
+                            <mat-error>la Date fin doit être supérieur ou égale à la date début </mat-error>
+                        </mat-form-field>
+                    </div> -->
+                    <div class="col-xl-3 col-md-6">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Référence</mat-label>
+                            <input type="text" matInput formControlName="reference" placeholder="reference ">
+                        </mat-form-field>&nbsp;
+                    </div>
+                    <div class="col-md-12 text-right">
+                        <button class="btn btn-primary btn-ladda" data-style="expand-left" (click)="rerender()">
+                            <i class="fa fa-search"> Chercher </i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <div style="overflow-x:auto;">
+                <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover display nowrap"
+                    width="100%">
+                    <thead>
+                        <tr>
+                            
+                            <th  style="width: 5%;"><i class="fa fa-file-o" title="Détail"
+                                    aria-hidden="true"></i> Note débit
+                            </th>
+                            <th>Date </th>
+                            <th>Référence </th>
+                            <th>Station</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of ListNotes">
+                           
+                            <td align="center"><i class="fa fa-eye"
+                                    [ngClass]="{'fa-eye': !showNd,'fa-eye-slash': showNd }"
+                                    (click)="selectNoteNd(item);getDetailsNd(item.idDebit, item.id,item.idStation,false )"
+                                    title=" Détail ND " aria-hidden="true"></i>
+                                &nbsp;
+                                <i class="fa fa-download"
+                                    (click)="selectNoteNd(item);getDetailsNd(item.idDebit,item.id,item.idStation,true )"
+                                    title="Télécharger ND" aria-hidden="true"></i>
+                            </td>
+                            
+                            <td>{{item.date | dateSql }}</td>
+                            <td>{{item.reference}}</td>
+                            <!-- <td>{{item.type}}</td> -->
+                            <td>{{item.station}}</td>
+                           
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="animated fadeIn" *ngIf="showNd">
+    <div class="card">
+        <div class="card-header"><strong> Note Débit (ND)</strong></div>
+        <div class="card-body">
+            <div class="row">
+                <div class=" col-md-4">
+                    <span> <b>Date : </b> {{ selectedNote?.date |dateSql}}
+                    </span>
+                </div>
+                <div class=" col-md-4">
+                    <span> <b>Référence : </b> {{ selectedNoteD?.reference}} </span>
+                </div>
+                <div class=" col-md-12" style="text-align: right;">
+                    <a class="btn btn-danger btn-ladda" data-style="expand-left" (click)="downlaodND()">
+                        <i class="fa fa-download"></i> Télécharger
+                    </a>
+                </div>
+            </div>
+            <!-- <div style="overflow-x:auto; margin-top: 20px;">
+                <table class="table table-striped" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Date </th>
+                            <th>Produit </th>
+                            <th>Montant </th>
+                            <th>Numéro carte </th>
+                            <th>Terminal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of listTransaction">
+                            <td>{{item.dateTimeSystem | dateSql }}</td>
+                            <td>{{item.produit }}</td>
+                            <td>{{item.montant  }}</td>
+                            <td>{{item.numCarte }}</td>
+                            <td>{{item.idterminal }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+            </div> -->
+            <div style="overflow-x:auto; margin-top: 40px;">
+                <table class="table table-striped" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Libellé produit</th>
+                            <th>Quantité </th>
+                            <th>Commission </th>
+                            <th>Montant TVA </th>
+                            <th>Montant HTVA </th>
+                            <th>Montant TVA </th>
+                            <th>Montant TTC </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of ListdetailNoteNd">
+                            <td>{{item.produit}}</td>
+                            <td>{{item.qteM3}}</td>
+                            <td>{{item.commission }}</td>
+                            <td>{{item.txtva }} %</td>
+                            <td>{{item.mthtva | amountpipe}}</td>
+                            <td>{{item.mttva | amountpipe}}</td>
+                            <td>{{item.montantttc | amountpipe}}</td>
+
+                        </tr>
+                        <tr>
+                            <th colspan="4">Total commission</th>
+                            <td>{{TotalHTVA | amountpipe}}</td>
+                            <td>{{TotalTVA | amountpipe}}</td>
+                            <td>{{TotalTTC | amountpipe}}</td>
+                        </tr>
+                        <tr>
+                            <th colspan="6">Timbre</th>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <th colspan="6">Total débit </th>
+                            <td>{{TotalTTC + 1}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="container" id="iDdIV2" hidden="true">
+
+    <div class="row">
+        <div class="col-xl-3 col-md-5">
+            <img src="assets/img/logo-symbol.png" style="align-self: center; float: left;">
+        </div>
+        <div class="col-xl-3 col-md-3">
+            <div style="align-self: center;">
+                <h2>Note débit</h2>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-4">
+            <div style="align-self: center; float: right;">
+                <h4>Edité le: :{{ selectedNoteD?.date |dateSql}}</h4>
+            </div>
+        </div>
+    </div>
+    <div class="row  col-md-12" style="margin-top: 20px;">
+        <div class="col-xl-3 col-md-6" style="float: left;">
+            <fieldset>
+                <p><strong>Raison sociale: </strong> {{station?.nom}} </p>
+                <p><strong>Adresse: </strong> {{station?.adresse }} </p>
+
+            </fieldset>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <fieldset style="float: right;">
+                <p><strong>Date: </strong> {{selectedNoteD?.date |dateSql }} </p>
+                <p><strong>Numéro débit: </strong> {{selectedNoteD?.reference }} </p>
+
+            </fieldset>
+        </div>
+    </div>
+    <hr>
+    <div style="overflow-x:auto; margin-top: 20px;">
+        <!-- <table class="table table-striped" width="100%">
+            <thead>
+                <tr>
+                    <th>Date </th>
+                    <th>Produit </th>
+                    <th>Montant </th>
+                    <th>Numéro carte</th>
+                    <th>Terminal</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of listTransaction">
+                    <td>{{item.dateTimeSystem | dateSql }}</td>
+                    <td>{{item.produit }}</td>
+                    <td>{{item.montant  }}</td>
+                    <td>{{item.numCarte }}</td>
+                    <td>{{item.idterminal }}</td>
+                </tr>
+            </tbody>
+        </table> -->
+
+
+    </div>
+    <hr>
+
+
+    <div style="overflow-x:auto; margin-top: 40px;">
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Libellé produit</th>
+                    <th>Quantité </th>
+                    <th>Commission </th>
+                    <th>Montant TVA </th>
+                    <th>Montant HTVA </th>
+                    <th>Montant TVA </th>
+                    <th>Montant TTC </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of ListdetailNoteNd">
+                    <td>{{item.produit}}</td>
+                    <td>{{item.qteM3}}</td>
+                    <td>{{item.commission }}</td>
+                    <td>{{item.txtva }} %</td>
+                    <td>{{item.mthtva | amountpipe }}</td>
+                    <td>{{item.mttva | amountpipe }}</td>
+                    <td>{{item.montantttc | amountpipe}}</td>
+                </tr>
+
+                <tr>
+                    <th colspan="4">Total commission</th>
+                    <td>{{TotalHTVA | amountpipe}}</td>
+                    <td>{{TotalTVA | amountpipe}}</td>
+                    <td>{{TotalTTC | amountpipe}}</td>
+                </tr>
+                <tr>
+                    <th colspan="6">Timbre</th>
+                    <td>1.000</td>
+                </tr>
+                <tr>
+                    <th colspan="6">Total débit </th>
+                    <td>{{TotalTTC  + 1}}</td>
+                </tr>
+                <tr>
+                    <th colspan="6">Soit : {{MntTtlND}} </th>
+
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col text-right">
+        <h4>Signature et cachet</h4>
+    </div>
+</div>
+
+

@@ -1,0 +1,277 @@
+<div class="animated fadeIn">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title"><strong>Liste notes crédit </strong></h5>
+        </div>
+        <div class="card-body">
+            <form class="form-horizontal" [formGroup]="form">
+
+                <div class="form-group row" style="margin-top: 10px;">
+                    <div class="col-xl-3 col-md-6">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Date début</mat-label>
+                            <input matInput formControlName="dateDebut" type="date">
+                            <mat-error>la Date début doit être inférieur ou égale à la date fin </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Date fin</mat-label>
+                            <input matInput formControlName="dateFin" type="date">
+                        </mat-form-field>
+                    </div>
+                    <!-- <div class="col-xl-3 col-md-6">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Date Fin</mat-label>
+                            <input matInput formControlName="dateFin" type="date">
+                            <mat-error>la Date fin doit être supérieur ou égale à la date début </mat-error>
+                        </mat-form-field>
+                    </div> -->
+                    <div class="col-xl-3 col-md-6">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Référence</mat-label>
+                            <input type="text" matInput formControlName="reference" placeholder="reference ">
+                        </mat-form-field>&nbsp;
+                    </div>
+                    <div class="col-md-12 text-right">
+                        <button class="btn btn-primary btn-ladda" data-style="expand-left" (click)="rerender()">
+                            <i class="fa fa-search"> Chercher </i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <div style="overflow-x:auto;">
+                <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover display nowrap"
+                    width="100%">
+                    <thead>
+                        <tr>
+
+                            <th style="width: 5%;"><i class="fa fa-file-o" title="Détail" aria-hidden="true"></i> Note crédit </th>
+                            <th>Date </th>
+                            <th>Référence </th>
+                            <th>Station</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of ListNotes">
+
+                            <td align="center" ><i class="fa fa-eye"
+                                    [ngClass]="{'fa-eye': !showNc,'fa-eye-slash': showNc }"
+                                    (click)="selectNoteNc(item);getDetailsNc(item.idCredi, item.id,item.idStation,false )"
+                                    title=" Détail NC " aria-hidden="true"></i>
+                                &nbsp;
+                                <i class="fa fa-download"
+                                    (click)="selectNoteNc(item);getDetailsNc(item.idCredi,item.id,item.idStation,true )"
+                                    title="Télécharger NC" aria-hidden="true"></i>
+                            </td>
+                            <td>{{item.date | dateSql }}</td>
+                            <td>{{item.reference}}</td>
+                            <!-- <td>{{item.type}}</td> -->
+                            <td>{{item.station}}</td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="animated fadeIn" *ngIf="showNc">
+
+    <div class="card">
+        <div class="card-header"><strong> Note Crédit (NC) </strong></div>
+        <div class="card-body">
+
+            <div class="row">
+                <div class=" col-md-4">
+                    <span> <b>Date : </b> {{ selectedNoteC.date | dateSql }}
+                    </span>
+                </div>
+                <div class=" col-md-4">
+                    <span> <b>Référence : </b> {{ selectedNoteC.idCredi}} </span>
+                </div>
+                <div class=" col-md-12" style="text-align: right;">
+                    <a class="btn btn-danger btn-ladda" data-style="expand-left" (click)="downlaodNC()">
+                        <i class="fa fa-download"></i> Télécharger
+                    </a>
+                </div>
+            </div>
+            <div style="overflow-x:auto; margin-top: 20px;">
+                <table class="table table-striped" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Date / Heure </th>
+                            <th>N° ticket </th>
+                            <th>Réference TPE</th>
+                            <th>N° carte </th>
+                            <th>Produit </th>
+                            <th>Quantité </th>
+                            <th>Montant TTC </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of listTransaction">
+                            <td>{{item.dateTimeSystem | dateSql }}</td>
+                            <td> {{item.numTicket}}</td>
+                            <td>{{item.idterminal }}</td>
+                            <td>{{item.numCarte }}</td>
+                            <td>{{item.produit }}</td>
+                            <td>{{item.quantite }}</td>
+                            <td>{{item.montant | amountmillierpipe}}</td>
+                        </tr>
+                        <tr>
+                            <th colspan="6">Total crédit</th>
+                            <td>{{TotalMntNc | amountmillierpipe}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+            </div>
+            <div style="overflow-x:auto; margin-top: 40px;">
+                <table class="table table-striped" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Libellé produit</th>
+                            <th>Quantité</th>
+                            <th>Prix Unitaire</th>
+                            <th>Taux TVA %</th>
+                            <th>Montant HTVA </th>
+                            <th>Montant TVA </th>
+                            <th>Montant TTC </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of ListdetailNoteNc">
+                            <td>{{ item.produit }}</td>
+                            <td>{{ item.qteM3 }}</td>
+                            <td>{{ item.prixM3htva }}</td>
+                            <td>{{ item.txtva }} % </td>
+                            <td>{{ item.mthtva | amountpipe}}</td>
+                            <td>{{ item.mttva | amountpipe}}</td>
+                            <td>{{ item.montantttc | amountpipe}}</td>
+                        </tr>
+                        <tr>
+                            <th colspan="4">Total crédit</th>
+                            <td>{{TotalMhtva | amountpipe}}</td>
+                            <td>{{TotalMtva | amountpipe}}</td>
+                            <td>{{Total | amountpipe}}</td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container" id="iDdIV3" hidden="true">
+    <div class="row">
+        <div class="col-xl-3 col-md-5">
+            <img src="assets/img/logo-symbol.png" style="align-self: center; float: left;">
+        </div>
+        <div class="col-xl-3 col-md-3">
+            <div style="align-self: center;">
+                <h2>Note crédit</h2>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-4">
+            <div style="align-self: center; float: right;">
+                <h4>Edité le: :{{ selectedNoteC?.date | dateSql }}</h4>
+            </div>
+        </div>
+    </div>
+    <div class="row  col-md-12" style="margin-top: 20px;">
+        <div class="col-xl-3 col-md-6" style="float: left;">
+            <fieldset>
+                <p><strong>Raison sociale: </strong> {{station?.nom}} </p>
+                <p><strong>Adresse: </strong> {{station?.adresse }} </p>
+
+            </fieldset>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <fieldset style="float: right;">
+                <p><strong>Date: </strong> {{selectedNoteC?.date | dateSql }} </p>
+                <p><strong>Numéro Crébit: </strong> {{selectedNoteC?.reference }} </p>
+
+            </fieldset>
+        </div>
+    </div>
+    <hr>
+    <div>
+        <div style="overflow-x:auto; margin-top: 40px;">
+            <table class="table table-striped">
+                <thead align="center">
+                    <tr>
+                        <th>DATE/ HEURE </th>
+                        <th>N° DU TICKET </th>
+                        <th>RÉFÉRENCE TPE</th>
+                        <th>N° DE CARTE </th>
+                        <th>PRODUIT </th>
+                        <th>QUANTITÉ </th>
+                        <th>MONTANT TTC </th>
+                    </tr>
+                </thead>
+                <tbody align="center">
+                    <tr *ngFor="let item of listTransaction">
+                        <td>{{item.dateTimeSystem | dateSql }}</td>
+                        <td>{{item.numTicket}}</td>
+                        <td>{{item.idterminal }}</td>
+                        <td>{{item.numCarte }}</td>
+                        <td>{{item.produit }}</td>
+                        <td>{{item.quantite }}</td>
+                        <td>{{item.montant | amountmillierpipe}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" class="col text-left">RECAP PRODUIT : </td>
+                        <td>{{TotalMntNc | amountmillierpipe}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="overflow-x:auto; margin-top: 40px;">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Libellé produit</th>
+                        <th>Quantité</th>
+                        <th>Prix Unitaire</th>
+                        <th>Taux TVA % </th>
+                        <th>Montant HTVA </th>
+                        <th>Montant TVA </th>
+                        <th>Montant TTC </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of ListdetailNoteNc">
+                        <!-- <td *ngIf="{{item.produit}} == 'Total'">{{ item.produit }}</td> -->
+                        <td>{{ item.produit }}</td>
+                        <td>{{ item.qteM3 }}</td>
+                        <td>{{ item.prixM3htva }}</td>
+                        <td>{{ item.txtva }} %</td>
+                        <td>{{ item.mthtva | amountpipe }}</td>
+                        <td>{{ item.mttva | amountpipe }}</td>
+                        <td>{{ item.montantttc | amountpipe }}</td>
+                    </tr>
+                    <tr>
+                        <th colspan="4">Total crédit</th>
+                        <td>{{TotalMhtva | amountpipe}}</td>
+                        <td>{{TotalMtva | amountpipe}}</td>
+                        <td>{{Total | amountpipe}}</td>
+                    </tr>
+                    <tr>
+                        <th colspan="6">Soit : {{MntTtlNC}} </th>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col text-right">
+        <h4>Signature et cachet</h4>
+    </div>
+</div>

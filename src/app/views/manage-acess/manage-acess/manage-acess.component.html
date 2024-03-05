@@ -1,0 +1,50 @@
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <h5 class="card-title" align="center">{{ 'ACESS.MESSAGE' | translate }}</h5>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-sm-6">
+          <label for="roleSelect">Sélectionnez un rôle</label>
+          <input class="form-control mb-3" list="roless" #t (change)="getUserss(t.value)" id="roleSelect" placeholder="{{ 'Role' }}">
+          <datalist id="roless">
+            <option *ngFor="let role of roles" value="{{ role}}">{{ role }}</option>
+          </datalist>
+        </div>
+        <div class="col-sm-6">
+          <label for="userSelect">Sélectionnez un utilisateur</label>
+          <input class="form-control mb-3" list="users" class="form-control mb-3" (change)="selectUser($event)" id="userSelect" placeholder="{{ 'Utilisateur' }}">
+          <datalist id="users">
+            <option *ngFor="let user of userr; let i = index" value="{{ user.userName }}">{{ user.userName }}</option>
+          </datalist>
+        </div>
+    </div>
+    <div class="permissions-container">
+      <ul class="permissions-list">
+        <li *ngFor="let node of permissions" class="permission-item">
+          {{ node.name }}
+          <input type="checkbox" class="permission-checkbox" 
+            (click)="toggleChildrenVisibility(node); ">
+          <div *ngIf="node.isChecked && node.children && node.children.length > 0" class="sub-permissions">
+            <ul class="sub-permissions-list">
+              <li *ngFor="let child of node.children" class="sub-permission-item">
+                {{ child.name }}
+                <input type="checkbox" [(ngModel)]="child.test"
+                  (click)=" checkModifications();">
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </div>
+    
+    
+
+    <div class="row" *ngIf="modified">
+      <div class="col text-right">
+        <button class="btn btn-primary" (click)="savePermissions()">{{ 'ACESS.MESSAGE3' | translate }}</button>
+      </div>
+    </div>
+  </div>
+</div>

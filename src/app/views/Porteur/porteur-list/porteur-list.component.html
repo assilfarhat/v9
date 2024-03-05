@@ -1,0 +1,121 @@
+
+
+<!-- <pre>{{PorteurList | json}}</pre> -->
+
+<div class="animated fadeIn">
+  <div class="card">
+    <div class="card-header">List des porteurs</div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-sm-12 text-right">
+          <a class="btn btn-success btn-ladda" data-style="expand-left" [routerLink]="['/porteur/add']">
+            <i class="fa fa-plus"></i>  Ajouter
+          </a>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <!-- <div class="col-md-4 offset-md-8">
+           <div class="input-group">
+             <label class="col-form-label">Recherche :   </label>
+             <input type="text" class="form-control" [(ngModel)]="filterQuery" placeholder="Recherche par prenom"/>
+           </div>
+         </div> -->
+      </div>
+      <div style="overflow-x:auto;">
+
+        <table *ngIf="PorteurList" datatable class="table row-border hover" [dtOptions]="dtOptions">
+          <thead>
+            <tr>
+              <!--<th>idClient             </th>-->
+            
+              <th>Nom</th>
+              <!--<th>matricule</th>-->
+              <th>CIN</th>
+              <th>contact</th>
+              <th>Numero gsm</th>
+              <th>Societé</th>
+              <th><i class="icon-pencil" title="Modifier Porteur"></i></th>
+              <th><i class="fa fa-money" title="Recharge Porteur "></i></th>
+              <th><i class="fa fa-credit-card" ></i></th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of PorteurList">
+              <!--<td>{{item.idClient        }}    </td>-->
+
+              <td>{{item.nom}}    </td>
+              <!--<td>{{item.matricule}}    </td>-->
+              <td>{{item.cin}}    </td>
+              <td>{{item.contact}}    </td>
+              <td>{{item.numeroGSM}}    </td>
+              <td>{{item.raisonSociale}}    </td>
+              <td><i class="icon-pencil" (click)="updatePorteur(item.idPorteur)"></i></td>
+              <td><i class="fa fa-money" (click)="selectPorteur(item.idPorteur);RechargeModal.show()"></i></td>
+              <td><i class="fa fa-credit-card" [routerLink]="['/porteur/Carte', item.idPorteur]"></i></td>
+
+           
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div bsModal #RechargeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Recharge Compte</h4>
+        <button type="button" class="close" (click)="RechargeModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!--{{PorteurForm.value | json
+                }}-->
+                <form [formGroup]="PorteurForm" autocomplete="off">
+                  <div class="box-body">
+
+                    <mat-form-field appearance="outline">
+                      <mat-label>idPorteur</mat-label>
+                      <input readonly matInput formControlName="idPorteur" required placeholder="idPorteur">
+                      <mat-error>ce champ est obligatoire</mat-error>
+                    </mat-form-field><br><br>
+                    <mat-form-field appearance="outline">
+                      <mat-label>Montant en millimes</mat-label>
+                      <input type="text" min="1000" step="1" matInput formControlName="montant" pattern="^[1-9][0-9]{3,5}$" required placeholder="montant">
+                      <mat-error>Le montant doit etre compris entre 1000 et 999999</mat-error>
+                    </mat-form-field><br><br>
+
+                  </div>
+                </form>
+</div>
+      <div class="modal-footer">
+
+        <button [disabled]="PorteurForm.invalid" type="button" class="btn btn-primary" (click)="ConfirmRechargeModal.show()">Confirmer</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div bsModal #ConfirmRechargeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Confirmation Recharge Compte</h4>
+        <button type="button" class="close" (click)="ConfirmRechargeModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+     
+      </div>
+      <div class="modal-footer">
+
+        <button type="button" class="btn btn-primary" (click)="confirmRecharge();ConfirmRechargeModal.hide();RechargeModal.hide()">Confirmer</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

@@ -1,0 +1,88 @@
+<div class="animated fadeIn">
+  <div class="animated fadeIn">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card">
+          <h5 class="card-title">
+            <div class="card-header"><strong>Gestion des produits</strong></div>
+          </h5>
+          <div class="card-body">
+            <!-- <div class="row" *ngIf="role=='ADMIN STAROIL'">
+                    <div class="col-sm-12 text-right">
+                      <a class="btn btn-success btn-ladda" data-style="expand-left" [routerLink]="['/produits/add']">
+                        <i class="fa fa-plus"></i>  Ajouter
+                      </a>
+                    </div>
+                  </div> -->
+            <div style="overflow-x:auto; margin-top: 20px;">
+              <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover display nowrap"
+                width="100%">
+                <thead >
+                  <tr>
+                    <th>Code article </th>
+                    <th>Libellé</th>
+                    <th>Prix unitaire TTC </th>
+                    <th>TVA </th>
+                    <th>Taux de taxe </th>
+                    <!-- <th>Compte vente </th>
+                    <th>Compte de taxe </th> -->
+                    <th>type</th>
+                    <th>Famille </th>
+                    <th>Stations</th>
+                    
+                    
+                    
+                    <th >
+                      <i  *ngIf=" modifProduit =='Modification' && accessModifProduit == true" class="icon-pencil" aria-hidden="true"></i>
+                    </th>
+                  </tr>
+                </thead>
+
+                <tbody *ngIf="produits?.length != 0 &&  ActualUser !='GERANT'">
+                  <tr *ngFor="let item of produits">
+                    <td>{{item.idProduit}}</td>
+                    <td>{{item.produit}}</td>
+                    <td>{{item.prixUnitaireTtc }}</td>
+                    <td>{{item.tva }}</td>
+                    <td>{{item.tauxTaxe}}</td>
+                    <!-- <td>{{item.compteVente}}</td>
+                    <td>{{item.compteTaxe}}</td> -->
+                    <td>{{item.typeProduit}}</td>
+                    <td>{{item.familleProduit}}</td>
+                    <td>{{item.nbStation}}</td>
+                    
+                    
+                    
+                    <td><i *ngIf="  modifProduit =='Modification' && accessModifProduit == true"  class="icon-pencil" aria-hidden="true"
+                      [routerLink]="['/produits/add', item.idProduit]"></i>
+                  </td>
+                  </tr>
+                </tbody>
+                <tbody *ngIf="produits?.length != 0 &&  ActualUser =='GERANT'">
+                  <tr *ngFor="let item of produits2">
+                    <td >{{item.idProduit}}</td>
+                    <td>{{item.produit}}</td>
+                    <td>{{item.prixUnitaireTtc }}</td>
+                    <td>{{item.tva }}</td>
+                    <td>{{item.tauxTaxe}}</td>
+                    <!-- <td>{{item.compteVente}}</td>
+                    <td>{{item.compteTaxe}}</td> -->
+                    <td>{{item.typeProduit}}</td>
+                    <td>{{item.familleProduit}}</td>
+                    <td>{{item.nbStation}}</td>
+                   
+                   
+                   
+                    <td><i *ngIf="  modifProduit =='Modification' && accessModifProduit == true"  class="icon-pencil" aria-hidden="true"
+                      [routerLink]="['/produits/add', item.idProduit]"></i>
+                  </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

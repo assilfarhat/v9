@@ -1,0 +1,68 @@
+<div class="card">
+  <div class="card-header">
+    <h5 class="card-title"><strong> {{editMode?"Modifier TPE": "Nouveau TPE"}} </strong></h5>
+  </div>
+  <div class="card-body" *ngIf="form">
+    <form class="form-horizontal row" [formGroup]="form">
+      <div class="col-sm-6">
+        <mat-form-field appearance="outline">
+          <mat-label>Numéro de série</mat-label>
+          <input matInput formControlName="SerialNumber" required placeholder="Numéro de série">
+          <mat-error>{{f.SerialNumber.errors?.required ? 'ce champ est obligatoire': ' le format du SerialNumber doit être xxx-xxx-xxx '}}</mat-error>
+        </mat-form-field>&nbsp;
+      </div>
+
+      <!-- dataliste -->
+
+      <!-- <div class="col-sm-6">
+        <div style="text-align:center;margin-top: 10px;">
+          <input class="form-control" list="Station" placeholder="{{'Station'}}" 
+            formControlName="idPointDeVente">
+          <datalist id="Station">
+            <option *ngFor="let item of stations" value="{{item.idStationNom}}">{{item.idStationNom}} </option>
+          </datalist>
+        </div>
+      </div> -->
+
+      <div class="col-xl-3 col-md-6">
+        Station
+        <input class="form-control" list="Station" placeholder="{{'Station'}}" formControlName="idPointDeVente">
+        <datalist id="Station">
+          <option *ngFor="let item of stations" [value]="item.stationName">{{ item.stationName }} </option>
+        </datalist>
+      </div>
+
+      <!-- <div class="col-sm-6">
+        <mat-form-field appearance="outline">
+          <mat-label>Station</mat-label>
+          <mat-select formControlName="idPointDeVente" required placeholder="Station">
+            <mat-option *ngFor="let item of stations" value="{{item.idStation}}">{{item.nom}} </mat-option>
+          </mat-select>
+          <mat-error>ce champ est obligatoire</mat-error>
+        </mat-form-field> &nbsp;
+         (selectionChange)="filtreStations()" 
+      </div> -->
+      <div class="col-sm-6">
+        <!-- 
+        <mat-form-field appearance="outline">
+          <mat-label>Station</mat-label>ng 
+          <mat-select formControlName="idPointDeVente" required placeholder="Station">
+            <mat-option *ngFor="let item of FiltredStation" value="{{item.idStation}}" > {{item.nom}} </mat-option>
+
+          </mat-select>
+          <mat-error >ce champ est obligatoire</mat-error>    
+
+        </mat-form-field>&nbsp; -->
+      </div>
+      <div class="col-sm-12 text-right">
+        <a class="btn btn-secondary btn-ladda" data-style="expand-left"
+          style="margin-right:20px; color: rgb(42, 42, 44);" [routerLink]="[ '/Tpe/list']">
+          <i class="fa fa-undo"></i> Annuler
+        </a>
+        <button class="btn btn-success btn-ladda" data-style="expand-left" [ladda]='isLoading' (click)="checkAndSave()">
+          <i class="fa fa-plus"></i> {{editMode?"Modifier ": "Ajouter"}}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

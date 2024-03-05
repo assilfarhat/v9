@@ -1,0 +1,245 @@
+<div class="card">
+  <div class="card-header">
+    <h5 class="card-title"><strong> Modifier affilié </strong></h5>
+  </div>
+  <div class="card-body">
+    <form class="form-horizontal" [formGroup]="form">
+      <!-- <div class="row">
+                  <div class="col-sm-6">
+                    <div class="form-group row">
+                      <label class="col-form-label col-sm-4" for="name">Code</label>
+                      <div class="col-sm-8">
+                        <input formControlName="CodeAffilie" type="text" class="form-control" />
+                        <div class="help-block text-danger" *ngIf="f.CodeAffilie.errors && f.CodeAffilie.errors.required && submitted">
+                            Ce champ est obligatoire.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>-->
+
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group row">
+            <label class="col-form-label col-sm-4" for="name">Code CorePass</label>
+            <div class="col-sm-8">
+              <input formControlName="CodeCorePass" type="text" class="form-control" />
+              <div class="help-block text-danger"
+                *ngIf="f.CodeCorePass.errors && f.CodeCorePass.errors.required && submitted">
+                Ce champ est obligatoire.
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group row">
+            <label class="col-form-label col-sm-4" for="name">Nom</label>
+            <div class="col-sm-8">
+              <input formControlName="Nom" type="text" class="form-control" />
+              <div class="help-block text-danger" *ngIf="f.Nom.errors && f.Nom.errors.required && submitted">
+                Ce champ est obligatoire.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group row">
+            <label class="col-form-label col-sm-4" for="name">Raison Sociale</label>
+            <div class="col-sm-8">
+              <input formControlName="RaisonSocial" type="text" class="form-control" />
+              <div class="help-block text-danger"
+                *ngIf="f.RaisonSocial.errors && f.RaisonSocial.errors.required && submitted">
+                Ce champ est obligatoire.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group row">
+            <label class="col-form-label col-sm-4" for="name">Adresse</label>
+            <div class="col-sm-8">
+              <input formControlName="Adresse" type="text" class="form-control" />
+              <div class="help-block text-danger" *ngIf="f.Adresse.errors && f.Adresse.errors.required && submitted">
+                Ce champ est obligatoire.
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group row">
+            <label class="col-form-label col-sm-4" for="name">Ville</label>
+            <div class="col-sm-8">
+              <input formControlName="Ville" type="text" class="form-control" />
+              <div class="help-block text-danger" *ngIf="f.Ville.errors && f.Ville.errors.required && submitted">
+                Ce champ est obligatoire.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group row">
+            <label class="col-form-label col-sm-4" for="name">Gouvernorat</label>
+            <div class="col-sm-8">
+              <input formControlName="Gouvernorat" type="text" class="form-control" />
+              <div class="help-block text-danger"
+                *ngIf="f.Gouvernorat.errors && f.Gouvernorat.errors.required && submitted">
+                Ce champ est obligatoire.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group row">
+            <label class="col-form-label col-sm-4" for="name">CodePostal</label>
+            <div class="col-sm-8">
+              <input formControlName="CodePostal" type="text" class="form-control" />
+              <div class="help-block text-danger"
+                *ngIf="f.CodePostal.errors && f.CodePostal.errors.required && submitted">
+                Ce champ est obligatoire.
+              </div>
+              <div class="help-block text-danger"
+                *ngIf="f.CodePostal.errors && f.CodePostal.errors.pattern && submitted">
+                Code Postal invalide.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group row">
+            <label class="col-form-label col-sm-4" for="name">Contact</label>
+            <div class="col-sm-8">
+              <input formControlName="Contact" type="text" class="form-control" />
+              <div class="help-block text-danger" *ngIf="f.Contact.errors && f.Contact.errors.required && submitted">
+                Ce champ est obligatoire.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group row">
+            <label class="col-form-label col-sm-4" for="name">Responsable</label>
+            <div class="col-sm-8">
+              <input formControlName="Responsable" type="text" class="form-control" />
+              <div class="help-block text-danger"
+                *ngIf="f.Responsable.errors && f.Responsable.errors.required && submitted">
+                Ce champ est obligatoire.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--<div class="row">
+                  <div class="col-sm-6">
+                    <div class="form-group row">
+                      <label class="col-form-label col-sm-4" for="name">Activité</label>
+                      <div class="col-sm-8">
+                        <input formControlName="Activite" type="text" class="form-control" />
+                        <div class="help-block text-danger" *ngIf="f.Activite.errors && f.Activite.errors.required && submitted">
+                            Ce champ est obligatoire.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>-->
+
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group row">
+            <label class="col-form-label col-sm-4" for="name">Activite</label>
+            <div class="col-sm-8">
+              <select class="form-control" formControlName="Activite">
+                <option value=""> - Choisir - </option>
+                <option *ngFor="let item of mccs" value="{{item.Nom_Sodexo}}">{{ item.Nom_Sodexo }}-{{ item.MCC_Code }}
+                </option>
+              </select>
+              <div class="help-block text-danger" *ngIf="f.Activite.errors && f.Activite.errors.required && submitted">
+                Ce champ est obligatoire.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <!-- <div class="row">
+                      <div class="col-sm-6">
+                        <div class="form-group row">
+                          <label class="col-form-label col-sm-4" for="name">Décote</label>
+                          <div class="col-sm-8">
+                            <input formControlName="Decote" type="text" class="form-control" />
+                            <div class="help-block text-danger" *ngIf="f.Decote.errors && f.Decote.errors.required && submitted">
+                                Ce champ est obligatoire.
+                            </div>
+                            <div class="help-block text-danger" *ngIf="f.Decote.errors && f.Decote.errors.pattern && submitted">
+                              Decote invalide.
+                          </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div> -->
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group row">
+            <label class="col-form-label col-sm-4" for="name">Actif</label>
+            <div class="col-sm-8">
+              <input class="" name="Actif" id="Actif" type="checkbox" formControlName="Actif">
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group row">
+            <label class="col-form-label col-sm-4" for="name">Visibilie Mobile</label>
+            <div class="col-sm-8">
+              <input class="" name="VisibilieMobile" id="VisibilieMobile" type="checkbox"
+                formControlName="VisibilieMobile">
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12 text-right">
+          <a class="btn btn-secondary btn-ladda" data-style="expand-left"
+            style="margin-right:20px; color: rgb(42, 42, 44);" [routerLink]="[ '/affil/list']">
+            <i class="fa fa-undo"></i> Annuler
+          </a>
+          <button class="btn btn-success btn-ladda" data-style="expand-left" [ladda]='isLoading'
+            (click)="checkAndSave()">
+            <i class="fa fa-plus"></i> Modifier
+          </button>
+        </div>
+      </div>
+
+
+    </form>
+  </div>
+</div>

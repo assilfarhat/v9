@@ -1,0 +1,856 @@
+<!--<p>recharge-client works!</p>
+<pre>
+{{ListRechargeClient | json}}
+</pre>-->
+
+<div class="animated fadeIn">
+  <div class="card">
+    <h5 class="card-title">
+      <div class="card-header"><b> Confirmation recharge client</b></div>
+    </h5>
+    <div class="card-body">
+      <form class="form-horizontal" [formGroup]="form">
+        <div class="form-group row" style="margin-top: 10px;">
+          <div class="col-xl-3 col-md-6">
+            <div style="text-align:center;margin-top: 10px;">
+              <input class="form-control" list="Client" placeholder="Client" formControlName="clientId">
+              <datalist id="Client">
+                <option *ngFor="let item of ClientList" [value]="item.raisonSociale">{{ item.raisonSociale }} </option>
+              </datalist>
+            </div>
+          </div>
+          <div class="col-xl-3 col-md-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Date début</mat-label>
+              <input matInput formControlName="dateDebut" type="date">
+              <mat-error>la Date début doit être inférieur ou égale à la date fin </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-xl-3 col-md-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Date Fin</mat-label>
+              <input matInput formControlName="dateFin" type="date">
+              <mat-error>la Date fin doit être supérieur ou égale à la date début </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-xl-3 col-md-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Statut</mat-label>
+              <mat-select formControlName="status">
+                <mat-option value=""> Tous </mat-option>
+                <mat-option value="confirmé"> Confirmé </mat-option>
+                <mat-option value="demandé"> Demandé </mat-option>
+                <mat-option value="annulé"> Annulé </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-xl-3 col-md-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Type recharge</mat-label>
+              <mat-select formControlName="typeCompte">
+                <mat-option value="">Tous</mat-option>
+                <mat-option value="20">Prépayé</mat-option>
+                <mat-option value="21">Prépayé à terme</mat-option>
+                <!-- <mat-option value="22">Postpayé</mat-option> -->
+              </mat-select>
+            </mat-form-field>&nbsp;
+          </div>
+          <div class="col-xl-3 col-md-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Type paiement</mat-label>
+              <mat-select formControlName="typePayement">
+                <mat-option value=""> Tous </mat-option>
+                <mat-option value="virement">Virement</mat-option>
+                <mat-option value="espece">Espèce</mat-option>
+                <mat-option value="cheque">Chèque</mat-option>
+                <mat-option value="traite">Traite</mat-option>
+              </mat-select>
+            </mat-form-field>&nbsp;
+          </div>
+          <div class="col-xl-3 col-md-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Etat</mat-label>
+              <mat-select formControlName="statutBon">
+                <mat-option value=""> Tous </mat-option>
+                <mat-option value="open">Ouvert</mat-option>
+                <mat-option value="closed">Fermé</mat-option>
+              
+              
+              </mat-select>
+            </mat-form-field>&nbsp;
+          </div>
+          <!-- <div class="col-xl-3 col-md-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Montant Min </mat-label>
+              <input type="number" min="1" step="1" matInput formControlName="montantMin" placeholder="Montant Min">
+              <mat-error>Le montant min doit etre inferieur ou égale au montant Max </mat-error>
+            </mat-form-field>&nbsp;
+          </div>
+          <div class="col-xl-3 col-md-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Montant Max </mat-label>
+              <input type="number" min="1" step="1" matInput formControlName="montantMax" placeholder="Montant Max">
+            </mat-form-field>&nbsp;
+          </div> -->
+          <div class="col-xl-3 col-md-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Type Opération</mat-label>
+              <mat-select formControlName="typeOperation">
+                <mat-option value=""> Tous </mat-option>
+                <mat-option value="Recharge">Recharge</mat-option>
+                <mat-option value="Paiement PS">Paiement PS</mat-option>
+              </mat-select>
+            </mat-form-field>&nbsp;
+          </div>
+          <div class="col-md-12 text-right">
+            <button class="btn btn-primary btn-ladda" data-style="expand-left" (click)="getlistRecharge()">
+              <i class="fa fa-search"> Chercher </i>
+            </button>
+          </div>
+        </div>
+      </form>
+      <div style="overflow-x:auto;">
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover display nowrap" width="100%">
+          <thead align="center">
+            <tr>
+              <th *ngIf=" decision =='Aide à la décision' && accessdecision == true"><i title="Aide à la décision" class="fa fa-question-circle" aria-hidden="true"></i></th>
+              
+              <th *ngIf="  annulation =='Annulation' && accessannulation == true">
+                <i title="Anuuler recharge" class="fa fa-ban" aria-hidden="true"> </i></th>
+              
+             
+              
+              <th *ngIf="  confirmPS =='Comfirmation PaiementPS' && accessconfirmPS == true"> <i titre="Paiement Facture PS" class="fa fa-check-square-o" aria-hidden="true"></i></th>
+              <th>Statut</th>
+              <th>Type opération </th>
+              <th>Date validation</th>
+              <th>Date transaction</th>
+              <th>Code client</th>
+              <th>Client </th>
+              <th>Montant Paiement</th>
+              <th>Montant Recharge</th>
+              <th>Type paiement</th>
+              <th>Type recharge </th>
+              <th>Status Bon </th>
+              <th>montant Recharge Restant</th>
+              <th>Date échéance</th>
+              <th>Num chèque/Traite</th>
+              <th>Date chèque </th>
+              <th>Motif annulation</th>
+              <th>Référence facture </th>
+             
+             
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of ListRechargeClient" align="center">
+             
+         
+         
+             
+             
+
+            
+              <td *ngIf="  decision =='Aide à la décision' && accessdecision == true">
+                <i title="Aide à la décision" *ngIf="item.statusValidation=='demandé'  && (item.typeOperation=='Recharge' || item.typeOperation=='Solde Depart')"
+                  (click)="selectRecharge(item);getRechergeNonConfirmerByClientId();chargerDemandeReglementList1()" class="fa fa-question-circle" aria-hidden="true">
+                </i>
+              </td>
+
+              <td *ngIf="  annulation =='Annulation' && accessannulation == true">
+                <i title="Annulation Recharge" *ngIf="item.statusValidation=='confirmé'  && (item.typeOperation=='Recharge' || item.typeOperation=='Solde Depart')"
+                  (click)="selectRecharge(item);showValidateAnnulationConfirmModal()" class="fa fa-ban" aria-hidden="true">
+                </i>
+              </td>
+              
+              
+              
+              
+              
+
+              <td *ngIf="  confirmPS =='Comfirmation PaiementPS' && accessconfirmPS == true"> 
+                <i class="fa fa-check-square-o" *ngIf="item.statusValidation=='demandé' && item.typeOperation=='Paiement PS'"
+                  titre="Paiement Facture PS" (click)='selectRecharge(item);ConfirmRechargeModal.show();'aria-hidden="true">
+                </i>
+              </td>
+              <td>
+                <span class="badge badge-success" *ngIf="item.statusValidation=='confirmé'  ">confirmé</span>
+                <span class="badge badge-danger" *ngIf=" item.statusValidation=='demandé' ">demandé</span>
+                <span class="badge badge-warning" *ngIf=" item.statusValidation=='annulé' ">annulé</span>
+              </td>
+              <td *ngIf="item.typeOperation =='Solde Depart'">Solde départ</td>
+              <td *ngIf="item.typeOperation !='Solde Depart'">{{item.typeOperation}}</td>
+              <td>{{item.dateTimeValidation |dateSql }}</td>
+
+              <td>{{item.dateTimeTransaction |dateSql }}</td>
+              <td>{{item.codeClient }}</td>
+              <td>{{item.raisonSociale}}</td>
+              <td>{{item.montant | amountmillierpipe }}</td>
+              <td>{{item.montantRecharge | amountmillierpipe }}</td>
+              
+              <td *ngIf="item.typePayment == 'SoldeDepart'">Solde départ</td>
+              <td *ngIf="item.typePayment == 'espece'">espèce</td>
+              <td *ngIf="item.typePayment == 'cheque'">chèque</td>
+              <td *ngIf="item.typePayment != 'SoldeDepart' && item.typePayment != 'espece' && item.typePayment != 'cheque'">{{ item.typePayment }}</td>
+
+              <td>{{item.typeCompte =='20' ? 'PP' :(item.typeCompte =='21' ? 'PPE' :(item.typeCompte =='22' ? 'PS':'-'))}}</td>
+              <td> 
+                <i *ngIf="item.statutBon =='open' ">ouvert</i>
+                <i *ngIf="item.statutBon =='closed'  ">fermé</i>
+              </td>
+              <td> 
+                <i *ngIf="item.typeCompte =='20' ">{{item.montantRechargeRestant | amountmillierpipe}}</i>
+                <i *ngIf="item.typeCompte =='21'  ">{{item.montantRechargeRestantPPE | amountmillierpipe}}</i>
+              </td>
+              <td>{{item.dateEcheance |dateSql | slice:0:10}}</td>
+              <td>{{item.numChequeTraite }}</td>
+              <td>{{item.dateEcheance2 |dateSql | slice:0:10}}</td>
+              <td>{{item.motifAnnulation}}</td>
+              <td *ngIf="item.typeOperation=='Paiement PS'" >{{item.reference}}</td>
+              <td *ngIf="item.typeOperation!='Paiement PS'"> -- </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Aide à la décision pop up -->
+<div bsModal #AideDecisionModal="bs-modal" class="modal fade" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered  modal-info" role="document" *ngIf="recharge"
+    style="max-width: 1200px !important;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Aide à la décision </h4>
+        <button type="button" class="close" (click)="AideDecisionModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="card">
+          <h5 class="card-title">
+            <div class="card-header">
+              <b>Informations opération recharge</b>
+            </div>
+          </h5>
+          <div class="card-body">
+            <div class="row">
+              <div class=" col-md-4">
+                <span> <b>Date : </b> {{ recharge?.dateTimeTransaction|dateSql }} </span>
+              </div>
+              <div class="col-md-4">
+                <span><b>Type de recharge : </b>{{recharge.typeCompte =='20' ? 'PP' :(recharge.typeCompte =='21' ?
+                  'PPE':(recharge.typeCompte =='22' ? 'PS ':'-')) }}</span>
+              </div>
+              <div class="col-md-4">
+                <span><b>Type de paiement : </b>{{recharge?.typePayment }}</span>
+              </div>
+             
+              <div class=" col-md-4">
+                <span><b> Montant Paiement : </b>{{ recharge?.montant  | amountmillierpipe}}</span>
+              </div>
+              <div class=" col-md-4">
+                <span><b> Montant de recharge : </b>{{ recharge?.montantRecharge | amountmillierpipe }}</span>
+              </div>
+              <div class=" col-md-4">
+                <span><b>Date écheance : </b>{{ recharge?.dateEcheance |dateSql:'dd-MM-yyyy' }}</span>
+              </div>
+              <div class=" col-md-4">
+                <span><b>Num chèque/Traite : </b>{{ recharge?.numChequeTraite }}</span>
+              </div>
+              <div class=" col-md-4">
+                <span><b>Date chèque/Traite : </b>{{ recharge?.dateEcheance2 | dateSql:'dd-MM-yyyy' }}</span>
+              </div>
+              <div class="col-md-4">
+                <span><b>Banque : </b>{{recharge?.banque }}</span>
+              </div>
+              <div class=" col-md-4">
+                <span><b>Status : </b>{{ recharge?.statusValidation }}</span>
+              </div>
+              <div class=" col-md-4">
+                <b>Image : </b> 
+              <img [src]="'data:image/png;base64,'+ recharge?.image " class="logo" width="300px" height="200px"  alt="Image" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <app-client-info [idClient]="recharge.idClient"></app-client-info>
+        <!-- <div style="overflow-x:auto; overflow-y:auto; max-height: 500px;">
+          <table class="table table-striped">
+            <thead align="center">
+              <tr>
+                <th>Date </th>
+                <th>Type compte </th>
+                <th>Montant</th>
+                <th>Type paiement</th>
+                <th>Date echéance</th>
+                <th>Num chèque/Traite</th>
+                <th>Date chèque/Traite</th>
+                <th>Statut</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of recherageNonConfirme" align="center">
+                <td>{{item.dateTimeTransaction | dateSql }}</td>
+                <td>{{item.typeCompte =='20' ? 'PP' :(item.typeCompte =='21' ? 'PPE' :(item.typeCompte =='22' ? 'PS ' :'-')) }}</td>
+                <td>{{item.montant }}</td>
+                <td>{{item.typePayement }}</td>
+                <td>{{item.dateEcheance }}</td>
+                <td>{{item.numChequeTraite }}</td>
+                <td>{{item.dateEcheance2 }}</td>
+                <td>
+                  <span class="badge badge-danger" *ngIf=" item.statusValidation=='demandé' "> Demandé</span>
+                  <span class="badge badge-warning" *ngIf=" item.statusValidation=='annulé' "> Annulé</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div> -->
+        <div style="overflow-x:auto; overflow-y:auto; max-height: 500px;">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Numéro chèque</th>
+                <th>Banque</th>
+                <th>Montant</th>
+                <th>Date de rechargement </th>
+                <th>Date écheance</th>
+                <th>Date chéque</th>
+                <th>N° Bon recharge </th>
+                <th>Statut </th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of DemandeReglementList">
+
+                <td>{{item.numChequeTraite}}</td>
+                <td>{{item.banque}}</td>
+                <td>{{item.montantRecharge | amountmillierpipe}}</td>
+                <td>{{item.dateTimeTransaction | dateSql }} </td>
+                <td>{{item.dateEcheance|dateSql}}</td>
+                <td>{{item.dateEcheance2|dateSql}}</td>
+                <td>{{item.bonRecharge}}</td> 
+                <td>{{item.statusBank}}</td>
+              </tr>
+            </tbody>
+
+          </table>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="showValidateAnnulationModal()"> Annuler le recharge</button>
+        <button type="button" class="btn btn-primary"
+          (click)="recharge?.typeOperation=='Paiement PS'? confirmerPaiement(): confirmerRecharge();" [disabled]="DisabledButton">Confirmer le recharge</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div bsModal #AnnulerRechargeModal="bs-modal" class="modal fade" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-md modal-danger" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Annulation du recharge compte</h4>
+        <button type="button" class="close" (click)="AnnulerRechargeModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p> Êtes-vous sure de vouloir annuler le recharge du compte client {{recharge?.numCompte}} d'un montant
+          {{recharge?.montant | amount }} DT ? </p>
+        <div class=" col-md-10">
+          <mat-form-field appearance="outline">
+            <mat-label>Motif d'annulation</mat-label>
+            <mat-select required [(ngModel)]="motifAnnulation" (selectionChange)="onChange()">
+              <mat-option value="" disabled default> -- choisir --</mat-option>
+              <mat-option value="Dépassement DMA"> Dépassement DMA </mat-option>
+              <mat-option value="Cheque échue"> Chéque échue </mat-option>
+              <mat-option value="Dépassement délai de paiement"> Dépassement délai de paiement </mat-option>
+              <mat-option value="épassement de DMA"> Dépassement de DMA </mat-option>
+              <mat-option value="Chèque impayé"> Chèque impayé </mat-option>
+              <mat-option value="Chèque en préavis"> Chèque en préavis </mat-option>
+              <mat-option value="Autre"> Autre </mat-option>
+            </mat-select>
+            <mat-error>motif obligatoire</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline" *ngIf="isMemo">
+            <mat-label>Commentaire</mat-label>
+            <textarea matInput placeholder="saisie ..." [(ngModel)]="motifAnnulation"></textarea>
+            <mat-error>motif obligatoire</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="AnnulerRecharge();">Oui,Annuler</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<div bsModal #AnnulerRechargeClientModal="bs-modal" class="modal fade" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-md modal-danger" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Annulation du recharge compte</h4>
+        <button type="button" class="close" (click)="AnnulerRechargeClientModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p> Êtes-vous sure de vouloir annuler le recharge du compte client {{recharge?.numCompte}} d'un montant
+          {{recharge?.montant }} DT ? </p>
+        <div class=" col-md-10">
+          <mat-form-field appearance="outline">
+            <mat-label>Motif d'annulation</mat-label>
+            <mat-select required [(ngModel)]="motifAnnulation" (selectionChange)="onChange()">
+              <mat-option value="" disabled default> -- choisir --</mat-option>
+              <mat-option value="Dépassement DMA"> Dépassement DMA </mat-option>
+              <mat-option value="Cheque échue"> Chéque échue </mat-option>
+              <mat-option value="Dépassement délai de paiement"> Dépassement délai de paiement </mat-option>
+              <mat-option value="épassement de DMA"> Dépassement de DMA </mat-option>
+              <mat-option value="Chèque impayé"> Chèque impayé </mat-option>
+              <mat-option value="Chèque en préavis"> Chèque en préavis </mat-option>
+              <mat-option value="Autre"> Autre </mat-option>
+            </mat-select>
+            <mat-error>motif obligatoire</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline" *ngIf="isMemo">
+            <mat-label>Commentaire</mat-label>
+            <textarea matInput placeholder="saisie ..." [(ngModel)]="motifAnnulation"></textarea>
+            <mat-error>motif obligatoire</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="AnnulerRechargeClient();">Oui,Annuler</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div bsModal #AnnulerPaiementModal="bs-modal" class="modal fade" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-md modal-danger" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Annulation du paiement Ps</h4>
+        <button type="button" class="close" (click)="AnnulerPaiementModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Êtes-vous sure de vouloir annuler le paiement ps du facture pour le compte client {{recharge?.numCompte}}
+          d'un montant
+          {{recharge?.montant}} DT?
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="AnnulerRecharge();">Oui, Annuler</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!--<div bsModal #ReconfirmationRechargeModal="bs-modal" class="modal fade" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-md modal-danger" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Reconfirmer recharge compte</h4>
+        <button type="button" class="close" (click)="ReconfirmationRechargeModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Êtes-vous sure de vouloir confirmer <b>le recharge annulé</b> du compte client {{recharge?.numCompte}} d'un
+          montant
+          {{recharge?.montant }} DT?
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="confirmerRecharge();">Oui, Annuler</button>
+      </div>
+    </div>
+  </div>
+</div> /.modal -->
+
+<div bsModal #ConfirmRechargeModal="bs-modal" class="modal fade" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Confirmation Facture PS </h4>
+        <button type="button" class="close" (click)="ConfirmRechargeModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p *ngIf="recharge?.typeOperation=='Paiement PS'">
+
+          Êtes-vous sure de vouloir payer la facture {{recharge?.Reference}} du client {{recharge?.numCompte}} d'un montant {{recharge?.montant }} DT?
+        </p>
+        <p *ngIf="recharge?.typeOperation!='Paiement PS'">
+
+          Êtes-vous sure de vouloir recharger le compte du client {{recharge?.numCompte}} d'un montant {{recharge?.montant }} DT?
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary"
+          (click)="recharge?.typeOperation=='Paiement PS'? confirmerPaiement(): confirmerRecharge();"
+          [disabled]="disableButton">Confirmer</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<!--Etat de rechargement -->
+<div bsModal #AideDecision="bs-modal" class="modal fade" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Télécharger pdf recharge</h4>
+        <button type="button" class="close" (click)="AideDecision.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="AideDecision();">Confirmer</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="container" id="iDdIV" hidden="true">
+
+
+  <!-- <div class="col text-left">
+
+
+    <h3>
+      Date bon : {{ f.Date.value}}
+    </h3>
+    <h3>
+      Numéro bon : {{ f.NumBon.value}}
+    </h3>
+    <h3>
+      Client : {{ f.RaisonSociale.value}}
+    </h3>
+    <h3>
+      Mode de paiement : {{ f.typePayement.value}}
+    </h3>
+    <div  *ngIf="f.typePayement.value=='chèque'|| f.typePayement.value=='traite'">
+    <h3 >
+      Numéro chèque/Traite : {{ f.NumChequeTraite.value}}
+    </h3>
+    </div>
+
+    <h3>
+      Banque : {{ f.banque.value}}
+    </h3>
+    <h3>
+      Montant Recharge : {{ f.montantRecharge.value}} DT
+    </h3>
+    <h3>
+      Montant de paiement : {{ f.montant.value}} DT
+    </h3>
+    <h3>
+      Etat : Demandé
+    </h3>
+
+  </div> -->
+
+
+  <!-- <div class="col text-right">
+    <h4>Signature et cachet</h4>
+  </div> -->
+
+
+  <div class="row">
+    <div class="col-xl-3 col-md-3">
+      <img src="assets/img/logo-symbol.png" style="align-self: center; float: left;">
+    </div>
+    <div class="col-xl-3 col-md-6">
+      <div style="align-self: center;">
+        <h2>
+        </h2>
+      </div>
+    </div>
+    <div class="col-xl-3 col-md-3">
+      <div style="align-self: center; float: right;">
+        <h4>Edité le : {{ f.Date.value}}</h4>
+      </div>
+    </div>
+
+  </div>
+  <div class="col text-center">
+    <h2>
+      <strong>
+        Bon de Paiement
+      </strong>
+    </h2>
+    <br>
+    <br>
+  </div>
+  <div class="col text-left">
+
+
+    <h3>
+      Date Bon : {{ f.Date.value}}
+    </h3>
+    <h3>
+      Numéro Bon : {{ f.numBon.value}}
+    </h3>
+    <h3>
+      Client : {{ f.RaisonSociale.value}}
+    </h3>
+    <h3>
+      Code Client : {{ recharge?.codeClient}}
+    </h3>
+    <h3>
+      Type de paiement : {{ f.typePayement.value}}
+    </h3>
+    <div *ngIf="f.typePayement.value=='chèque'|| f.typePayement.value=='cheque'|| f.typePayement.value=='traite'">
+      <h3>
+        Numéro chèque/Traite : {{ f.numChequeTraite.value}}
+      </h3>
+    </div>
+    <!-- <h3>
+      Référence : {{ f.reference.value}}
+    </h3> -->
+    <h3>
+      Banque : {{ f.banque.value}}
+    </h3>
+    <!-- <h3>
+      Banque : {{ f.banque.value}}
+    </h3> -->
+    <h3>
+      Montant Recharge : {{ f.montantRecharge.value }} DT
+    </h3>
+    <h3>
+      Montant de paiement : {{ f.Montant.value }} DT
+    </h3>
+    <h3>
+      Etat : Confirmé
+    </h3>
+  </div>
+
+  <!-- <div class="col text-right">
+    <h4>Signature et cachet</h4>
+  </div> -->
+  <tr>
+    <br>
+       <div class="row">
+      <div class="col-xl-3 col-md-3">
+        <img src="assets/img/logo-symbol.png" style="align-self: center; float: left;">
+      </div>
+      <div class="col-xl-3 col-md-6">
+        <div style="align-self: center;">
+          <h2>
+          </h2>
+        </div>
+      </div>
+      <div class="col-xl-3 col-md-3">
+        <div style="align-self: center; float: right;">
+          <h4>Edité le : {{ f.Date.value}}</h4>
+        </div>
+      </div>
+
+    </div>
+    <div class="col text-center">
+      <h2>
+        <strong>
+          Bon de Recharge
+        </strong>
+      </h2>
+
+    </div>
+    <div class="col text-left">
+      <h3>
+        Date Bon : {{ f.Date.value}}
+      </h3>
+      <h3>
+        Numéro Bon : {{ f.numBon.value}}
+      </h3>
+      <h3>
+        Client : {{ f.RaisonSociale.value}}
+      </h3>
+      <h3>
+        Type de paiement : {{ f.typePayement.value}}
+      </h3>
+      <div *ngIf="f.typePayement.value=='chèque'|| f.typePayement.value=='cheque'|| f.typePayement.value=='traite'">
+        <h3>
+          Numéro chèque/Traite : {{ f.numChequeTraite.value}}
+        </h3>
+      </div>
+      <h3>
+        Banque : {{ f.banque.value}}
+      </h3>
+      <!-- <h3>
+      Référence : {{ f.reference.value}}
+    </h3> -->
+      <h3>
+        Montant Recharge : {{ f.montantRecharge.value  | amountmillierpipe}} DT
+      </h3>
+      <h3>
+        Montant de paiement : {{ f.Montant.value  | amountmillierpipe}} DT
+      </h3>
+
+      <!-- <h3>
+      Etat : Demandé
+    </h3> -->
+    </div>
+  <tr>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="row">
+      <div class="col-xl-3 col-md-3">
+        <img src="assets/img/logo-symbol.png" style="align-self: center; float: left;">
+      </div>
+      <div class="col-xl-3 col-md-6">
+        <div style="align-self: center;">
+          <h2>
+          </h2>
+        </div>
+      </div>
+      <div class="col-xl-3 col-md-3">
+        <div style="align-self: center; float: right;">
+          <h4>Edité le : {{ f.Date.value}}</h4>
+        </div>
+      </div>
+
+    </div>
+    <div class="col text-center">
+      <h2>
+        <strong>
+          État de rechargement des cartes
+        </strong>
+      </h2>
+      <br>
+      <br>
+    </div>
+    <div class="col text-left">
+      <h3>
+        N° rechargement :
+      </h3>
+      <h3>
+        Nom client : {{ recharge?.raisonSociale}}
+      </h3>
+      <h3>
+        Date chargement : {{ recharge?.montant }}
+      </h3>
+      <h3>
+        Montant : {{ recharge?.montant/1000}} DT
+      </h3>
+    </div>
+
+    <br>
+    <div class="row" style="border-bottom: solid 1px black;border-top: solid 1px black;">
+      <div class="col-md-4">
+        <h4>Nom du groupe : </h4>
+      </div>
+    </div>
+    <br>
+    <div class="row" style="border-bottom: solid 1px black;">
+      <div class="col-md-4 text-center">
+        <h4>Numéro carte : {{ recharge?.numCompte}} </h4>
+      </div>
+      <div class="col-sm-4 " style="display: inline;">
+        <h4>Nom porteur :{{ recharge?.raisonSociale}} </h4>
+      </div>
+      <div class="col-sm-4 " style="display: inline;">
+        <h4>Montant : {{ recharge?.montant/1000}} DT </h4>
+      </div>
+    </div>
+    <br>
+    <div class="row" style="border-bottom: solid 1px black;">
+      <div class="col-md-4">
+        <h4>Total groupe : </h4>
+      </div>
+    </div> <br> <br>
+    <div class="col text-right">
+      <h4>Signature et cachet</h4>
+    </div>
+</div>
+
+
+<!--  état de rechargement cartes  -->
+<!-- <div class="container" id="iDdIV2" hidden="true">
+  <div class="row">
+    <img src="assets/img/logo-symbol.png" style="width:800px;height:500; top: 0; left: 100;">
+    <div style="align-self: center; float: left;">
+      <h4>Date le : {{ f.Date.value}} </h4>
+    </div>
+  </div>
+  <div class="col text-center">
+    <h2>
+      <strong>
+        État de rechargement cartes
+      </strong>
+    </h2>
+    <br>
+    <br>
+  </div>
+  <div class="col text-left">
+    <h3>
+      N° Rechargement :
+    </h3>
+    <h3>
+      Nom Client : {{ recharge?.raisonSociale}}
+    </h3>
+    <h3>
+      Date chargement : {{ recharge?.montant }}
+    </h3>
+    <h3>
+      Montant : {{ recharge?.montant/1000}} DT
+    </h3>
+  </div>
+  <br>
+  <div class="row" style="border-bottom: solid 1px black;border-top: solid 1px black;">
+    <div class="col-md-4">
+      <h4>Nom Groupe : </h4>
+    </div>
+  </div>
+  <br>
+  <div class="row" style="border-bottom: solid 1px black;">
+    <div class="col-md-4 text-center">
+      <h4>Num Carte : {{ recharge?.numCompte}} </h4>
+    </div>
+    <div class="col-sm-4 " style="display: inline;">
+      <h4>Nom Porteur :{{ recharge?.raisonSociale}} </h4>
+    </div>
+    <div class="col-sm-4 " style="display: inline;">
+      <h4>Montant : {{ recharge?.montant/1000}} DT </h4>
+    </div>
+  </div>
+  <br>
+  <div class="row" style="border-bottom: solid 1px black;">
+    <div class="col-md-4">
+      <h4>Total groupe : </h4>
+    </div>
+  </div> <br> <br>
+  <div class="col text-right">
+    <h4>Signature et cachet</h4>
+  </div>
+</div> -->

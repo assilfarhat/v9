@@ -1,0 +1,57 @@
+<div class="card">
+  <div class="card-header"><strong>Ajouter réclamation</strong> </div>
+  <div class="card-body">
+
+
+
+    <form [formGroup]="form" autocomplete="off">
+
+
+      <div class="row">
+
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Objet</mat-label>
+            <input matInput formControlName="objet" required placeholder="Objet">
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+
+
+
+        <div class="col-sm-12">
+          <mat-form-field appearance="outline">
+            <mat-label>Message</mat-label>
+            <textarea matInput formControlName="message" required placeholder="Message"></textarea>
+            <mat-error>ce champ est obligatoire</mat-error>
+
+          </mat-form-field>&nbsp;<br />
+        </div>
+
+
+        <div class="col-sm-6" >
+          <label for="name"><b> Le fichier en pièce jointe (JPEG - PNG - JPG) : </b>  </label>
+                <div  (click)="openFileInput()"   >
+                  <input formControlName="imagePJ"  (change)="fileChange($event)" id="name" placeholder="image"  accept=".jpeg, .jpg, .png"type="file" required
+                    class="form-control" />
+                    <div class="help-block text-danger" *ngIf="f.imagePJ.errors && f.imagePJ.errors.required && submitted">
+                      Ce champs est obligatoire
+                    </div>
+                    <img [src]="imagePreview" width="100%" height="100%" style="margin-top:20px" />
+                </div>
+       </div>
+
+      </div>
+      <button mat-raised-button class="btn btn-info pull-right" color="primary" [disabled]="!isImageValid || form.invalid"
+        (click)="checkAndSave()" type="submit">
+        Demander
+      </button>
+
+    </form>
+    <!-- /.box-body -->
+
+    <!-- /.box-footer -->
+
+  </div>
+
+</div>

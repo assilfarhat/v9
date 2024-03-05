@@ -1,0 +1,132 @@
+
+<div class="card">
+  <h5 class="card-title"><div class="card-header"><strong>Nouveau client</strong> </div></h5>
+  <div class="card-body">
+    <form [formGroup]="clientForm" autocomplete="off">
+      <div class="row">
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Code Client</mat-label>
+            <input matInput formControlName="codeClient" required placeholder="Code Client">
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Raison Sociale</mat-label>
+            <input matInput formControlName="raisonSociale" required placeholder="Raison Sociale">
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Registre commerce</mat-label>
+            <input matInput formControlName="registreCommerce" required placeholder="Registre commerce">
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Adresse</mat-label>
+            <input matInput formControlName="adresse" required placeholder="Adresse">
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Ville</mat-label>
+            <input matInput formControlName="ville" required placeholder="Ville">
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Code Postal</mat-label>
+            <input matInput formControlName="codePostal" required placeholder="Code Postal">
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Contact</mat-label>
+            <input matInput formControlName="contact" required placeholder="Contact">
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Responsable</mat-label>
+            <input matInput formControlName="responsable" required placeholder="Responsable">
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Téléphone</mat-label>
+            <input matInput formControlName="telephone" required placeholder="Téléphone" pattern="[1-9][0-9]{7}">
+            <mat-error>Numéro de téléphone invalide</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input type="text" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" matInput formControlName="email" required placeholder="Email">
+            <mat-error>Email invalide</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Prix Remplacement Carte</mat-label>
+            <input type="number" matInput formControlName="prixRempCarte" required placeholder="Prix Remplacement Carte">
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Type Tax</mat-label>
+            <mat-select formControlName="typeTax">
+              <mat-option value="Client TTC">Client TTC</mat-option>
+              <mat-option value="Client HT">Client HT</mat-option>
+            </mat-select>
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+        
+        <div class="col-sm-12">
+          <mat-checkbox matInput formControlName="actif">Actif</mat-checkbox>&nbsp;
+
+          <mat-checkbox matInput formControlName="enOpposition">En Opposition</mat-checkbox>&nbsp;
+
+          <mat-checkbox matInput formControlName="plafonne">Plafonné</mat-checkbox>&nbsp;
+
+          <mat-checkbox matInput formControlName="exigerPin">Exiger Pin</mat-checkbox>&nbsp;
+
+          <mat-checkbox matInput formControlName="reseauReduit">Réseau Réduit</mat-checkbox>&nbsp;
+
+          <mat-checkbox matInput formControlName="envoiFacture">Envoi Facture</mat-checkbox>&nbsp;
+
+          <mat-checkbox matInput formControlName="accesInternet">Acces Internet</mat-checkbox>&nbsp;
+
+          <mat-checkbox matInput formControlName="envoiRLD">Envoi RLD</mat-checkbox>&nbsp;
+        </div>
+        <div class="col-sm-12">
+          <mat-form-field appearance="outline">
+            <mat-label>Remarque</mat-label>
+            <textarea matInput formControlName="remarque" placeholder="remarque"></textarea>
+
+          </mat-form-field>&nbsp;<br />
+        </div>
+      </div>
+      <button mat-raised-button class="btn btn-info pull-right" color="primary" [disabled]="clientForm.invalid" (click)="ModifierClient()" type="submit">
+        Enregistrer
+      </button>
+    </form>
+    <!-- /.box-body -->
+    <!-- /.box-footer -->
+
+  </div>
+
+</div>
+
+
+

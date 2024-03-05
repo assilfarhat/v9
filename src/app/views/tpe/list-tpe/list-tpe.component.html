@@ -1,0 +1,62 @@
+<div class="animated fadeIn">
+  <div class="card">
+    <h5 class="card-title">
+      <div class="card-header"><b> Liste des TPEs </b></div>
+    </h5>
+    
+    <div class="card-body">
+    
+    
+    
+    
+    
+    
+    
+
+     
+        <div class="row" *ngIf=" ajoutTPE =='Ajout' && accessajoutTPE == true">
+          <div class="col-sm-12 text-right">
+            <a class="btn btn-success btn-ladda" data-style="expand-left" [routerLink]="[ '/Tpe/add']">
+              <i class="fa fa-plus"></i> Ajouter
+            </a>
+            
+          </div>
+        </div>
+      <br>
+      <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover display nowrap"
+        width="100%">
+        <thead >
+          <tr>
+            <th> Numéro de série </th>
+            <th> Affilié</th>
+            <th>Station </th>
+            <th> Disponibilité </th>
+            
+            
+            
+            <th *ngIf=" modifTPE =='Modification' && accessModifTPE == true">
+              <i class="icon-pencil"></i>
+            </th>
+          </tr>
+        </thead>
+
+        <tbody *ngIf="tpes?.length != 0" >
+          <tr *ngFor="let item of tpes">
+            <td>{{item.serialNumber}}</td>
+            <td>{{item.idAffilie}}</td>
+            <td>{{item.station}}</td>
+            <td>{{item.availability}}</td>
+           
+       
+           
+           
+            <td *ngIf="  modifTPE =='Modification' && accessModifTPE == true">
+              <i class="icon-pencil" [routerLink]="['/Tpe/edit', item.serialNumber]" *ngIf="item.availability==0"></i>
+              <i class="icon-ban" *ngIf="item.availability==1"></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  </div>

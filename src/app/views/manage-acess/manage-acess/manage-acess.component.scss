@@ -1,0 +1,135 @@
+/* manage-acess.component.scss */
+
+.container {
+    margin: 20px;
+    padding: 20px;
+    background-color: #f5f5f5;
+  }
+  
+  .card {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+  }
+  
+  .card-header {
+    background-color: #e6bc73;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px 5px 0 0;
+  }
+  
+  .card-title {
+    font-size: 1.5rem;
+  }
+  
+  .form-control {
+    width: 50%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .permission-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .permission-item {
+    margin: 10px 0;
+    color: #333;
+  }
+  
+  
+  .sub-permissions {
+    margin-left: 50px;
+  }
+  
+  .sub-permission-list {
+    list-style: none;
+    padding: 50;
+  }
+  
+  .sub-permission-item {
+    margin: 5px 0;
+  }
+  
+  .btn-primary {
+    background-color: #f59f0a;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  
+  .btn-primary:hover {
+    background-color: #f59f0a;
+  }
+  
+  /* styles.css */
+
+.permissions-container {
+    background-color: #f7f7f7;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    margin: 10px;
+  }
+  
+  .permissions-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .permission-item {
+    margin: 10px 0;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .permission-checkbox {
+    margin: 5px;
+     background-color: #e6bc73;
+  }
+  
+  .permission-info {
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+  
+  .sub-permissions {
+    margin-top: 10px;
+    flex-direction: column;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    flex: 2; /* Utilise 2/3 de l'espace */
+  }
+  
+  .sub-permissions-list {
+    list-style: none;
+    padding: 50;
+  }
+  
+  .sub-permission-item {
+    margin: 5px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .sub-permission-info {
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+  

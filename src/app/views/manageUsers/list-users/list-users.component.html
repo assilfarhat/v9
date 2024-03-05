@@ -1,0 +1,202 @@
+<div class="animated fadeIn">
+  <div class="card">
+    <h5 class="card-title">
+      <div class="card-header"> <b>{{'LISTU.MESSAGE'|translate}}</b></div>
+    </h5>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-sm-12 text-right">
+          <a class="btn btn-success btn-ladda" data-style="expand-left" [routerLink]="[ '/add/user']">
+            <i class="fa fa-plus"></i> Ajouter
+          </a>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <!-- <div class="col-md-4 offset-md-8">
+            <div class="input-group">
+              <label class="col-form-label">Recherche :   </label>
+              <input type="text" class="form-control" [(ngModel)]="filterQuery" placeholder="Recherche par prenom"/>
+            </div>
+          </div>-->
+      </div>
+      <div style="overflow-x:auto;">
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table-striped datatable display nowrap"
+          width="100%">
+
+          <thead >
+            <tr>
+              <th>
+                {{'LISTU.PRENOM'|translate}}
+              </th>
+              <th>
+                {{'LISTU.NOM'|translate}}
+              </th>
+              <th>
+                {{'LISTU.USERNAME'|translate}}
+              </th>
+
+              <th>
+                {{'LISTU.PHONE'|translate}}
+              </th>
+              <th>
+                {{'LISTU.ROLE'|translate}}
+              </th>
+              <th>
+                {{'LISTU.EMAIL'|translate}}
+              </th>
+              <th>
+                {{'LISTU.STATUT'|translate}}
+              </th>
+
+              <th>
+
+                <i class="icon-lock"></i>
+              </th>
+              <th>
+
+                <i class="icon-trash"></i>
+              </th>
+              <th>
+                <i class="icon-pencil"></i>
+
+
+
+              </th>
+            </tr>
+          </thead>
+
+          <tbody *ngIf="users?.length != 0" >
+            <tr *ngFor="let item of users">
+
+              <td>{{item.firstName}}</td>
+              <td>{{item.lastName}}</td>
+              <td>{{item.userName}}</td>
+              <td>{{item.phoneNumber}}</td>
+              <td>{{item.role}}</td>
+              <td>{{item.email}}</td>
+
+
+
+              <td><span class="badge badge-success" *ngIf=" item.emailConfirmed ">{{'LISTU.CONFIRM'|translate}}</span>
+                <span class="badge badge-danger"
+                  *ngIf=" item.emailConfirmed == false ">{{'LISTU.NCONFIRM'|translate}}</span>
+              </td>
+
+
+              <td><i class="icon-lock  " title="Activer" (click)="selectUser(item.id); desactivateModal.show()"
+                  style="color: red; font-size:15px" *ngIf=" item.lockoutEnabled == false"></i>
+                <i class="icon-lock-open" title="Désactiver" (click)="selectUser(item.id); activateModal.show()"
+                  style="color: green;font-size:15px" *ngIf=" item.lockoutEnabled "></i>
+              </td>
+
+
+
+
+              <td><i class="icon-ban" *ngIf=" item.emailConfirmed  "></i>
+                <i class="icon-trash" title="Supprimer" *ngIf=" item.emailConfirmed == false "
+                  (click)="selectUser(item.id); deleteModal.show()"></i>
+              </td>
+              <td><i class="icon-pencil" title="Modifier" (click)="selectUser(item.id); updateModal.show()"></i></td>
+            </tr>
+          </tbody>
+
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+<div bsModal #deleteModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-danger" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">{{'LISTU.DELETEMESSAGE'|translate}}</h4>
+        <button type="button" class="close" (click)="deleteModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>{{'LISTU.DELETEMESSAGE2'|translate : {username :selectedUser?.userName} }} </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary"
+          (click)="deleteModal.hide()">{{'LISTU.ANNULER'|translate}}</button>
+        <button type="button" class="btn btn-danger" (click)="delete()">{{'LISTU.YES1'|translate}}</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<div bsModal #activateModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">{{'LISTU.ACTIVATEMESSAGE'|translate}}</h4>
+        <button type="button" class="close" (click)="activateModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>{{'LISTU.ACTIVATEMESSAGE2'|translate : {username :selectedUser?.userName} }} </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary"
+          (click)="activateModal.hide()">{{'LISTU.ANNULER'|translate}}</button>
+        <button type="button" class="btn btn-danger"
+          (click)="ActivateUser('désactivé ')">{{'LISTU.YES2'|translate}}</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+<div bsModal #desactivateModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">{{'LISTU.ACTIVATEMESSAGE'|translate}}</h4>
+        <button type="button" class="close" (click)="desactivateModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>{{'LISTU.ACTIVATEMESSAGE3'|translate : {username :selectedUser?.userName} }} </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary"
+          (click)="desactivateModal.hide()">{{'LISTU.ANNULER'|translate}}</button>
+        <button type="button" class="btn btn-primary"
+          (click)="ActivateUser('activé ')">{{'LISTU.YES3'|translate}}</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div bsModal #updateModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">{{'LISTU.UPDATEMESSAGE'|translate}}</h4>
+        <button type="button" class="close" (click)="updateModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-edit-user *ngIf="selectedUser != null" [submitted]="submitted" [form]="form"></app-edit-user>
+      </div>
+      <div class="modal-footer">
+
+        <button type="button" class="btn btn-primary" (click)="updateUser()">{{'LISTU.UPDATE'|translate}}</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

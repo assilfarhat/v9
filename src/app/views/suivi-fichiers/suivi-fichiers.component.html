@@ -1,0 +1,359 @@
+<div class="animated fadeIn">
+  <div class="card">
+    <h5 class="card-title">
+      <div class="card-header"><b>Liste des fichiers </b></div>
+    </h5>
+    <div class="card-body">
+      <form class="form-horizontal" [formGroup]="form">
+        <div class="form-group row" style="margin-top: 10px;">
+          <div class="col-xl-3 col-md-6">
+            <!-- <mat-form-field appearance="outline">
+              <mat-label>Client</mat-label>
+              <mat-select formControlName="clientId">
+                <mat-option value=""> Tous </mat-option>
+                <mat-option *ngFor="let item of ClientList" [value]="item.idClient">
+                  {{item.raisonSociale}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field> -->
+            <div style="text-align:center;margin-top: 10px;">
+              <input class="form-control" list="Client" placeholder="{{'Client'}}" formControlName="clientId">
+
+              <datalist id="Client">
+
+                <option *ngFor="let item of ClientList" [value]="item.raisonSociale">{{ item.raisonSociale }} </option>
+              </datalist>
+
+            </div>
+          </div>
+
+          <div class="col-xl-3 col-md-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Date début</mat-label>
+              <input matInput formControlName="dateDebut" type="date">
+              <mat-error>la Date début doit être inférieur ou égale à la date fin </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-xl-3 col-md-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Date Fin</mat-label>
+              <input matInput formControlName="dateFin" type="date">
+              <mat-error>la Date fin doit être supérieur ou égale à la date début </mat-error>
+            </mat-form-field>
+          </div>
+          <!-- <div class="col-xl-3 col-md-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Date début</mat-label>
+              <input matInput formControlName="dateDebut" [matDatepicker]="picker">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div> 
+          <div class="col-xl-3 col-md-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Date fin</mat-label>
+              <input matInput formControlName="dateFin" [matDatepicker]="pickerdateFin">
+              <mat-datepicker-toggle matSuffix [for]="pickerdateFin"></mat-datepicker-toggle>
+              <mat-datepicker #pickerdateFin></mat-datepicker>
+            </mat-form-field>
+          </div>-->
+          <div class="col-xl-3 col-md-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Type ficher</mat-label>
+              <mat-select formControlName="typeFile">
+                <mat-option value=""> Tous </mat-option>
+                <mat-option value="Bon de Recharge"> Bon de Recharge </mat-option>
+                <mat-option value="Bon de Paiement"> Bon de Paiement </mat-option>
+                <mat-option value="etat de Rechargement"> Etat de Rechargement </mat-option>
+                <mat-option value="Paiement facture postpayé"> Paiement facture postpayé </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <!-- <div class="col-xl-3 col-md-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Numéro fichier</mat-label>
+              <input matInput formControlName="numBon" placeholder="Numéro Fichier">
+            </mat-form-field>
+          </div> -->
+          <div class="col-xl-3 col-md-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Référence</mat-label>
+              <input matInput formControlName="reference" placeholder="Référence">
+            </mat-form-field>
+          </div>
+          <div class="col-md-12 text-right">
+            <button class="btn btn-primary btn-ladda" data-style="expand-left" (click)="getlistRecharge()">
+              <i class="fa fa-search"> Chercher </i>
+            </button>
+          </div>
+        </div>
+      </form>
+      <div style="overflow-x:auto;">
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover display nowrap"
+          width="100%">
+          <thead>
+            <tr>
+              <th> Date </th>
+              <th> Client </th>
+              
+              <th> Référence </th>
+              <th> Type Bon </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of ListRechargeClient">
+              <td>{{item.dateBon | dateSql }}</td>
+              <td>{{item.raisonSociale}}</td>
+              <td>{{item.reference}}</td>
+              <td class="form-horizontal"><span *ngIf="item.bonTypeRecharge">&nbsp;&nbsp;{{item.bonTypeRecharge}}&nbsp; 
+                
+                <i *ngIf="  telechargement =='télecharger' && accessTelechargement == true" class="fa fa-download" (click)="DownloadBon(item,item.bonTypeRecharge);" aria-hidden="true"></i>
+              </span>
+               <span *ngIf="item.bonTypePaiement"> &nbsp;&nbsp;{{item.bonTypePaiement}}&nbsp;
+                 
+                 <i *ngIf="  telechargement =='télecharger' && accessTelechargement == true" class="fa fa-download" (click)="DownloadBon(item,item.bonTypePaiement);" aria-hidden="true"></i></span>
+                <span *ngIf="item.bonTypeEtat">&nbsp;&nbsp;{{item.bonTypeEtat}} &nbsp; 
+                 
+                  <i *ngIf=" telechargement =='télecharger' && accessTelechargement == true" class="fa fa-download" (click)="DownloadBon(item,item.bonTypeEtat);" aria-hidden="true"></i>
+                </span>
+                <span *ngIf="item.bonTypePost" >&nbsp;&nbsp;{{item.bonTypePost}} &nbsp;
+                 
+                   <i *ngIf=" telechargement =='télecharger' && accessTelechargement == true" class="fa fa-download" (click)="DownloadBon(item,item.bonTypePost);" aria-hidden="true"></i>
+                  </span>
+                <span *ngIf="item.bonTypeFacture" >&nbsp;&nbsp;{{item.bonTypeFacture}} &nbsp; 
+                  
+                  <i *ngIf=" telechargement =='télecharger' && accessTelechargement == true" class="fa fa-download" (click)="DownloadBon(item,item.bonTypeFacture);" aria-hidden="true"></i>
+                </span>
+              </td>
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- bon paiement / recharge  -->
+
+<div class="container" id="iDdIV" hidden="true">
+  <div class="row">
+    <div class="col-xl-3 col-md-3">
+      <img src="assets/img/logo-symbol.png" style="align-self: center; float: left;">
+    </div>
+    <div class="col-xl-3 col-md-6">
+      <div style="align-self: center;">
+        <h2> 
+        </h2>
+      </div>
+    </div>
+    <div class="col-xl-3 col-md-3">
+      <div style="align-self: center; float: right;">
+        <h4>Edité le : {{ f.Date.value}}</h4>
+      </div>
+    </div>
+  </div>
+  <div class="col text-center">
+    <h2>
+      <strong>
+        {{type}} 
+      </strong>
+    </h2>
+    <br>
+    <br>
+  </div>
+ 
+  <div class="row " *ngFor="let item of ListeCarte">
+    <div class="col text-left ">
+      <h3>
+        Date Bon : {{ selectedFile?.dateBon | dateSql | slice:0:10 }}
+      </h3>
+
+      <h3>
+        Numéro Bon : {{ item?.reference}}
+      </h3>
+
+      <h3>
+        Client : {{ item?.raisonSociale}}
+      </h3>
+
+      <h3>
+        Code client : {{ item?.codeClient}}
+      </h3>
+
+      <h3>
+        Type de paiement : {{ item?.paymentMode}}
+      </h3>
+      <div *ngIf="item?.paymentMode=='chèque' || item?.paymentMode=='cheque'|| item?.paymentMode=='traite' || type=='Paiement facture postpayé' ||  type =='Facture postpayé'">
+        <h3>
+          Numéro chèque/Traite : {{ item?.numChequeTraite}}
+        </h3>
+      </div>
+      <div *ngIf="item?.paymentMode=='chèque'|| item?.paymentMode=='cheque'|| item?.paymentMode=='traite' || type=='Paiement facture postpayé' ||  type =='Facture postpayé' ">
+        <h3>
+          Date écheance : {{ item?.dateEcheance | dateSql:'dd-MM-yyyy' }}
+        </h3>
+      </div>
+      <div *ngIf="item?.paymentMode=='chèque' || item?.paymentMode=='cheque'|| item?.paymentMode=='traite' || type=='Paiement facture postpayé' ||  type =='Facture postpayé' ">
+        <h3>
+          Date chèque : {{ item?.dateEcheance2 | dateSql:'dd-MM-yyyy'  }}
+        </h3>
+      </div>
+      <h3 *ngIf="item?.paymentMode!='SoldeDepart' && type !='Paiement facture postpayé' && type !='Facture postpayé'" >
+        Banque : {{ item?.banque}}
+      </h3>
+
+      <!-- si le mode de payment = espèce / virement -->
+      <h3 *ngIf=" item?.paymentMode != 'SoldeDepart'  && item?.montantPP!=0  && (item?.montantPPE == null || item?.montantPPE == 0)">
+        Montant recharge : {{ item?.montantPP | amountmillierpipe}} DT
+      </h3>
+      <h3 *ngIf=" item?.paymentMode != 'SoldeDepart' && item?.montantPPE!=0  && (item?.montantPP == null || item?.montantPP == 0)">
+        Montant recharge : {{ item?.montantPPE | amountmillierpipe}} DT
+      </h3>
+
+
+      <!-- si le mode de payment = solde départ -->
+      <h3 *ngIf="item?.paymentMode == 'SoldeDepart'  
+      && ((item?.montantPP != 0 && (item?.montantPPE == null || item?.montantPPE == 0)) || (item?.montantPPE != 0
+      && (item?.montantPP == null || item?.montantPP == 0)))">
+        Montant recharge : {{ (item?.montantPP != 0) ? item?.montantPP : item?.montantPPE | amountmillierpipe }} DT
+      </h3>
+      
+      <h3 *ngIf="item?.paymentMode =='SoldeDepart'  ">
+        Montant de paiement : {{ item?.montantPaiement | amountmillierpipe}} DT
+      </h3>
+
+    
+      <h3 *ngIf="(item?.paymentMode=='espèce'  || item?.paymentMode=='espece' || item?.paymentMode=='chèque'|| item?.paymentMode=='cheque'|| item?.paymentMode=='traite'|| item?.paymentMode=='virement')  ">
+        Montant de paiement : {{ item?.montantPaiement | amountmillierpipe}} DT
+      </h3>
+
+      <h3 *ngIf="type=='Bon de Recharge'">
+        Etat : Demandé
+      </h3>
+      <h3 *ngIf="type=='Bon de Paiement' && item?.bonState=='confirmé' ">
+        Etat : Confirmé
+      </h3>
+      <h3 *ngIf="type=='Bon de Paiement' && item?.bonState=='annulé' ">
+        Etat : Annulé
+      </h3>
+     
+
+      <h3 *ngIf=" type =='Paiement facture postpayé' && item?.bonState=='demandé'  ">
+        Etat : Demandé
+      </h3>   
+      <h3 *ngIf=" type =='Facture postpayé' && item?.bonState=='confirmé'  ">
+        Etat : Confirmé
+      </h3>
+
+    </div>
+  </div>
+  <div class="col text-right">
+    <h4>Signature et cachet</h4>
+  </div>
+</div>
+
+
+
+
+<!-- etat rechargeeeee  -->
+
+<div class="container" id="iDdIV2" hidden="true">
+  <div class="row">
+    <div class="col-xl-3 col-md-3">
+      <img src="assets/img/logo-symbol.png" style="align-self: center; float: left;">
+    </div>
+    <div class="col-xl-3 col-md-6">
+      <div style="align-self: center;">
+        <h2>
+        </h2>
+      </div>
+    </div>
+    <div class="col-xl-3 col-md-3">
+      <div style="align-self: center; float: right;">
+        <h4>Edité le : {{ f.Date.value}}</h4>
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="col text-center">
+
+    <h2>
+      <strong>
+        État de Rechargement Cartes
+      </strong>
+    </h2>
+    <br>
+    <br>
+
+  </div>
+  <div class="col text-left">
+  </div>
+  <h3>
+    Date Bon : {{ selectedFile?.dateBon | dateSql | slice:0:10}}
+  </h3>
+  <h3>
+    Numéro Bon : {{ selectedFile?.reference}}
+  </h3>
+  <h3>
+    Client : {{selectedFile?.raisonSociale}}
+  </h3>
+  <h3>
+    Code client : {{ selectedFile?.codeClient}}
+  </h3>
+  <h3>
+    Type de paiement : {{ selectedFile?.paymentMode}}
+  </h3>
+
+  <br>
+
+  <div class="row" style="border-bottom: solid 1px black;border-top: solid 1px black;">
+    <div class="col-md-4">
+      <h4>Nom Groupe : </h4>
+    </div>
+  </div>
+
+  <br>
+ 
+    <div style="overflow-x:auto;">
+      <table class="table table-striped" >
+        <thead>
+          <tr>
+
+            <th scope="col" style="width: 20% !important;;"> Numéro carte </th>
+            <th scope="col" style="width: 20% !important;"> Nom Porteur </th>
+            <th scope="col" style="width: 20% !important;"> Montant PP à recharger </th>
+            <th scope="col" style="width: 20% !important;"> Solde PPE à recharger </th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of ListeCarte" >
+
+            <td> {{ item.numCompte}}</td>
+            <td> {{ item.porteur}}</td>
+            <td> {{ item.montantPP | amountmillierpipe}}</td>
+            <td> {{ item.montantPPE | amountmillierpipe}}</td>
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <br>
+  <div class="row" style="border-bottom: solid 1px black;">
+    <div class="col-md-4">
+      <h4>Total groupe : </h4>
+    </div>
+  </div>
+
+  <br>
+  <br>
+
+  <div class="col text-right">
+    <h4>Signature et cachet</h4>
+  </div>

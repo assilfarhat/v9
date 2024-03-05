@@ -1,0 +1,84 @@
+<div class="card">
+
+    <div class="card-header">
+        <h5 class="card-title"> <strong>Solde départ</strong> </h5>
+    </div>
+
+    <div class="card-body">
+
+        <form class="form-horizontal" [formGroup]="formSearch">
+
+            <div class="form-group row" style="margin-top: 10px; ">
+
+                <div class="col-xl-3 col-md-6">
+
+                    <div style="text-align:center;margin-top: 10px;">
+                        <input class="form-control" list="Client" placeholder="Client" formControlName="clientId"
+                            (change)="selectFile()">
+                        <datalist id="Client">
+                            <option *ngFor="let item of ClientListDropdown" [value]="item.raisonSociale">
+                                {{item.raisonSociale }} </option>
+                        </datalist>
+                    </div>
+
+                </div>
+
+                <div class="col-md-12 text-right">
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-sm-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Solde PP</mat-label>
+                        <input matInput type="number" formControlName="PlafondPP" placeholder="Plafond PP">
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Solde PPE</mat-label>
+                        <input matInput type="number" formControlName="PlafondPPE" placeholder="Plafond PPE">
+                    </mat-form-field>
+                </div>
+
+            </div>
+
+            <div class="row">
+
+
+
+                <div class="col-sm-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Solde PP départ</mat-label>
+                        <input matInput type="number" formControlName="PlafondDepartPP" required
+                            placeholder="Plafond PP départ">
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Solde PPE départ</mat-label>
+                        <input matInput type="number" step="0.01" min="0.0" max="5.0" formControlName="PlafondDepartPPE"
+                            required placeholder="Plafond PPE départ">
+                    </mat-form-field>
+                </div>
+
+            </div>
+
+            <div class="col-md-12 text-right">
+
+                <button class="btn btn-primary btn-ladda" data-style="expand-left" [ladda]='isLoading'
+                    (click)="ConfirmRecharge()" [disabled]="formSearch.invalid">
+                    <i class="fa fa-search"> Ajouter solde Départ </i>
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>

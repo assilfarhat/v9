@@ -1,0 +1,827 @@
+<div class="animated fadeIn">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title"><strong>Liste notes débit crédit</strong></h5>
+        </div>
+        <div class="card-body">
+            <form class="form-horizontal" [formGroup]="form">
+
+                <div class="form-group row" style="margin-top: 10px;">
+                    <div class="col-xl-3 col-md-6">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Date début</mat-label>
+                            <input matInput formControlName="dateDebut" type="date">
+                            <mat-error>la Date début doit être inférieur ou égale à la date fin </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Date fin</mat-label>
+                            <input matInput formControlName="dateFin" type="date">
+                        </mat-form-field>
+                    </div>
+                    <!-- <div class="col-xl-3 col-md-6">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Date Fin</mat-label>
+                            <input matInput formControlName="dateFin" type="date">
+                            <mat-error>la Date fin doit être supérieur ou égale à la date début </mat-error>
+                        </mat-form-field>
+                    </div> -->
+                    <!-- <div class="col-xl-3 col-md-6">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Référence</mat-label>
+                            <input type="text" matInput formControlName="reference" placeholder="référence">
+                        </mat-form-field>&nbsp;
+                    </div> -->
+                    <div class="col-xl-3 col-md-6" >
+                        <mat-form-field appearance="outline">
+                            <mat-label>Code</mat-label>
+                            <input type="text" matInput formControlName="code" placeholder="code">
+                        </mat-form-field>&nbsp;
+                    </div>
+
+                    <div class="col-xl-3 col-md-6" *ngIf=" ActualUser != 'GERANT'">
+                        <input class="form-control" list="Station" placeholder="{{'Station'}}"
+                            formControlName="IdStation">
+                        <datalist id="Station">
+                            <option *ngFor="let item of StationList" [value]="item.stationName">{{ item.stationName }}
+                            </option>
+                        </datalist>
+                    </div>
+
+                    <div class="col-md-12 text-right">
+                        <button class="btn btn-primary btn-ladda" data-style="expand-left" (click)="rerender()">
+                            <i class="fa fa-search"> Chercher </i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <div style="overflow-x:auto;">
+                <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover display nowrap"
+                    width="100%">
+                    <thead>
+                        <tr>
+                            <th style="width: 5%;"><i class="fa fa-file-o" title="Détail" aria-hidden="true"></i> NDC
+                            </th>
+                            <th *ngIf="isAdmin || ActualUser == 'VALIDATEUR' || ActualUser == 'GERANT'" style="width: 5%;"><i class="fa fa-file-o"
+                                    title="Détail" aria-hidden="true"></i> ND
+                            </th>
+                            <th *ngIf="isAdmin || ActualUser == 'VALIDATEUR' || ActualUser == 'GERANT' " style="width: 5%;"><i class="fa fa-file-o"
+                                    title="Détail" aria-hidden="true"></i> NC
+                            </th>
+                            <th>Date </th>
+                            <!-- <th>Référence </th> -->
+                            <th>Code de la référence</th>
+                            <th>ID Station</th>
+                            <th>Station</th>
+                            <th>Montant TTC Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of ListNotes">
+                            <td><i class="fa fa-eye" [ngClass]="{'fa-eye': !show,'fa-eye-slash': show }"
+                                    (click)="selectNote(item);getDetails(item.idDebitCredit, item.id,false )"
+                                    title=" Détail NDC " aria-hidden="true"></i>
+                                &nbsp;
+                                
+                                
+                                
+
+                                    <i *ngIf=" telechargement =='télecharger' && accessTelechargement == true" class="fa fa-download"
+                                    (click)="selectNote(item);getDetails(item.idDebitCredit,item.id,true)"
+                                    title="Télécharger NDC" aria-hidden="true"></i>
+                            </td>
+                            <td><i class="fa fa-eye"
+                                    [ngClass]="{'fa-eye': !showNd,'fa-eye-slash': showNd }"
+                                    (click)="selectNoteNd(item);getDetailsNd(item.idDebit, item.id,item.idStation,false )"
+                                    title=" Détail ND " aria-hidden="true"></i>
+                                &nbsp;
+                                
+                                
+                                
+                                    <i *ngIf="  telechargement =='télecharger' && accessTelechargement == true" class="fa fa-download"
+                                    (click)="selectNoteNd(item);getDetailsNd(item.idDebit,item.id,item.idStation,true )"
+                                    title="Télécharger ND" aria-hidden="true"></i>
+                            </td>
+                            <td><i class="fa fa-eye"
+                                    [ngClass]="{'fa-eye': !showNc,'fa-eye-slash': showNc }"
+                                    (click)="selectNoteNc(item);getDetailsNc(item.idCredi, item.id,item.idStation,false )"
+                                    title=" Détail NC " aria-hidden="true"></i>
+                                &nbsp;
+                                
+                                
+                                
+                                    <i *ngIf=" telechargement =='télecharger' && accessTelechargement == true"  class="fa fa-download"
+                                    (click)="selectNoteNc(item);getDetailsNc(item.idCredi,item.id,item.idStation,true )"
+                                    title="Télécharger NC" aria-hidden="true"></i>
+                            </td>
+                            <td>{{item.date | dateSql }}</td>
+                            <!-- <td>{{item.reference}}</td> -->
+                            <td align="center">{{item.code}}</td>
+                            <td>{{item.idStation}}</td>
+                            <td>{{item.station}}</td>
+                            <td>{{ item.montantttc | amountpipe}}</td>
+                            <!-- <td *ngIf="ListdetailNoteNdcommission==0" >{{ item.montantttc | amountpipe}}</td> -->
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="animated fadeIn" *ngIf="show">
+    <div class="card">
+        <div class="card-header"><strong> Note Débit Crédit (NDC) </strong></div>
+        <div class="card-body">
+            <div class="row">
+                <div class=" col-md-4">
+                    <span> <b>Date : </b> {{ selectedNote?.date | dateSql}}
+                    </span>
+                </div>
+                <div class=" col-md-4">
+                    <span> <b>Référence : </b> {{ selectedNote?.code}} </span>
+                </div>
+                <div *ngIf=" telechargement =='télecharger' && accessTelechargement == true"  class=" col-md-12" style="text-align: right;">
+                    <a class="btn btn-danger btn-ladda" data-style="expand-left" (click)="downlaodNDC()">
+                        <i class="fa fa-download"></i> Télécharger
+                    </a>
+                </div>
+               
+               
+               
+               
+               
+                <br>
+
+            </div>
+            <div style="overflow-x:auto; margin-top: 40px;">
+
+                <table class="table table-striped" width="100%">
+                    <thead>
+                        <tr>
+                            <th> </th>
+                            <th>Montant HTVA </th>
+                            <th>Montant TVA </th>
+                            <th>Montant TTC </th>
+
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of ListdetailNote">
+                            <td><strong> Total général </strong></td>
+                            <td>{{item.mthtva | amountpipe}}</td>
+                            <td>{{item.mttva | amountpipe}}</td>
+                            <td>{{item.montantttc | amountpipe}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="animated fadeIn" *ngIf="showNd">
+    <div class="card">
+        <div class="card-header"><strong> Note Débit (ND)</strong></div>
+        <div class="card-body">
+            <div class="row">
+                <div class=" col-md-4">
+                    <span> <b>Date : </b> {{ selectedNoteD?.date | dateSql}}
+                    </span>
+                </div>
+                <div class=" col-md-4">
+                    <span> <b>Référence : </b> {{ selectedNoteD?.code}} </span>
+                </div>
+                <div *ngIf="  telechargement =='télecharger' && accessTelechargement == true" class=" col-md-12" style="text-align: right;">
+                    <a class="btn btn-danger btn-ladda" data-style="expand-left" (click)="downlaodND()">
+                        <i class="fa fa-download"></i> Télécharger
+                    </a>
+                </div>
+
+    
+    
+    
+    
+    
+            </div>
+            <!-- <div style="overflow-x:auto; margin-top: 20px;">
+                <table class="table table-striped" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Date </th>
+                            <th>Produit </th>
+                            <th>Montant </th>
+                            <th>Numéro carte </th>
+                            <th>Terminal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of listTransaction">
+                            <td>{{item.dateTimeSystem | dateSql }}</td>
+                            <td>{{item.produit }}</td>
+                            <td>{{item.montant  }}</td>
+                            <td>{{item.numCarte }}</td>
+                            <td>{{item.idterminal }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+            </div> -->
+            <div style="overflow-x:auto; margin-top: 40px;">
+                <table class="table table-striped" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Libellé produit</th>
+                            <th>Quantité </th>
+                            <th>Commission </th>
+                            <th>Taux TVA % </th>
+                            <th>Montant HTVA </th>
+                            <th>Montant TVA </th>
+                            <th>Montant TTC </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of ListdetailNoteNd">
+                            <td>{{item.produit}}</td>
+                            <td *ngIf="item.produit != 'SERVICE STATION'  && item.produit != 'ARTICLE LUBRIFIANT'"> {{
+                                item.qteM3 | number:'1.3-3' }} </td>
+                            <td *ngIf="item.produit == 'SERVICE STATION' || item.produit == 'ARTICLE LUBRIFIANT'">
+                                &nbsp; </td>
+                            <td>{{item.commission }}</td>
+                            <td>{{item.txtva }} %</td>
+                            <td>{{item.mthtva | amountpipe}}</td>
+                            <td>{{item.mttva | amountpipe}}</td>
+                            <td>{{item.montantttc | amountpipe}}</td>
+
+                        </tr>
+                        <tr>
+                            <th colspan="4">Total commission</th>
+                            <td>{{TotalHTVA | amountpipe}}</td>
+                            <td>{{TotalTVA | amountpipe}}</td>
+                            <td>{{TotalTTC | amountpipe}}</td>
+                        </tr>
+                        <tr>
+                            <th *ngIf="TotalHTVA!=0  && TotalTVA!=0 &&  TotalTTC != 0" colspan="6">Timbre</th>
+                            <td *ngIf="TotalHTVA!=0  && TotalTVA!=0 &&  TotalTTC != 0">1</td>
+                        </tr>
+                        <tr>
+                            <th *ngIf="TotalHTVA == 0  && TotalTVA == 0 &&  TotalTTC == 0" colspan="6">Timbre</th>
+                            <td *ngIf="TotalHTVA == 0  && TotalTVA == 0 &&  TotalTTC == 0">0</td>
+                        </tr>
+                        <tr>
+                            <th colspan="6">Total débit </th>
+                            <td *ngIf="TotalHTVA!=0  && TotalTVA!=0 &&  TotalTTC != 0"> {{(TotalTTC + 1) |
+                                number:'1.3-3'}} </td>
+                            <td *ngIf="TotalHTVA ==0  && TotalTVA ==0 &&  TotalTTC == 0"> {{TotalTTC | number:'1.3-3'}}
+                            </td>
+                            <!-- <td> {{TotalTTC | number:'1.3-3'}} </td> -->
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="animated fadeIn" *ngIf="showNc">
+
+    <div class="card">
+        <div class="card-header"><strong> Note Crédit (NC) </strong></div>
+        <div class="card-body">
+
+            <div class="row">
+                <div class=" col-md-4">
+                    <span> <b>Date : </b> {{ selectedNoteC.date | dateSql }}
+                    </span>
+                </div>
+                <div class=" col-md-4">
+                    <span> <b>Référence : </b> {{ selectedNoteC.code}} </span>
+                </div>
+                
+                
+                
+                
+                
+                <div *ngIf=" telechargement =='télecharger' && accessTelechargement == true" class=" col-md-12" style="text-align: right;">
+                    <a class="btn btn-danger btn-ladda" data-style="expand-left" (click)="downlaodNC()">
+                        <i class="fa fa-download"></i> Télécharger
+                    </a>
+                </div>
+            </div>
+            <div style="overflow-x:auto; margin-top: 20px;">
+                <table class="table table-striped" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Date / Heure </th>
+                            <th>N° ticket </th>
+                            <th>Réference TPE</th>
+                            <th>N° carte </th>
+                            <th>Produit </th>
+                            <th>Quantité </th>
+                            <th>Montant TTC </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of listTransaction">
+                            <td>{{item.dateTimeSystem | dateSql }}</td>
+                            <td> {{item.numTicket}}</td>
+                            <td>{{item.idterminal }}</td>
+                            <td>{{item.numCarte }}</td>
+                            <td>{{item.produit }}</td>
+                            <td *ngIf="item.produit != 'SERVICE STATION'  && item.produit != 'ARTICLE LUBRIFIANT'"> {{ item.quantite | amountmillierpipe }}</td>
+                            <td *ngIf="item.produit == 'SERVICE STATION' || item.produit == 'ARTICLE LUBRIFIANT'">
+                                &nbsp; </td>
+                            <td>{{item.montant | amountmillierpipe}}</td>
+                        </tr>
+                        <tr>
+                            <th colspan="6">Total crédit</th>
+                            <td>{{TotalMntNc | amountmillierpipe}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+            </div>
+            <div style="overflow-x:auto; margin-top: 40px;">
+                <table class="table table-striped" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Libellé produit</th>
+                            <th>Quantité</th>
+                            <th>Prix Unitaire HT</th>
+                            <th>Taux TVA %</th>
+                            <th>Montant HTVA </th>
+                            <th>Montant TVA </th>
+                            <th>Montant TTC </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of ListdetailNoteNc">
+                            <td *ngIf="item.isPrestations!=true">{{ item.produit }}</td>
+                            <td *ngIf="item.isPrestations==true"> <b>Prestation</b> </td>
+                            <td *ngIf="item.produit != 'SERVICE STATION'  && item.produit != 'ARTICLE LUBRIFIANT'"> {{
+                                item.qteM3 | number:'1.3-3'}} </td>
+                            <td *ngIf="item.produit == 'SERVICE STATION' || item.produit == 'ARTICLE LUBRIFIANT'">
+                                &nbsp; </td>
+                            <td >{{ item.prixM3htva | number:'1.3-3' }}</td>
+
+                            <td *ngIf=" item.txtva == null "> </td>
+                            <td *ngIf=" item.txtva != null ">{{ item.txtva }} %</td>
+                           
+                            <td>{{ item.mthtva | amountpipe}}</td>
+                            <td>{{ item.mttva | amountpipe}}</td>
+                            <td>{{ item.montantttc | amountpipe}}</td>
+                        </tr>
+                        <tr>
+                            <th colspan="4">Total crédit</th>
+                            <td>{{TotalMhtva | amountpipe}}</td>
+                            <td>{{TotalMtva | amountpipe}}</td>
+                            <td>{{Total | amountpipe}}</td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- *************************************************  Note débit crédit  **************************************** -->
+<div class="container" id="iDdIV" hidden="true">
+    <div class="row">
+        <div class="col-xl-3 col-md-5">
+            <img src="assets/img/logo-symbol.png" style="align-self: center; float: left;">
+        </div>
+        <div class="col-xl-3 col-md-3">
+            <div class="col-xs-1 text-center">
+                <h2> NOTE DE DEBIT-CREDIT </h2>
+            </div>
+
+        </div>
+        <div class="col-xl-3 col-md-4">
+            <div style="align-self: center; float: right;">
+                <h4>Edité le : {{ selectedNote?.date |dateSql}}</h4>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row  col-md-12" style="margin-top: 20px;">
+        <div class="col-xl-3 col-md-6" style="float: left;">
+            <fieldset>
+                <p><strong>Raison sociale : </strong> {{station?.nom}} </p>
+                <p><strong>Adresse : </strong> {{station?.adresse }} </p>
+
+            </fieldset>
+        </div>
+
+
+        <div class="col-xl-3 col-md-6">
+            <fieldset style="float: right;">
+                <p><strong>Date : </strong> {{ selectedNote?.date |dateSql}}</p>
+                <p><strong>N° débit-crédit : </strong> {{selectedNote?.code }} </p>
+
+            </fieldset>
+        </div>
+    </div>
+
+    <div style="overflow-x:auto; margin-top: 40px;">
+
+        <table style="border:none">
+            <thead style="border:none">
+                <tr style="border:none !important">
+                    <th style="border-bottom: 1px solid ; border-left:none; border-right:none;border-top:1px solid">
+                    </th>
+                    <th style="border-bottom: 1px solid ; border-left:none; border-right:none;border-top:1px solid">
+                        MONTANT HTVA </th>
+                    <th style="border-bottom: 1px solid  ; border-left:none; border-right:none;border-top:1px solid ">
+                        MONTANT
+                        TVA </th>
+                    <th style="border-bottom: 1px solid ; border-left:none; border-right:none;border-top:1px solid">
+                        MONTANT TTC </th>
+                </tr>
+            </thead>
+            <tbody style="border:none">
+
+                <tr *ngFor="let item of ListdetailNote">
+                    <td style="border-bottom:none ; border-left:none; border-right:none;border-top:none ">
+                        <strong>TOTAL GENERAL &nbsp; &nbsp; &nbsp; TND </strong>
+                    </td>
+                    <td style="border-bottom:none ; border-left:none; border-right:none;border-top:none ">
+                        {{item.mthtva| amountpipe }}</td>
+                    <td style="border-bottom:none ; border-left:none; border-right:none;border-top:none ">
+                        {{item.mttva | amountpipe}}</td>
+                    <td style="border-bottom:none ; border-left:none; border-right:none;border-top:none ">
+                        {{item.montantttc | amountpipe }}</td>
+                </tr>
+
+
+            </tbody>
+            <tfoot style="border-bottom: 1px solid  ; border-left:none; border-right:none;border-top:none ">
+                <td style="border-bottom: 1px solid  ; border-left:none; border-right:none;border-top:none "></td>
+            </tfoot>
+        </table>
+        <br>
+        <div style="border-bottom: 1px solid ; border-left:1px solid; border-right:1px solid;border-top:1px solid">
+            <div colspan="6">&nbsp; <b>Soit : </b> &nbsp; &nbsp; &nbsp; {{MntTtlNDC}}</div>
+        </div>
+        <br>
+    </div>
+</div>
+
+<!-- *************************************************  Note Débit  **************************************** -->
+<div class="container" id="iDdIV2" hidden="true">
+
+    <div class="row">
+        <div class="col-xl-3 col-md-5">
+            <img src="assets/img/logo-symbol.png" style="align-self: center; float: left;">
+        </div>
+        <div class="col-xl-3 col-md-3">
+            <div class="col-xs-1 text-center" style="align-self: center;">
+                <h2>NOTE DEBIT</h2> (COMMISSION)
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-4">
+            <div style="align-self: center; float: right;">
+                <h4>Edité le : {{ selectedNoteD?.date |dateSql}}</h4>
+            </div>
+        </div>
+    </div>
+    <div class="row  col-md-12" style="margin-top: 20px;">
+        <div class="col-xl-3 col-md-6" style="float: left;">
+            <fieldset>
+                <p><strong>Raison sociale: </strong> {{station?.nom}} </p>
+                <p><strong>Adresse: </strong> {{station?.adresse }} </p>
+
+            </fieldset>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <fieldset style="float: right;">
+                <p><strong>Date : </strong> {{selectedNoteD?.date |dateSql }} </p>
+                <p><strong>N° débit : </strong> {{selectedNoteD?.code }} </p>
+
+            </fieldset>
+        </div>
+    </div>
+
+    <div style="overflow-x:auto; margin-top: 20px;">
+        <!-- <table class="table table-striped" width="100%">
+            <thead>
+                <tr>
+                    <th>Date </th>
+                    <th>Produit </th>
+                    <th>Montant </th>
+                    <th>Numéro carte</th>
+                    <th>Terminal</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of listTransaction">
+                    <td>{{item.dateTimeSystem | dateSql }}</td>
+                    <td>{{item.produit }}</td>
+                    <td>{{item.montant  }}</td>
+                    <td>{{item.numCarte }}</td>
+                    <td>{{item.idterminal }}</td>
+                </tr>
+            </tbody>
+        </table> -->
+
+    </div>
+    <div style="overflow-x:auto; margin-top: 40px;">
+        <table style="border:none">
+            <thead align="center" style="border:none">
+                <tr style="border:none !important">
+                    <th style="border-bottom: 1px solid  ; border-left:none; border-right:none;border-top:1px solid ">
+                        PRODUIT
+                    </th>
+                    <th style="border-bottom: 1px solid  ; border-left:none; border-right:none;border-top:1px solid ">
+                        QUANTITÉ </th>
+                    <th style="border-bottom: 1px solid  ; border-left:none; border-right:none;border-top:1px solid ">
+                        COMMISSION </th>
+                    <th style="border-bottom: 1px solid  ; border-left:none; border-right:none;border-top:1px solid ">
+                        TAUX
+                        TVA </th>
+                    <th style="border-bottom: 1px solid  ; border-left:none; border-right:none;border-top:1px solid ">
+                        Montant
+                        HT </th>
+                    <th style="border-bottom: 1px solid  ; border-left:none; border-right:none;border-top:1px solid ">
+                        Montant
+                        TVA </th>
+                    <th style="border-bottom: 1px solid  ; border-left:none; border-right:none;border-top:1px solid ">
+                        Montant
+                        TTC </th>
+                </tr>
+            </thead>
+            <tbody align="center" style="border:none">
+                <tr *ngFor="let item of ListdetailNoteNd">
+                    <td style="border-bottom:none ; border-left:none; border-right:none;border-top:none ">
+                        {{item.produit}}</td>
+                    <td style="border-bottom:none ; border-left:none; border-right:none;border-top:none "
+                        *ngIf="item.produit != 'SERVICE STATION'  && item.produit != 'ARTICLE LUBRIFIANT'"> {{
+                        item.qteM3 | number:'1.3-3' }} </td>
+                    <td style="border-bottom:none ; border-left:none; border-right:none;border-top:none "
+                        *ngIf="item.produit == 'SERVICE STATION' || item.produit == 'ARTICLE LUBRIFIANT'"> &nbsp; </td>
+                    <td style="border-bottom:none ; border-left:none; border-right:none;border-top:none ">
+                        {{item.commission }}</td>
+                        
+                          
+                    <td style="border-bottom:none ; border-left:none; border-right:none;border-top:none " *ngIf=" item.txtva != null "> {{item.txtva
+                    }} %</td>
+                        <td style="border-bottom:none ; border-left:none; border-right:none;border-top:none " *ngIf=" item.txtva == null "></td>
+                    <td style="border-bottom:none ; border-left:none; border-right:none;border-top:none ">{{item.mthtva
+                        | amountpipe }}</td>
+                    <td style="border-bottom:none ; border-left:none; border-right:none;border-top:none ">{{item.mttva |
+                        amountpipe }}</td>
+                    <td style="border-bottom:none ; border-left:none; border-right:none;border-top:none ">
+                        {{item.montantttc | amountpipe}}</td>
+                </tr>
+                <br>
+                <tr style="border-bottom: 1px solid ; border-left:none; border-right:none;border-top:1px solid">
+                    <th style="border-bottom: 1px solid ; border-left:none; border-right:none;border-top:1px solid"
+                        colspan="4" class="col text-left">TOTAL COMMISSION</th>
+                    <td style="border-bottom: 1px solid ; border-left:none; border-right:none;border-top:1px solid"
+                        class="col-xs-1 text-center">{{TotalHTVA | amountpipe}}</td>
+                    <td style="border-bottom: 1px solid ; border-left:none; border-right:none;border-top:1px solid"
+                        class="col-xs-1 text-center">{{TotalTVA | amountpipe}}</td>
+                    <td style="border-bottom: 1px solid ; border-left:none; border-right:none;border-top:1px solid"
+                        class="col-xs-1 text-center">{{TotalTTC | amountpipe}}</td>
+                </tr>
+
+
+                <br>
+                <br>
+                <tr>
+                    <th *ngIf="TotalHTVA!=0  && TotalTVA!=0 &&  TotalTTC != 0" colspan="6"
+                        style="border-bottom: 1px solid ; border-left:none; border-right:none;border-top:1px solid"
+                        class="col text-left">Timbre</th>
+                    <td *ngIf="TotalHTVA!=0  && TotalTVA!=0 &&  TotalTTC != 0"
+                        style="border-bottom: 1px solid ; border-left:none; border-right:none;border-top:1px solid">
+                        1.000</td>
+                </tr>
+
+                <tr>
+                    <th *ngIf="TotalHTVA == 0  && TotalTVA == 0 &&  TotalTTC == 0" colspan="6"
+                        style="border-bottom: 1px solid ; border-left:none; border-right:none;border-top:1px solid"
+                        class="col text-left">Timbre</th>
+                    <td *ngIf="TotalHTVA ==0  && TotalTVA ==0 &&  TotalTTC == 0"
+                        style="border-bottom: 1px solid ; border-left:none; border-right:none;border-top:1px solid">
+                        0.000</td>
+                </tr>
+                <tr>
+                    <th colspan="6"
+                        style="border-bottom: 1px solid ; border-left:none; border-right:none;border-top:1px solid"
+                        class="col text-left">Total débit </th>
+                    <td *ngIf="TotalHTVA!=0  && TotalTVA!=0 &&  TotalTTC != 0"
+                        style="border-bottom: 1px solid ; border-left:none; border-right:none;border-top:1px solid">
+                        {{(TotalTTC +1)| amountpipe}}</td>
+                    <td *ngIf="TotalHTVA ==0  && TotalTVA ==0 &&  TotalTTC == 0"
+                        style="border-bottom: 1px solid ; border-left:none; border-right:none;border-top:1px solid">
+                        {{TotalTTC | amountpipe}}</td>
+                </tr>
+                <tr>
+                    <th *ngIf="TotalHTVA !=0  && TotalTVA !=0 &&  TotalTTC != 0" colspan="7"
+                        style="border-bottom: 1px solid ; border-left:none; border-right:none;border-top:1px solid"
+                        class="col text-left">Soit : {{MntTtlND}} </th>
+                    <th *ngIf="TotalHTVA ==0  && TotalTVA ==0 &&  TotalTTC == 0" colspan="7"
+                        style="border-bottom: 1px solid ; border-left:none; border-right:none;border-top:1px solid"
+                        class="col text-left">Soit : {{MntTtlNDnull}} </th>
+
+
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<!-- *************************************************  Note crédit  **************************************** -->
+<div class="container" id="iDdIV3" hidden="true">
+    <div class="row">
+        <div class="col-xl-3 col-md-5">
+            <img src="assets/img/logo-symbol.png" style="align-self: center; float: left;">
+        </div>
+        <div class="col-xl-3 col-md-3">
+            <div style="align-self: center;">
+                <h2>NOTE CREDIT </h2> (DETAILS DES OPERATIONS)
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-4">
+            <div style="align-self: center; float: right;">
+                <h4>Edité le : {{ selectedNoteC?.date | dateSql }}</h4>
+            </div>
+        </div>
+    </div>
+    <div class="row  col-md-12" style="margin-top: 20px;">
+        <div class="col-xl-3 col-md-6" style="float: left;">
+            <fieldset>
+                <p><strong>Raison sociale : </strong> {{station?.nom}} </p>
+                <p><strong>Adresse : </strong> {{station?.adresse }} </p>
+
+            </fieldset>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <fieldset style="float: right;">
+                <p><strong>Date : </strong> {{selectedNoteC?.date | dateSql }} </p>
+                <p><strong>N°Crédit : </strong> {{selectedNoteC?.code }} </p>
+
+            </fieldset>
+        </div>
+    </div>
+    <div>
+        <div style="overflow-x:auto; margin-top: 40px;">
+            Produits consommés en station
+            <br>
+            <br>
+            <table style="border:none">
+                <thead align="center" style="border:none">
+                    <tr style="border:none !important">
+                        <th style="border-bottom: none  ; border-left:none; border-right:none;border-top:1px solid ">
+                            DATE/ HEURE </th>
+                        <th style="border-bottom: none  ; border-left:none; border-right:none;border-top:1px solid ">N°
+                            TICKET </th>
+                        <th style="border-bottom: none  ; border-left:none; border-right:none;border-top:1px solid ">
+                            RÉFÉRENCE TPE</th>
+                        <th style="border-bottom: none  ; border-left:none; border-right:none;border-top:1px solid ">N°
+                            CARTE </th>
+                        <th style="border-bottom: none  ; border-left:none; border-right:none;border-top:1px solid ">
+                            PRODUIT </th>
+                        <th style="border-bottom: none  ; border-left:none; border-right:none;border-top:1px solid ">
+                            QUANTITÉ </th>
+                        <th style="border-bottom: none  ; border-left:none; border-right:none;border-top:1px solid ">
+                            MONTANT TTC </th>
+                    </tr>
+                </thead>
+                <tbody align="center" style="border:none">
+                    <tr *ngFor="let item of listTransaction">
+                        <td style="border-bottom:none ; border-left:none; border-right:none;border-top:none ">
+                            {{item.dateTimeSystem | dateSql }}</td>
+                        <td style="border-bottom:none ; border-left:none; border-right:none;border-top:none ">
+                            {{item.numTicket}}</td>
+                        <td style="border-bottom:none ; border-left:none; border-right:none;border-top:none ">
+                            {{item.idterminal }}</td>
+                        <td style="border-bottom:none ; border-left:none; border-right:none;border-top:none ">
+                            {{item.numCarte }}</td>
+                        <td style="border-bottom:none ; border-left:none; border-right:none;border-top:none ">
+                            {{item.produit }}</td>
+                        <td style="border-bottom:none ; border-left:none; border-right:none;border-top:none "
+                            *ngIf="item.produit != 'SERVICE STATION'  && item.produit != 'ARTICLE LUBRIFIANT'"> {{
+                            item.quantite | amountmillierpipe  }} </td>
+                        <td style="border-bottom:none ; border-left:none; border-right:none;border-top:none "
+                            *ngIf="item.produit == 'SERVICE STATION' || item.produit == 'ARTICLE LUBRIFIANT'"> &nbsp;
+                        </td>
+                        <td style="border-bottom:none ; border-left:none; border-right:none;border-top:none ">
+                            {{item.montant | amountmillierpipe}}</td>
+                    </tr>
+                    <br>
+                    <!-- <tr>
+                        <td colspan="6" class="col text-left"> TOTAL : </td>
+                        <td>{{TotalMntNc | amountmillierpipe}}</td>
+                    </tr> -->
+                </tbody>
+                <tfoot style="border-bottom: 1px solid  ; border-left:none; border-right:none;border-top:none ">
+                    <td style="border-bottom: 1px solid  ; border-left:none; border-right:none;border-top:none "></td>
+                </tfoot>
+            </table>
+        </div>
+        <div style="overflow-x:auto; margin-top: 40px;">
+            RECAP PRODUIT
+            <table style="border:none">
+                <thead style="border:none" align="center">
+                    <tr style="border:none !important">
+                        <th style="border-bottom: 1px solid ; border-left:none; border-right:none;border-top:1px solid">
+                            Produit</th>
+                        <th style="border-bottom: 1px solid ; border-left:none; border-right:none;border-top:1px solid">
+                            Quantité</th>
+                        <th style="border-bottom: 1px solid ; border-left:none; border-right:none;border-top:1px solid">
+                            Prix Unitaire</th>
+                        <th style="border-bottom: 1px solid ; border-left:none; border-right:none;border-top:1px solid">
+                            Taux TVA </th>
+                        <th style="border-bottom: 1px solid ; border-left:none; border-right:none;border-top:1px solid">
+                            Montant HTVA </th>
+                        <th style="border-bottom: 1px solid ; border-left:none; border-right:none;border-top:1px solid">
+                            Montant TVA </th>
+                        <th style="border-bottom: 1px solid ; border-left:none; border-right:none;border-top:1px solid">
+                            Montant TTC </th>
+                    </tr>
+                </thead>
+                <tbody style="border:none">
+                    <tr *ngFor="let item of ListdetailNoteNc" align="center">
+                        <td *ngIf="item.isPrestations!=true"
+                            style="border-bottom:none ; border-left:none; border-right:none;border-top:none ">{{
+                            item.produit }}</td>
+
+                        <td *ngIf="item.isPrestations==true"
+                            style="border-bottom:none ; border-left:none; border-right:none;border-top:none ">
+                            <b>Prestation</b> </td>
+
+
+                        <td style="border-bottom:none ; border-left:none; border-right:none;border-top:none "
+                            *ngIf="item.produit != 'SERVICE STATION'  && item.produit != 'ARTICLE LUBRIFIANT'"> {{
+                            item.qteM3 | number:'1.3-3' }} </td>
+                            
+                        <td style="border-bottom:none ; border-left:none; border-right:none;border-top:none "
+                            *ngIf="item.produit == 'SERVICE STATION' || item.produit == 'ARTICLE LUBRIFIANT'"> &nbsp;
+                        </td>
+
+                        <td style="border-bottom:none ; border-left:none; border-right:none;border-top:none ">{{
+                            item.prixM3htva | number:'1.3-3' }}</td>
+                        <td *ngIf=" item.txtva == null " style="border-bottom:none ; border-left:none; border-right:none;border-top:none "> &nbsp;</td>
+                        
+                        <td *ngIf=" item.txtva != null " style="border-bottom:none ; border-left:none; border-right:none;border-top:none ">{{
+                                item.txtva }} %</td>
+                                
+                        <td style="border-bottom:none ; border-left:none; border-right:none;border-top:none ">{{
+                            item.mthtva | amountpipe }}</td>
+                        <td style="border-bottom:none ; border-left:none; border-right:none;border-top:none ">{{
+                            item.mttva | amountpipe }}</td>
+                        <td style="border-bottom:none ; border-left:none; border-right:none;border-top:none "> {{
+                            item.montantttc | amountpipe }}</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid ; border-left:none; border-right:none;border-top:1px solid">
+                        <th style="border-bottom: 1px solid ; border-left:none; border-right:none;border-top:1px solid"
+                            colspan="4" class="col text-left"> TOTAL </th>
+                        <th style="border-bottom: 1px solid ; border-left:none; border-right:none;border-top: 1px solid "
+                            class="col-xs-1 text-center">&nbsp; {{ TotalMhtva | amountpipe}}</th>
+                        <th style="border-bottom: 1px solid ; border-left:none; border-right:none;border-top: 1px solid "
+                            class="col-xs-1 text-center">&nbsp; {{TotalMtva | amountpipe}}</th>
+                        <th style="border-bottom: 1px solid ; border-left:none; border-right:none;border-top: 1px solid "
+                            class="col-xs-1 text-center">&nbsp; {{ Total| amountpipe }} </th>
+                    </tr>
+                    <br>
+                </tbody>
+                <tfoot style="border-bottom: 1px solid  ; border-left:none; border-right:none;border-top:none ">
+                    <br>
+                </tfoot>
+            </table>
+            <br>
+            <br>
+
+            <div>
+                <div colspan="7" class="col-xs-1 text-center">
+                    <b> TOTAL CREDIT :
+                        &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;
+                        &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;
+                        &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;
+                        &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;
+                        &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;
+                        &nbsp; &nbsp;
+                        {{ Total | amountpipe }}
+                    </b>
+                </div>
+            </div>
+
+        </div>
+        <br>
+        <div style="border-bottom: 1px solid ; border-left:1px solid; border-right:1px solid;border-top:1px solid">
+            <div colspan="6">&nbsp; <b>Soit : </b> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {{MntTtlNC}} </div>
+        </div>
+        <br>
+        <br>
+
+    </div>
+</div>

@@ -1,0 +1,302 @@
+<app-client-info (sendNumCompteEvent)="patchNumCompte($event)" [idClient]="idClient"></app-client-info>
+
+
+
+
+
+<div class="card">
+  <h5 class="card-title">
+    <div class="card-header"><strong>Paiement facture postpayé PS</strong> </div>
+  </h5>
+  <div class="card-body">
+
+
+
+    <form [formGroup]="RechargeClientForm" autocomplete="off">
+      <div class="row">
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Montant </mat-label>
+            <input type="number" min="1" step="1" matInput formControlName="montant" required placeholder=" Montant de paiement">
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Référence facture</mat-label>
+            <input type="text" matInput formControlName="reference" required placeholder="Référence facture ">
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>
+        </div>
+
+
+
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline">
+            <mat-label>type paiement</mat-label>
+            <mat-select formControlName="typePayement" (selectionChange)="showFileAndDate()">
+              <mat-option value="espece">Espèce</mat-option>
+              <mat-option value="cheque">chèque</mat-option>
+              <mat-option value="traite">Traite</mat-option>
+            </mat-select>
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+
+
+        <div class="col-sm-6" *ngIf="f.typePayement.value=='cheque'|| f.typePayement.value=='chèque'|| f.typePayement.value=='traite'">
+          <mat-form-field appearance="outline">
+            <mat-label>date Échéance </mat-label>
+            <input matInput type="date" formControlName="dateEcheance" placeholder="Date écheance">
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+        <div class="col-sm-6" *ngIf="f.typePayement.value=='cheque'|| f.typePayement.value=='chèque'|| f.typePayement.value=='traite'">
+          <mat-form-field appearance="outline">
+            <mat-label>Numéro chèque/Traite</mat-label>
+            <input matInput type="text" formControlName="NumChequeTraite" placeholder=" Numéro chèque/Traite">
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+
+        <div class="col-sm-6" *ngIf="f.typePayement.value=='cheque'|| f.typePayement.value=='chèque'|| f.typePayement.value=='traite'">
+          <mat-form-field appearance="outline">
+            <mat-label>date chèque </mat-label>
+            <input matInput type="date" formControlName="dateEcheance2" placeholder=" Date chèque ">
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+
+        <div class="col-sm-12">
+          <b>Importer le fichier en pièce jointe de type  (JPEG - PNG - JPG - PDF) :</b>
+          <app-upload-files (deleteItemEvent)="deleteItem($event)" (newItemEvent)="addItem($event)"></app-upload-files>
+          <div class="help-block text-danger" *ngIf="fileRequerd ">
+            ce champ est obligatoire
+          </div>
+        </div>
+       
+        <div class="col-sm-12">
+          <br>
+          <button class="btn btn-primary" [disabled]="RechargeClientForm.invalid"
+            (click)="checkfile()">Confirmer</button>
+        </div>
+      </div>
+
+    </form>
+    <!-- /.box-body -->
+
+    <!-- /.box-footer -->
+
+  </div>
+
+</div>
+
+
+
+
+<div bsModal #ConfirmRechargeModal="bs-modal" class="modal fade" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Confirmation paiement PS</h4>
+        <button type="button" class="close" (click)="ConfirmRechargeModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Êtes-vous sure de vouloir payer la facture du compte client {{RechargeClientForm.value.numCompte}} d'un montant
+        {{RechargeClientForm.value.montant}} DT?
+        <div class="alert alert-info" role="alert" *ngIf="chequeFlag && (f.typePayement.value!='espece' || f.typePayement.value!='espèce')">
+
+
+          Chéque/Traite existant .
+          <br>
+          La derniere Date de modification : {{cheque.dateBon}}
+          <br>
+          Code client : {{cheque.codeClient}}
+          <br>
+
+          Voulez-vous continuer votre demande ?
+
+        </div>
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="ConfirmRechargeModal.hide()">Annuler</button>
+        <button type="button" class="btn btn-primary" (click)="checkandSave('true');">Confirmer</button>
+
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="container" id="iDdIV" hidden="true">
+
+
+
+  <div class="row">
+    <div class="col-xl-3 col-md-3">
+      <img src="assets/img/logo-symbol.png" style="align-self: center; float: left;">
+    </div>
+    <div class="col-xl-3 col-md-6">
+      <div style="align-self: center;">
+        <h2> Bon de Paiement facture PS</h2>
+      </div>
+    </div>
+    <div class="col-xl-3 col-md-3">
+      <div style="align-self: center; float: right;">
+        <h4>Edité le : {{ f.Date.value}}</h4>
+      </div>
+    </div>
+
+  </div>
+
+
+
+
+
+  <div class="col text-center">
+
+    <h2>
+      <strong>
+
+      </strong>
+    </h2>
+    <br>
+    <br>
+
+  </div>
+  <div class="col text-left">
+
+    <h3>
+      Date Bon : {{ f.Date.value}}
+    </h3>
+    <h3>
+      Numéro Bon : {{ f.reference.value}}
+    </h3>
+    <h3>
+      Client : {{ f.RaisonSociale.value}}
+    </h3>
+
+    <h3>
+      Code client : {{ f.clientId.value}}
+    </h3>
+
+    <h3>
+      Type de paiement : {{ f.typePayement.value}}
+    </h3>
+
+
+    <div *ngIf="f.typePayement.value=='cheque'|| f.typePayement.value=='chèque'|| f.typePayement.value=='traite'">
+      <h3>
+        Date écheance : {{ f.dateEcheance.value | date :'dd-MM-yyyy' }}
+      </h3>
+    </div>
+
+    <div *ngIf="f.typePayement.value=='cheque'|| f.typePayement.value=='chèque'|| f.typePayement.value=='traite'">
+      <h3>
+        Date chèque : {{ f.dateEcheance2.value | date :'dd-MM-yyyy'   }}
+      </h3>
+    </div>
+
+    <h3>
+      Montant de paiement : {{ f.montant.value}} DT
+    </h3>
+    <h3>
+      Etat : Demandé
+    </h3>
+  </div>
+
+
+
+  <div class="col text-right">
+    <h4>Signature et cachet</h4>
+  </div>
+</div>
+<!-- <div class="container" id="iDdIV" hidden="true">
+
+  <div class="row">
+
+    <img src="assets/img/logo-symbol.png"  style="width:800px;height:500; top: 0; left: 100;">
+
+
+    <div style="align-self: center; float: left;">
+     <h4>Date le : {{ f.Date.value}}  </h4>
+    </div>
+
+</div>
+
+
+<div class="col text-center">
+
+<h2>
+  <strong>
+    Etat de Rechargement Cartes
+  </strong>
+</h2>
+<br>
+<br>
+
+</div>
+<div class="col text-left">
+
+
+  <h5>
+    N° Rechargement :{{f.NumBon.value}}
+  </h5>
+  <h5>
+  Nom client  :  {{f.RaisonSociale.value}}
+  </h5>
+  <h5>
+    Date Chargement :   {{f.Date.value}}
+  </h5>
+  <h5>
+ Montant :  {{ f.montant.value}} DT
+  </h5>
+
+</div>
+<br>
+
+
+
+  <table style="border: 1px solid black; border-collapse: collapse;  position: relative;  table-layout: fixed;   overflow: hidden; width: 100%  ">
+
+    <tbody>
+
+      <tr align="left" >
+        <td colspan="3" style="border: 1px solid black; border-collapse: collapse; ">
+          <div><h5> <i>  Nom Groupe :</i></h5> </div>
+        </td>
+      </tr>
+      <tr >
+        <td >
+          <div><h5> <i>   Numéro Carte : {{ f.numCompte.value}}</i></h5> </div>
+
+        </td>
+        <td >
+          <div><h5> <i> Nom porteur :</i></h5> </div>
+
+        </td>
+        <td>
+          <div><h5> <i>  Montant :   {{ f.montant.value}} DT</i></h5> </div>
+
+
+        </td>
+      </tr>
+
+      <tr align="left">
+        <td colspan="3" style="border: 1px solid black; border-collapse: collapse; ">
+          <div><h5> <i>  Total Groupe :</i></h5> </div>
+        </td>
+      </tr>
+
+    </tbody>
+  </table>
+  <br>
+  <div class="col text-right">
+    <h4>Signature et cachet</h4>
+   </div>
+
+</div> -->

@@ -1,0 +1,141 @@
+<div class="card">
+  <h5 class="card-title"><div class="card-header"><strong>{{editMode? "Modifier Produit" : "Nouveau Produit" }} </strong> <small></small></div></h5>
+  <div class="card-body" *ngIf="(isloadingEditProduit&&editMode)|| !editMode">
+    <form [formGroup]="form" autocomplete="off">
+
+      <div class="row">
+
+
+    
+       
+        <div class="col-sm-6">
+
+
+          <mat-form-field appearance="outline" >
+            <mat-label>Code Article</mat-label>
+            <input matInput formControlName="idProduit" required placeholder="Nom">
+            <mat-error>ce champ est obligatoire</mat-error>
+
+
+          </mat-form-field>&nbsp;
+        </div>
+
+
+
+
+        <div class="col-sm-6">
+
+
+          <mat-form-field appearance="outline" >
+            <mat-label>Libellé</mat-label>
+            <input matInput formControlName="produit" required placeholder="Nom">
+            <mat-error>ce champ est obligatoire</mat-error>
+
+
+          </mat-form-field>&nbsp;
+        </div>
+
+        <!-- <div class="col-sm-6">
+    
+
+          <mat-form-field appearance="outline" >
+            <mat-label>   Prix unitaire TTC 
+            </mat-label>
+            <input matInput formControlName="prixUnitaireTtc" required placeholder="Nom">
+            <mat-error>ce champ est obligatoire</mat-error>
+
+
+          </mat-form-field>&nbsp;
+        </div> -->
+       <div class="col-sm-6">
+
+
+          <mat-form-field appearance="outline" >
+            <mat-label>  Taux de taxe
+
+            </mat-label>
+            <input matInput formControlName="tauxTaxe" required placeholder="Nom">
+            <mat-error>ce champ est obligatoire</mat-error>
+
+
+          </mat-form-field>&nbsp;
+        </div> 
+        <div class="col-sm-6">
+
+
+          <mat-form-field appearance="outline" >
+            <mat-label> Compte vente </mat-label>
+            <input matInput formControlName="compteVente" required placeholder="Nom">
+            <mat-error>ce champ est obligatoire</mat-error>
+
+
+          </mat-form-field>&nbsp;
+        </div>
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline" >
+            <mat-label>Compte de taxe
+            </mat-label>
+            <input matInput formControlName="compteTaxe" required placeholder="Nom">
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline" >
+
+
+            <mat-label>Type</mat-label>
+            <mat-select formControlName="type"  (selectionChange)="SetValidtors()" required placeholder="type">
+              <mat-option>Tous </mat-option>
+              <mat-option value='Carburant'> Carburant </mat-option>
+              <mat-option value='Hors Carburant'> Hors Carburant</mat-option>
+              <!-- <mat-option value='Service'> Service</mat-option> -->
+
+            </mat-select>
+
+          </mat-form-field>&nbsp;
+
+        </div>
+        <div class="col-sm-6" *ngIf="f.type.value=='Carburant'">
+
+
+
+          <mat-form-field appearance="outline">
+            <mat-label>Famille</mat-label>
+            <mat-select formControlName="famille"  placeholder="famille">
+              <mat-option>
+
+                Tous
+              </mat-option>
+              <mat-option *ngFor="let item of ListFamillles" [value]="item.id">
+                {{item.titre}}
+              </mat-option>
+            </mat-select>
+
+            <mat-error>ce champ est obligatoire</mat-error>
+          </mat-form-field>&nbsp;
+        </div>
+
+        <!-- <div class="col-sm-12">
+          <div class="form-group">
+            <ng-multiselect-dropdown [placeholder]="'stations'" [settings]="dropdownSettings" [data]="dropdownList"
+              formControlName="listStation" (onSelect)="onItemSelect($event)" (onSelectAll)="onSelectAll($event)">
+
+            </ng-multiselect-dropdown>
+          </div>
+        </div> -->
+
+
+
+      </div>
+
+   
+    </form>
+    <button mat-raised-button class="btn btn-info pull-right" color="primary" [disabled]="form.invalid"
+      (click)="Ajouter()">
+      {{editMode?"Modifier ": "Ajouter"}}
+    </button>
+
+  </div>
+
+</div>

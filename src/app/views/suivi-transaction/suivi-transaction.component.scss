@@ -1,0 +1,80 @@
+.withSpaces {
+    white-space: pre-wrap;
+ }
+.button-selected{
+    background-color: #c8ced3;
+    color: black
+}
+
+.badge{
+    color: white !important;
+}
+.badge-orange {
+background-color:  	#FF8C00;
+}
+.callout-orange{
+
+    border-left-color:   	#FF8C00;
+}
+
+.badge-violet {
+    background-color:  	#8A2BE2
+    ;
+    }
+    .callout-violet{
+    
+        border-left-color:   	#8A2BE2
+        ;
+    }
+
+
+.progress-title{
+padding-left: 5px;
+width: 90% !important ;
+position: relative;
+top: 3px;
+float: left;
+}
+.bg-gradient-success{
+    background-color: #4dbd74;
+
+}
+.bg-gradient-danger{
+    background-color: #f86c6b;
+
+}
+.bg-gradient-warning{
+    background-color: #ffc107;
+
+}
+.bg-gradient-info{
+    background-color: #63c2de;
+
+}
+
+.color-danager{
+    color: #f86c6b;
+
+}
+.color-warning{
+    color: #ffc107;
+
+}
+.color-info{
+    color: #63c2de;
+}
+.color-success{
+    color: #4dbd74;
+
+}
+.progress-group{
+    margin-bottom: 40px;
+}
+
+
+.mfs-auto{
+    
+       width: 10%  !important;
+float: right;
+
+}

@@ -1,0 +1,76 @@
+<form class="form-horizontal" [formGroup]="form">
+    <div class="row">
+    <div class="col-sm-6">
+        <div class="form-group row">
+        <label class="col-form-label col-sm-4" for="name">{{'LISTU.PRENOM'|translate}}</label>
+        <div class="col-sm-8">
+            <input formControlName="firstName" type="text" class="form-control" />
+            <div class="help-block text-danger" *ngIf="firstName.errors && firstName.errors.required && submitted">
+                {{'ADDU.REQ'|translate}}
+            </div>
+        </div>
+        </div>
+</div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="form-group row">
+        <label class="col-form-label col-sm-4" for="name">{{'LISTU.NOM'|translate}}</label>
+        <div class="col-sm-8">
+            <input formControlName="lastName" type="text" class="form-control" />
+            <div class="help-block text-danger" *ngIf="lastName.errors && lastName.errors.required">
+               {{'ADDU.REQ'|translate}}
+            </div>
+        </div>
+        </div>
+</div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="form-group row">
+        <label class="col-form-label col-sm-4" for="name">{{'LISTU.PHONE'|translate}}</label>
+        <div class="col-sm-8">
+            <input formControlName="phoneNumber" type="text" class="form-control" />
+            <div class="help-block text-danger" *ngIf="phoneNumber.errors && phoneNumber.errors.required">
+                {{'ADDU.REQ'|translate}}
+            </div>
+            <div class="help-block text-danger" *ngIf="phoneNumber.value != '' && phoneNumber.errors && phoneNumber.errors.pattern ">
+                {{'ADDU.PHONERR'|translate}}
+            </div>
+        </div>
+        </div>
+</div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="form-group row">
+        <label class="col-form-label col-sm-4" for="name">{{'LISTU.USERNAME'|translate}}</label>
+        <div class="col-sm-8">
+            <input formControlName="userName" type="text" class="form-control"  />
+            <div class="help-block text-danger" *ngIf="userName.errors && userName.errors.required ">
+                {{'ADDU.REQ'|translate}}
+            </div>
+           
+        </div>
+        </div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+</form>

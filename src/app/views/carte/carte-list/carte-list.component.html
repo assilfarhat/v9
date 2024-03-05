@@ -1,0 +1,2019 @@
+<div class="card">
+
+    <h5 class="card-title">
+
+        <div class="card-header"><strong>Suivi des cartes</strong></div>
+
+    </h5>
+
+    <div class="card-body" *ngIf="form">
+
+        <form *ngIf="!addFromClient" class="form-horizontal" [formGroup]="form">
+
+            <div class="form-group row" style="margin-top: 10px; ">
+
+                <div class="col-xl-3 col-md-6">
+
+                    <div style="text-align:center;">
+
+                        <div style="text-align:center;margin-top: 10px;">
+
+                            <input class="form-control" list="Client" placeholder="{{'Client'}}"
+
+                                formControlName="clientId">
+
+                            <datalist id="Client">
+
+                                <option *ngFor="let item of ClientList" [value]="item.raisonSociale">{{
+
+                                    item.raisonSociale }} </option>
+
+                            </datalist>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-xl-3 col-md-6">
+
+                    <div style="text-align:center;">
+
+                        <mat-form-field appearance="outline">
+
+                            <mat-label>Date activation carte</mat-label>
+
+                            <input matInput formControlName="dateActivation" type="date">
+
+                        </mat-form-field>
+
+                    </div>
+
+                </div>
+
+                <div class="col-xl-3 col-md-6"> 
+                    <mat-form-field appearance="outline"> 
+                          <mat-label>Date création carte</mat-label> 
+                           <input matInput formControlName="dateCreation" type="date"> 
+                       </mat-form-field> 
+                  </div> 
+
+                <div class="col-xl-3 col-md-6">
+
+                    <div style="text-align:center;">
+
+                        <mat-form-field appearance="outline">
+
+                            <mat-label>Type carte</mat-label>
+
+                            <mat-select formControlName="TypeCarte">
+
+                                <mat-option> Tous </mat-option>
+
+                                <mat-option value="prépayé"> Prépayé </mat-option>
+
+                                <mat-option value="postpayé"> Postpayé </mat-option>
+
+                            </mat-select>
+
+                        </mat-form-field>
+
+                    </div>
+
+                </div>
+
+                <div class="col-xl-3 col-md-6">
+
+                    <div style="text-align:center;">
+
+                        <mat-form-field appearance="outline">
+
+                            <mat-label>Statut</mat-label>
+
+                            <mat-select formControlName="statut">
+
+                                <mat-option> Tous </mat-option>
+
+                                <mat-option value="0"> Active </mat-option>
+
+                                <mat-option value="1"> Inactive </mat-option>
+
+                                <mat-option value="8"> Expiré </mat-option>
+
+                                <mat-option value="10"> Remplacé </mat-option>
+
+                                <mat-option value="11"> Mise en opposition </mat-option>
+
+                                <mat-option value="7"> Bloqué </mat-option>
+
+                            </mat-select>
+
+                        </mat-form-field>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- <div class="col-xl-3 col-md-6">
+
+                    <mat-form-field appearance="outline">
+
+                        <mat-label>Date Fin</mat-label>
+
+                        <input matInput formControlName="dateFin" type="date">
+
+                        <mat-error>la Date fin doit être supérieur ou égale à la date début </mat-error>
+
+                    </mat-form-field>
+
+                </div> -->
+
+
+
+                <div class="col-md-12 text-right">
+
+                    <button class="btn btn-primary btn-ladda" data-style="expand-left" (click)="getListCarte()">
+
+                        <i class="fa fa-search"> Chercher </i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </form>
+
+
+
+        <!-- ajout pour admin staroil -->
+
+    
+
+
+
+        <!-- ajout pour OPERATEUR / VALIDATEUR -->
+
+        <div class="row"
+
+            *ngIf="ajout == 'Ajout Carte' && accessvalue==true">
+
+            <div class="col-sm-12 text-right">
+
+                <a class="btn btn-success btn-ladda" data-style="expand-left" [routerLink]="['/carte/add']"
+
+                    *ngIf="!addFromClient">
+
+                    <i class="fa fa-plus"></i> Ajouter
+
+                </a>
+
+                <a class="btn btn-success btn-ladda" data-style="expand-left" [routerLink]="['/carte/add', idClient]"
+
+                    *ngIf="addFromClient">
+
+                    <i class="fa fa-plus"></i> Ajouter
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <div style="overflow-x:auto; margin-top: 20px;">
+
+            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" id="example"
+
+                class="row-border hover display nowrap" width="100%">
+
+                <thead align="center">
+
+                    <tr>
+
+                        <!-- Detail Carte-->
+
+                        <th *ngIf="detailCarte == 'Détail Carte' && accessDetailCarte==true">
+
+                            <i class="fa fa-info-circle" title="Détail carte" aria-hidden="true"></i></th>
+
+                        
+
+                        <!-- ConfigCarte Carte-->
+
+                        <th
+
+                            *ngIf=" configCarte == 'Configuration carte' && accessconfigCarte==true">
+
+                            <i class="fa fa-cogs " title="Configuration carte" aria-hidden="true"></i>
+
+                        </th>
+
+                       
+
+                       
+
+                        <!-- Bloquer/activer Solde pour OPERATEUR/ VALIDATEUR-->
+
+                        <th
+
+                            *ngIf=" bloquesolde === 'Bloquer/activer Solde' && accessvalueBloquesolde ==true">
+
+                            <i class="fa fa-times-circle-o" title="Bloquer/activer Solde"></i>
+
+                        </th>
+
+                        <!-- Bloquer/activer Solde pour ADMIN STAROIL-->
+
+
+
+
+                        <!-- Modifier CarteBOPERATEUR/OPERATEUR-->
+
+                        <th
+
+                            *ngIf=" modifCarte === 'Modifier carte' && accessModifCarte ==true">
+
+                            <i class="icon-pencil" title="Modifier Carte"></i></th>
+
+                        <!-- Modifier Carte ADMIN-->
+
+                        
+
+                        <!-- Recharger carte-->
+
+                        <th
+
+                            *ngIf=" rechargeCarte === 'Recharger carte' && accessrechargeCarte ==true">
+
+                            <i class="fa fa-money" title="Recharger carte"></i></th>
+
+                 
+
+                        <!-- transfert solde-->
+
+                        <th
+
+                            *ngIf=" transfertSolde === 'Transfert Solde' && accessTransfertSolde ==true">
+
+                        <i class="fa fa-exchange" title="transfert solde"></i>
+
+                        </th>
+
+                        
+
+                        
+
+                        <!-- Activer/Bloquer/Débloquer carte-->
+
+                        <th *ngIf="isAdmin ">
+
+                            <i class="icon-lock" title="Activer/Bloquer/Débloquer carte" aria-hidden="true"></i>
+
+                        </th>
+
+                        <th *ngIf="!isAdmin "> <i class="icon-lock" title="Activer/Bloquer/Débloquer carte"
+
+                                aria-hidden="true"></i> </th>
+
+                                
+
+                        <!-- <th> <i class="fa fa-history" title="Historique des opération" aria-hidden="true"></i></th> -->
+                       
+                        <th  *ngIf=" telecharge === 'Télécharger' && acesstelecharge ==true">Fiche Suivi D'état</th>
+                        <th>Code client</th>
+
+                        <th>Client</th>
+
+                        <th>Porteur</th>
+
+                        <th>Numéro carte</th>
+
+                        <th>Date de création</th>
+
+                        <th>Date d'activation</th>
+
+
+
+                        <th>Date d'expiration</th>
+
+                        <th>Statut</th>
+
+                        <th>Type carte</th>
+
+                        <th>Solde PP </th>
+
+                        <th>Solde PPE </th>
+
+                        <th>Plafond PS </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr *ngFor="let item of carteList">
+
+                        <!-- DétailCarte -->
+
+                        <th *ngIf=" detailCarte == 'Détail Carte' && accessDetailCarte==true"><i class="fa fa-info-circle" [routerLink]="['/carte/Details', item.numCarte]"
+
+                                title="Détail carte" aria-hidden="true"></i></th>
+
+                                
+
+                                
+
+                         <!-- ConfigCarte Carte-->
+
+                        <td *ngIf="configCarte == 'Configuration carte' && accessconfigCarte==true"><i class="fa fa-cogs" aria-hidden="true"
+
+                                [routerLink]="['/carte/settings', item.numCarte]"
+
+                                *ngIf="item.statutCarte=='0' || item.statutCarte=='1'" title="Configuration carte"></i>
+
+                        </td>
+
+
+                          <!-- Bloquer/activer Solde pour OPERATEUR/ VALIDATEUR-->
+
+                        <td *ngIf=" bloquesolde === 'Bloquer/activer Solde' && accessvalueBloquesolde ==true"><i class="fa fa-times-circle-o"
+
+                                title="Bloquer/Activer Solde"
+
+                                (click)="selectCarte(item, 'bloquée');  getSoldeCarteClient(item, 'bloquée')"
+
+                                style="color: orange; font-size:15px"
+
+                                *ngIf=" item.statusClient=='2' && item.statutCarte=='0'  && item.typeCarte=='prépayé'"></i>
+
+                        </td>
+
+
+
+                       <!-- Modifier CarteBOPERATEUR/OPERATEUR-->
+
+
+
+                        <td *ngIf=" modifCarte === 'Modifier carte' && accessModifCarte ==true"><i class="icon-pencil"
+
+                                *ngIf="item.statutCarte=='0' || item.statutCarte=='1'"
+
+                                [routerLink]="['/Carte/update', item.idPorteur]" title="Modifier carte"></i></td>
+
+
+
+
+
+
+
+
+           <!-- Recharger carte-->
+
+                        <td  *ngIf=" rechargeCarte === 'Recharger carte' && accessrechargeCarte ==true">
+
+                            <i class="fa fa-money"
+
+                                *ngIf="item.statutCarte=='0' && item.statusClient=='2' && item.typeCarte=='prépayé'"
+
+                                [routerLink]="['/client/rechargeCarte/',item.idClient]" routerLink=""
+
+                                title="Recharge carte">
+
+                            </i>
+
+                        </td>
+
+
+                        <!-- transfert solde-->
+
+                        <td
+
+                            *ngIf=" transfertSolde === 'Transfert Solde' && accessTransfertSolde ==true">
+
+                            <i class="fa fa-ban"
+
+                                *ngIf="item.statutCarte=='0'  && !item.autoriserTransfert && item.statusClient=='2' && item.typeCarte=='prépayé'"
+
+                                style="color: red;font-size: 15px;" title=" Transfert non autorisé"></i>
+
+                            <i class="fa fa-exchange"
+
+                                *ngIf="item.statutCarte=='0'&& item.autoriserTransfert && item.statusClient=='2'&&  item.typeCarte=='prépayé' "
+
+                                title="transfert solde carte"
+
+                                (click)="selectCarte(item, 'transfert'); GetActivePPCarteByClient(item)"></i>
+
+                            <i class="fa fa-exchange"
+
+                                *ngIf="item.statutCarte=='0'&& item.autoriserTransfert && item.statusClient=='2'&&  item.typeCarte=='postpayé' "
+
+                                title="transfert solde carte"
+
+                                (click)="selectCarte(item, 'transfert'); GetActiveCarteByClient(item)"></i>
+
+                        </td>
+
+
+                        <td>
+
+                            <!-- Carte bloqué et Cliquer pour activer la carte -->
+
+                            <!-- pour role operateur ou validateur -->
+
+
+
+                            <i class="icon-lock" title="Cliquer pour activer la carte"
+
+                                (click)="selectCarte(item, 'activate'); activateModal.show() "
+
+                                style="color: red;font-size:15px"
+
+                                *ngIf="item.statutCarte=='7'  && bloqueCarte === 'Bloquer/Débloquer carte' && accessvalueBloqueCarte ==true"></i>
+
+
+
+                            <!-- Carte Activé et Cliquer pour bloquer la carte  -->
+
+                            <!-- Carte Activé et Cliquer pour bloquer la carte  -->
+
+                            <i class="icon-lock-open" title="Cliquer pour bloquer la carte"
+
+                                (click)="selectCarte(item, 'bloquée');desactivateModal.show() "
+
+                                style="color: green;font-size:15px" *ngIf="item.statutCarte=='0' && bloqueCarte === 'Bloquer/Débloquer carte' && accessvalueBloqueCarte ==true"></i>
+
+
+
+                            <!-- Carte inactive et Activer la carte en tant que admin   -->
+
+ <!-- Carte inactive et Activer la carte en tant que VALIDATEUR   -->
+
+                                <i class="fa fa-check-circle" title="Activer la carte" style="color: green;font-size:15px"
+
+                                (click)="selectCarte(item, 'activate'); activateModal.show()"
+
+                                *ngIf="item.statutCarte=='1'  && activationCarte === 'Activation Carte' && accessActivationCarte ==true" aria-hidden="true"></i>
+
+
+
+                            <!-- Carte inactive et demande Activation de la carte en tant que NON admin  -->
+
+                            <i class="fa fa-calendar-check-o" title="Demande Activation Carte"
+
+                                style="color: green;font-size:15px"
+
+                                (click)="selectCarte(item, 'activate'); dmdActivateModal.show()"
+
+                                *ngIf="item.statutCarte=='1'  && demandeActivation === 'Demande Activation Carte' && accessdemandeActivation ==true" aria-hidden="true" enabled="false"></i>
+
+                        </td>
+
+                        <!-- download fiche suivi carte  -->
+
+
+                        <td *ngIf=" telecharge === 'Télécharger' && acesstelecharge ==true" align="center">
+                            <i class="fa fa-download" *ngIf=" item.statutCarte=='0'"
+                                (click)="downlaod(item);" aria-hidden="true"></i>
+                        </td>
+                        <td>{{item.idClient}}
+
+                            <i class="fa fa-lock" title="Inactif" style="color: red" aria-hidden="true"
+
+                                *ngIf=" item.statusClient=='0' "></i>
+
+                        </td>
+
+                        <td>{{item.raisonSociale}}
+
+                            <i class="fa fa-lock" title="Inactif" style="color: red" aria-hidden="true"
+
+                                *ngIf=" item.statusClient=='0' "></i>
+
+                        </td>
+
+                        <td>{{item.nomPrenom}}</td>
+
+                        <td>{{item.numCarte}}</td>
+
+                        <td>{{item.dateCreation | dateSql }}</td>
+
+                        <td >{{item.dateActivation | dateSql }}</td>
+
+
+
+                        <td align="center">{{dateValideFormattee}}</td>
+
+                        <td>{{item.descriptionStatus}}</td>
+
+                        <td>
+
+                            <span class="badge " style="background-color:#D7AF00 ;"
+
+                                *ngIf=" item.typeCarte=='postpayé' ">{{item.typeCarte }}</span>
+
+                            <span class="badge " style="background-color:#d5d5d7 ;"
+
+                                *ngIf="item.typeCarte=='prépayé' ">{{item.typeCarte }}</span>
+
+                        </td>
+
+                        <td>{{item.soldePP | amountmillierpipe }}</td>
+
+                        <td>{{item.soldePPE | amountmillierpipe }}</td>
+
+                        <td>{{(item.typeCarte=='prépayé'? item.plafondPs : item.plafondMensuel) | amountmillierpipe }}
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+<div bsModal #activateModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+
+    aria-hidden="true">
+
+    <div class="modal-dialog modal-lg modal-success" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h4 class="modal-title"> Activer Carte</h4>
+
+                <button type="button" class="close" (click)="activateModal.hide()" aria-label="Close">
+
+                    <span aria-hidden="true">&times;</span>
+
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <p>Êtes-vous sûre de vouloir activer la carte de {{selectedCarte?.nomPrenom}}</p>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-secondary" (click)="activateModal.hide()">Annuler</button>
+
+                <button type="button" class="btn btn-success" (click)="activer()">Activer</button>
+
+            </div>
+
+        </div><!-- /.modal-content -->
+
+    </div><!-- /.modal-dialog -->
+
+</div><!-- /.modal -->
+
+
+
+
+
+<div bsModal #dmdActivateModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+
+    aria-hidden="true">
+
+    <div class="modal-dialog modal-lg modal-success" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h4 class="modal-title"> Demande d'activation Carte</h4>
+
+                <button type="button" class="close" (click)="dmdActivateModal.hide()" aria-label="Close">
+
+                    <span aria-hidden="true">&times;</span>
+
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <p>Êtes-vous sûre de vouloir demander l'activation de la carte de {{selectedCarte?.nomPrenom}}</p>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-secondary" (click)="dmdActivateModal.hide()">Annuler</button>
+
+                <button type="button" class="btn btn-success" (click)="dmdActiver()">Demande d'activation</button>
+
+            </div>
+
+        </div><!-- /.modal-content -->
+
+    </div><!-- /.modal-dialog -->
+
+</div><!-- /.modal -->
+
+
+
+<div bsModal #RenouvelmentModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+
+    aria-hidden="true">
+
+    <div class="modal-dialog modal-info" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h4 class="modal-title">Renouvellement Carte</h4>
+
+                <button type="button" class="close" (click)="RenouvelmentModal.hide()" aria-label="Close">
+
+                    <span aria-hidden="true">&times;</span>
+
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <p>Êtes-vous sûre de vouloir renouveler la Carte de {{selectedCarte?.nomPrenom}}</p>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-secondary" (click)="RenouvelmentModal.hide()">Annuler</button>
+
+                <button type="button" class="btn btn-info" (click)="RenouvlerCarte()">Oui, renouveler </button>
+
+            </div>
+
+        </div><!-- /.modal-content -->
+
+    </div><!-- /.modal-dialog -->
+
+</div><!-- /.modal -->
+
+
+
+<div bsModal #ReplaceModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+
+    aria-hidden="true">
+
+    <div class="modal-dialog modal-info" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h4 class="modal-title">Remplacer Carte</h4>
+
+                <button type="button" class="close" (click)="ReplaceModal.hide()" aria-label="Close">
+
+                    <span aria-hidden="true">&times;</span>
+
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <p>Êtes-vous sûre de vouloir remplacer la Carte la carte de {{selectedCarte?.nomPrenom}}</p>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-secondary" (click)="ReplaceModal.hide()">Annuler</button>
+
+                <button type="button" class="btn btn-info" (click)="ReplaceCarte()">Oui, Remplacer</button>
+
+            </div>
+
+        </div><!-- /.modal-content -->
+
+    </div><!-- /.modal-dialog -->
+
+</div><!-- /.modal -->
+
+
+
+<div bsModal #RechargeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+
+    aria-hidden="true">
+
+    <div class="modal-dialog modal-lg modal-info" role="document">
+
+        <div class="modal-content" *ngIf="Rechrgeform">
+
+            <div class="modal-header">
+
+                <h4 class="modal-title">Recharge carte</h4>
+
+                <button type="button" class="close" (click)="RechargeModal.hide()" aria-label="Close">
+
+                    <span aria-hidden="true">&times;</span>
+
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div class="row">
+
+                    <div class=" col-md-4">
+
+                        <span> <b> Identifiant :</b> {{ selectedCarte?.nomPrenom }} </span>
+
+                    </div>
+
+                    <div class=" col-md-4">
+
+                        <span><b>Numéro carte : </b>{{ selectedCarte?.numCarte }}</span>
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <span><b>Client : </b>{{ selectedCarte?.raisonSociale }}</span>
+
+                    </div>
+
+                    <br>
+
+                    <br>
+
+                </div>
+
+                <form [formGroup]="Rechrgeform" autocomplete="off">
+
+                    <table class="table table-striped">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Type solde </th>
+
+                                <th>Solde disponible </th>
+
+                                <th>Solde à recharger</th>
+
+                                <th>Solde client</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+
+                                <th>Solde PP</th>
+
+                                <td>{{(soldePP?.soldeReelDisponibleCarte ? soldePP?.soldeReelDisponibleCarte: 0 ) }}
+
+                                </td>
+
+                                <td>
+
+                                    <mat-form-field appearance="outline">
+
+                                        <mat-label>Montant (Dt)</mat-label>
+
+                                        <input step="1" matInput formControlName="montantRecharchePP" type="number"
+
+                                            placeholder="montant">
+
+                                        <mat-error>la montant à recharger doit etre inferieur ou égale au solde Client
+
+                                        </mat-error>
+
+                                    </mat-form-field>
+
+                                </td>
+
+                                <td> {{(soldePP?.soldeReelDisponibleClient ? soldePP?.soldeReelDisponibleClient: 0)}}
+
+                                </td>
+
+                            </tr>
+
+                            <tr>
+
+                                <th>Solde PPE</th>
+
+
+
+                                <td>{{( soldePPE?.soldeReelDisponibleCarte ? soldePPE?.soldeReelDisponibleCarte: 0)}}
+
+                                </td>
+
+                                <td>
+
+                                    <mat-form-field appearance="outline">
+
+                                        <mat-label>Montant (Dt)</mat-label>
+
+                                        <input step="1" matInput formControlName="montantRecharchePPE" type="number"
+
+                                            placeholder="montant">
+
+                                        <mat-error>la montant à recharger doit etre inferieur ou égale au solde Client
+
+                                        </mat-error>
+
+
+
+                                    </mat-form-field>
+
+
+
+                                </td>
+
+                                <td>{{ ( soldePPE?.soldeReelDisponibleClient ? soldePPE?.soldeReelDisponibleClient : 0
+
+                                    )}}</td>
+
+                            </tr>
+
+                            <!-- <tr>
+
+                              <th>Solde PS</th>
+
+                              <td>{{(plafondMensuel?.soldeReelDisponibleCarte ? plafondMensuel?.soldeReelDisponibleCarte: 0)| amount}} </td>
+
+                              <td> <mat-form-field appearance="outline">
+
+                                  <mat-label>Montant (Dt)</mat-label>
+
+                                  <input type="number" [max]="plafondMensuel?.soldeReelDisponibleClient" step="1" matInput formControlName="montantRecharchePsP"
+
+                                    placeholder="montant">
+
+                                  <mat-error>la montant à recharger doit etre inferieur ou égale au solde Client</mat-error>
+
+                              </mat-form-field>
+
+                          </td>
+
+                              <td>  {{(plafondMensuel?.soldeReelDisponibleClient ? plafondMensuel?.soldeReelDisponibleClient: 0) | amount}} </td>
+
+                          </tr> -->
+
+                        </tbody>
+
+                    </table>
+
+                </form>
+
+            </div>
+
+            <div class="modal-footer">
+
+
+
+                <button [disabled]="Rechrgeform.invalid" type="button" class="btn btn-primary"
+
+                    (click)="rechargerCarte()">Confirmer</button>
+
+            </div>
+
+        </div><!-- /.modal-content -->
+
+    </div><!-- /.modal-dialog -->
+
+</div><!-- /.modal -->
+
+
+
+<div bsModal #TransfertPPModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+
+    aria-hidden="true">
+
+    <div class="modal-dialog modal-lg modal-info" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h4 class="modal-title">Transfert Solde</h4>
+
+                <button type="button" class="close" (click)="TransfertPPModal.hide()" aria-label="Close">
+
+                    <span aria-hidden="true">&times;</span>
+
+                </button>
+
+            </div>
+
+
+
+
+
+            <div class="modal-body" *ngIf="selectedCarte?.soldePP==0 && selectedCarte?.soldePPE==0 ">
+
+                <div style="margin-top: 20px;" class="alert alert-danger" role="alert">
+
+                    <ul>
+
+                        <h5>Solde insuffisant!</h5>
+
+                        <p>Merci de recharger la carte.</p>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+            <div class="modal-body"
+
+                *ngIf="!(selectedCarte?.soldePP==0 && selectedCarte?.soldePPE==0)  && ActivePPCarte.length==0 ">
+
+                <div style="margin-top: 20px;" class="alert alert-danger" role="alert">
+
+                    <ul>
+
+                        <h5>Cartes non disponibles!</h5>
+
+                        <p> Merci d'assurer que le client a au moins une carte prépayé, active et qui autorise le
+
+                            transfert </p>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+            <div class="modal-body"
+
+                *ngIf="!(selectedCarte?.soldePP==0 && selectedCarte?.soldePPE==0 ) && ActivePPCarte.length > 0 ">
+
+
+
+                <div class="row">
+
+                    <div class="col-sm-12">
+
+                        <ng-multiselect-dropdown [placeholder]="'Cartes'" [settings]="dropdownSettings"
+
+                            [data]="ActivePPCarte" (onSelect)="selectCarteForTransfert($event)">
+
+                        </ng-multiselect-dropdown>&nbsp;
+
+                    </div>
+
+                </div>
+
+
+
+
+
+
+
+
+
+                <form *ngIf="selectedCarteToTransfert && TransfertRechrgeform" [formGroup]="TransfertRechrgeform"
+
+                    autocomplete="off">
+
+                    <table class="table table-striped">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Type Solde </th>
+
+                                <th>Solde disponible </th>
+
+                                <th>Solde Carte à transférer </th>
+
+                                <th>Solde Carte </th>
+
+
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+
+                                <th>Solde PP </th>
+
+                                <td>{{( (selectedCarte?.soldePP)? (selectedCarte?.soldePP) : 0 ) | amountmillierpipe}}</td>
+
+                                <td>
+
+                                    <mat-form-field appearance="outline">
+
+                                        <mat-label>Montant (Dt)</mat-label>
+
+                                        <input step="1" matInput formControlName="montantPP" type="number"
+
+                                            placeholder="montant">
+
+                                        <mat-error>la montant à recharger doit etre inferieur ou égale au solde du carte
+
+                                            expéditrice </mat-error>
+
+
+
+                                    </mat-form-field>
+
+
+
+                                </td>
+
+
+
+                                <td>{{ ( (carteToTransfert?.soldePP) ? (carteToTransfert?.soldePP)  : 0 )| amountmillierpipe}}</td>
+
+
+
+
+
+                            </tr>
+
+                            <tr>
+
+                                <th>Solde PPE</th>
+
+
+
+                                <td>{{((selectedCarte?.soldePPE) ? (selectedCarte?.soldePPE) : 0 ) | amountmillierpipe }}</td>
+
+                                <td>
+
+                                    <mat-form-field appearance="outline">
+
+                                        <mat-label>Montant (Dt)</mat-label>
+
+                                        <input step="1" matInput formControlName="montantPPE" type="number"
+
+                                            placeholder="montant">
+
+                                        <mat-error>la montant à recharger doit etre inferieur ou égale du carte
+
+                                            expéditrice</mat-error>
+
+
+
+                                    </mat-form-field>
+
+
+
+                                </td>
+
+                                <td>{{ ( (carteToTransfert?.soldePPE) ? (carteToTransfert?.soldePPE) : 0 ) | amountmillierpipe}}</td>
+
+
+
+
+
+                            </tr>
+
+
+
+                        </tbody>
+
+                    </table>
+
+
+
+
+
+
+
+
+
+                </form>
+
+            </div>
+
+            <div class="modal-footer">
+
+
+
+                <button type="button" [disabled]="TransfertRechrgeform?.invalid" class="btn btn-primary"
+
+                    (click)="TransfertPP()" *ngIf="!(selectedCarte?.soldePP==0 && selectedCarte?.soldePPE==0 )">
+
+                    Confirmer
+
+                </button>
+
+
+
+
+
+            </div>
+
+        </div><!-- /.modal-content -->
+
+    </div><!-- /.modal-dialog -->
+
+</div><!-- /.modal -->
+
+
+
+<div bsModal #desactivateModalS="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+
+    aria-hidden="true">
+
+    <div class="modal-dialog modal-lg modal-danger" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h4 class="modal-title">Bloquer Solde Carte</h4>
+
+                <button type="button" class="close" (click)="desactivateModalS.hide()" aria-label="Close">
+
+                    <span aria-hidden="true">&times;</span>
+
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div class="row">
+
+
+
+                    <div class=" col-md-4">
+
+                        <span> <b> Identifiant :</b> {{ selectedCarte?.nomPrenom }} </span>
+
+                    </div>
+
+                    <div class=" col-md-4">
+
+                        <span><b>Numéro carte : </b>{{ selectedCarte?.numCarte }}</span>
+
+                    </div>
+
+
+
+                    <div class="col-md-4">
+
+                        <span><b>Client : </b>{{ selectedCarte?.raisonSociale }}</span>
+
+                    </div>
+
+                    <br>
+
+                    <br>
+
+
+
+                </div>
+
+                <table class="table table-striped">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Solde</th>
+
+                            <th>Montant </th>
+
+                            <th>Statut </th>
+
+
+
+                            <th> Action</th>
+
+
+
+
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>Solde PP</td>
+
+
+
+                            <td>{{soldePP?.soldeReelDisponibleCarte }}</td>
+
+                            <td><span class="badge badge-success" *ngIf=" soldePP?.statusCarte=='0' ">activée</span>
+
+                                <span class="badge badge-danger" *ngIf="soldePP?.statusCarte=='1' ">bloquée</span>
+
+                            </td>
+
+
+
+                            <td>
+
+
+
+                                <section class="example-section">
+
+
+
+
+
+                                    <mat-checkbox class="example-margin" [(ngModel)]="statusPP">Bloquer</mat-checkbox>
+
+                                </section>
+
+
+
+                            </td>
+
+
+
+                        </tr>
+
+
+
+                        <tr>
+
+
+
+                            <td>Solde PPE</td>
+
+                            <td>{{soldePPE?.soldeReelDisponibleCarte }}</td>
+
+                            <td><span class="badge badge-success" *ngIf=" soldePPE?.statusCarte=='0' ">activée</span>
+
+                                <span class="badge badge-danger" *ngIf="soldePPE?.statusCarte=='1'  ">bloquée</span>
+
+                            </td>
+
+
+
+                            <td>
+
+
+
+                                <section class="example-section">
+
+                                    <mat-checkbox class="example-margin" [(ngModel)]="statusPPE">Bloquer</mat-checkbox>
+
+                                </section>
+
+
+
+
+
+                            </td>
+
+
+
+                        </tr>
+
+                        <!-- <tr>
+
+                  <td  >Solde Ps</td>
+
+                  <td  >{{plafondMensuel?.soldeReelDisponibleCarte | amount}}</td>
+
+                  <td><span class="badge badge-success"
+
+                    *ngIf=" plafondMensuel?.statusCarte=='1' ">Activée</span>
+
+                <span class="badge badge-danger"
+
+                    *ngIf="plafondMensuel?.statusCarte=='0'  ">bloquée</span>
+
+            </td>                       <td  >
+
+                    <section class="example-section">
+
+
+
+                      <mat-checkbox class="example-margin" [(ngModel)]="statusPsP" >Bloquer</mat-checkbox>
+
+                    </section>
+
+                   </td>
+
+
+
+              </tr> -->
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-secondary" (click)="desactivateModalS.hide()">Annuler</button>
+
+                <button type="button" class="btn btn-safe" (click)="BloquerDebloquerS()">Enregistrer</button>
+
+            </div>
+
+        </div><!-- /.modal-content -->
+
+    </div><!-- /.modal-dialog -->
+
+</div><!-- /.modal -->
+
+
+
+<div bsModal #TransfertPSModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+
+    aria-hidden="true">
+
+    <div class="modal-dialog modal-lg modal-info" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h4 class="modal-title">Transfert Solde </h4>
+
+                <button type="button" class="close" (click)="TransfertPSModal.hide()" aria-label="Close">
+
+                    <span aria-hidden="true">&times;</span>
+
+                </button>
+
+            </div>
+
+
+
+            <div class="modal-body" *ngIf="selectedCarte?.plafondMensuel==0  ">
+
+                <div style="margin-top: 20px;" class="alert alert-danger" role="alert">
+
+                    <ul>
+
+                        <h5>Solde insuffisant!</h5>
+
+                        <p>Merci de recharger la carte.</p>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+
+
+
+
+            <div class="modal-body"
+
+                *ngIf="!(selectedCarte?.plafondMensuel==0)  && ActivePPCarte?.length==0 && ActivePSCarte?.length==0  ">
+
+                <div style="margin-top: 20px;" class="alert alert-danger" role="alert">
+
+                    <ul>
+
+                        <h5>Cartes non disponibles!</h5>
+
+                        <p> Merci d'assurer que le client a au moins une carte , active et qui autorise le transfert
+
+                        </p>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+            <!-- *ngIf="!(selectedCarte?.soldePP==0 && selectedCarte?.soldePPE==0 ) && ActivePPCarte.length>0 " -->
+
+            <div class="modal-body"
+
+                *ngIf="!(selectedCarte?.plafondMensuel==0)&& (ActivePPCarte?.length>0 || ActivePSCarte?.length>0 )">
+
+
+
+                <div class="row">
+
+                    <div class="col-sm-12">
+
+                        <ng-multiselect-dropdown [placeholder]="'Cartes PP'" [settings]="dropdownSettings"
+
+                            [data]="ActivePPCarte" (onSelect)="selectCartePPForTransfertPS($event)"
+
+                            [(ngModel)]="selectedPP">
+
+                        </ng-multiselect-dropdown>&nbsp;
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="row">
+
+                    <div class="col-sm-12">
+
+                        <ng-multiselect-dropdown [placeholder]="'Cartes PS'" [settings]="dropdownSettings"
+
+                            [data]="ActivePSCarte" (onSelect)="selectCartePSForTransfert($event)"
+
+                            [(ngModel)]="selectedPS">
+
+                        </ng-multiselect-dropdown>&nbsp;
+
+                    </div>
+
+                </div>
+
+
+
+                <form *ngIf="selectedPS.length>0 && TransfertPSform" [formGroup]="TransfertPSform" autocomplete="off">
+
+                    <table class="table table-striped">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Type Solde </th>
+
+                                <th>Solde disponible </th>
+
+                                <th>Solde à Recharger</th>
+
+                                <th>Solde Carte </th>
+
+
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+
+
+                            <tr>
+
+                                <th>Solde PS</th>
+
+
+
+                                <td>{{(selectedCarte?.plafondMensuel ? selectedCarte?.plafondMensuel: 0 )}}</td>
+
+                                <td>
+
+                                    <mat-form-field appearance="outline">
+
+                                        <mat-label>Montant (Dt)</mat-label>
+
+                                        <input step="1" matInput formControlName="montantPS" type="number"
+
+                                            placeholder="montant">
+
+                                        <mat-error>la montant à recharger doit etre inferieur ou égale du carte
+
+                                            expéditrice</mat-error>
+
+
+
+                                    </mat-form-field>
+
+
+
+                                </td>
+
+                                <td *ngIf="carteToTransfert.typeCarte=='prépayé'">{{ ( carteToTransfert?.plafondPs ?
+
+                                    carteToTransfert?.plafondPs : 0 )}}</td>
+
+                                <td *ngIf="carteToTransfert.typeCarte!='prépayé'">
+
+                                    {{ ( carteToTransfert?.plafondMensuel ? carteToTransfert?.plafondMensuel : 0 )}}
+
+                                </td>
+
+
+
+
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </form>
+
+
+
+                <form *ngIf="selectedPP.length>0 && TransfertPSform" [formGroup]="TransfertPSform" autocomplete="off">
+
+                    <table class="table table-striped">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Type Solde </th>
+
+                                <th>Solde disponible </th>
+
+                                <th>Solde à Recharger</th>
+
+                                <th>Solde Carte </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+
+                                <th>Solde PP </th>
+
+                                <td>{{((selectedCarte?.soldePP)? (selectedCarte?.soldePP): 0 ) | amountmillierpipe}}</td>
+
+                                <td>--</td>
+
+                                <td>--</td>
+
+                            </tr>
+
+                            <tr>
+
+                                <th>Solde PPE</th>
+
+                                <td>{{((selectedCarte?.soldePPE)? (selectedCarte?.soldePPE): 0 ) | amountmillierpipe}}</td>
+
+                                <td> --</td>
+
+                                <td>--</td>
+
+                            </tr>
+
+                            <tr>
+
+                                <th>Solde PS</th>
+
+                                <td>{{(selectedCarte?.plafondMensuel ? selectedCarte?.plafondMensuel: 0 )}}</td>
+
+                                <td>
+
+                                    <mat-form-field appearance="outline">
+
+                                        <mat-label>Montant (Dt)</mat-label>
+
+                                        <input step="1" matInput formControlName="montantPS" type="number"
+
+                                            placeholder="montant">
+
+                                        <mat-error>la montant à recharger doit etre inferieur ou égale du carte
+
+                                            expéditrice</mat-error>
+
+                                    </mat-form-field>
+
+                                </td>
+
+                                <td>{{ ( carteToTransfert?.plafondMensuel ? carteToTransfert?.plafondMensuel : 0 )}}
+
+                                </td>
+
+
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </form>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button type="button" [disabled]="TransfertPSform?.invalid" class="btn btn-primary"
+
+                    (click)="TransfertPS()">Confirmer</button>
+
+            </div>
+
+        </div><!-- /.modal-content -->
+
+    </div><!-- /.modal-dialog -->
+
+</div><!-- /.modal -->
+
+<div bsModal #desactivateModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+
+    aria-hidden="true">
+
+    <div class="modal-dialog modal-lg modal-danger" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h4 class="modal-title">Bloquer Carte</h4>
+
+                <button type="button" class="close" (click)="desactivateModal.hide()" aria-label="Close">
+
+                    <span aria-hidden="true">&times;</span>
+
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <p>Êtes-vous sûre de vouloir bloquer la carte de {{selectedCarte?.nomPrenom}}</p>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-secondary" (click)="desactivateModal.hide()">Annuler</button>
+
+                <button type="button" class="btn btn-safe" (click)="BloquerDebloquer()">Bloquer</button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- /.modal -->
+
+
+
+
+
+<!-- Etat Fiche de suivi création carte pétrolière -->
+
+<div class="container" id="iDdIV28" hidden="true">
+
+    <div class="row">
+
+        <div class="col-xl-3 col-md-3">
+
+            <img src="assets/img/logo-symbol.png">
+
+        </div>
+
+
+
+        <div>
+
+            <div style="align-self: center;">
+
+                <h2>Fiche de suivi création carte pétrolière</h2>
+
+            </div>
+
+        </div>
+
+        <!-- <div class="col-xl-3 col-md-4">
+
+            <div style="align-self: center; float: right;">
+
+                <h4>Edité le: :{{ selectedNote?.date  |dateSql}}</h4>
+
+            </div>
+
+        </div> -->
+
+    </div>
+
+
+
+    <br>
+
+    <br>
+
+
+
+    <div class="col-xl-3 col-md-6" style="float: right;">
+
+        <table>
+
+            <tr>
+
+                <td>Client : {{ SelectedNameClient }}</td>
+
+            </tr>
+
+            <tr>
+
+                <td>Compte facturation : {{ SelectedIdClient }}</td>
+
+            </tr>
+
+        </table>
+
+    </div>
+
+
+
+    <br>
+
+    <br>
+
+    <br>
+
+    <br>
+
+
+
+
+
+    <table width="100%" style="border:none">
+
+        <thead style="border:none">
+
+            <tr style="border:none !important">
+
+                <td style="border-bottom: 1px solid  ; border-left:none; border-right:none;border-top:none ">
+
+                    <strong>N°carte</strong>
+
+                </td>
+
+                <td style="border-bottom: 1px solid  ; border-left:none; border-right:none;border-top:none ">
+
+                    <strong>Type carte</strong>
+
+                </td>
+
+                <td style="border-bottom: 1px solid  ; border-left:none; border-right:none;border-top:none ">
+
+                    <strong>Date création</strong>
+
+                </td>
+
+                <td style="border-bottom: 1px solid  ; border-left:none; border-right:none;border-top:none ">
+
+                    <strong>Date expiration</strong>
+
+                </td>
+
+                <td style="border-bottom: 1px solid  ; border-left:none; border-right:none;border-top:none ">
+
+                    <strong>Nom porteur</strong>
+
+                </td>
+
+            </tr>
+
+        </thead>
+
+
+
+        <tbody style="border:none">
+
+            <tr *ngFor="let item of ListdetailCarte">
+
+                <td style="border-bottom:none ; border-left:none; border-right:none;border-top:none ">
+
+                    {{item.numCarte}}
+
+                </td>
+
+                <td style="border-bottom:none  ; border-left:none; border-right:none;border-top:none ">
+
+                    {{item.typeCarte}}
+
+                </td>
+
+                <td style="border-bottom:none  ; border-left:none; border-right:none;border-top:none ">
+
+                    {{item.dateCreation | dateSql}}
+
+                </td>
+
+                <td style="border-bottom:none ; border-left:none; border-right:none;border-top:none ">
+
+                    {{ item.dateValidite }}
+
+                </td>
+
+                <td style="border-bottom: none  ; border-left:none; border-right:none;border-top:none ">
+
+                    {{item.nom}}
+
+                </td>
+
+
+
+            </tr>
+
+        </tbody>
+
+        <tfoot style="border-bottom: 1px solid  ; border-left:none; border-right:none;border-top:none ">
+
+            <td style="border-bottom: 1px solid  ; border-left:none; border-right:none;border-top:none "></td>
+
+        </tfoot>
+
+    </table>
+
+
+
+
+
+
+
+    <div class="col-xl-3 col-md-6" style="float: left;">
+
+        Total :
+
+    </div>
+
+
+
+    <br>
+
+    <br>
+
+    <div style="overflow-x:auto; margin-top: 40px;">
+
+        <table>
+
+            <thead style="text-align: center;">
+
+                <tr>
+
+                    <th> </th>
+
+                    <th>Création </th>
+
+                    <th>Validation et personnalisation </th>
+
+                    <th>Demande activation</th>
+
+                    <th>Activation</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <!-- <tr *ngFor="let item of ListSuiviCarte2"> -->
+
+                <tr>
+
+                    <td>Date</td>
+
+                    <td> {{ DetailEnteteCarte.dateCreation |dateSql}}</td>
+
+                    <td> {{ DetailEnteteCarte.dateValidation |dateSql }}</td>
+
+                    <td> {{ DetailEnteteCarte.dateUserDmdActivation |dateSql}}</td>
+
+                    <td> {{ DetailEnteteCarte.dateActivation |dateSql }}</td>
+
+                </tr>
+
+                <tr>
+
+                    <td>Nom & Prénom</td>
+
+                    <td> {{ DetailEnteteCarte.createur }}</td>
+
+                    <td> {{ DetailEnteteCarte.validateur }}</td>
+
+                    <td> {{ DetailEnteteCarte.userDmdActivation }}</td>
+
+                    <td> {{ DetailEnteteCarte.userActivation }}</td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <br>
+
+    <br>
+
+    <div class="col-xl-3 col-md-6" style="float: left;">
+
+        <table>
+
+            <tbody>
+
+                <tr>
+
+                    <td>Espace réservé au client &nbsp;&nbsp; </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+
+    <br>
+
+    <br>
+
+
+
+    <div class="col-xl-3 col-md-6" style="float: left;">
+
+        Je déclare avoir reçu le/les carte(s) pérolière(s)
+
+    </div>
+
+
+
+    <br>
+
+    <br>
+
+
+
+    <div class="col-xl-3 col-md-6" style="float: left;">
+
+        <table style="text-align: center;">
+
+            <tr>
+
+                <td>Date</td>
+
+                <td>Nom et Prénom </td>
+
+                <td>Signature et caché </td>
+
+            </tr>
+
+            <tr>
+
+                <td>
+
+                    <br>
+
+                    <br>
+
+                    <br>
+
+                    <br>
+
+                </td>
+
+                <td> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+
+                    &nbsp;&nbsp; </td>
+
+                <td>&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+
+                    &nbsp;&nbsp; </td>
+
+            </tr>
+
+        </table>
+
+    </div>
+
+
+
+</div>

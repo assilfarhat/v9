@@ -1,0 +1,286 @@
+<div class="animated fadeIn">
+  <div class="card">
+    <h5 class="card-title">
+      <div class="card-header"><b> Historique client </b></div>
+    </h5>
+    <div class="card-body">
+      <form class="form-horizontal" [formGroup]="form">
+        <div class="form-group row" style="margin-top: 10px;">
+          <div class="col-xl-3 col-md-6">
+            <!-- <mat-form-field appearance="outline">
+              <mat-label>Client</mat-label>
+              <mat-select formControlName="clientId">
+                <mat-option value=""> Tous </mat-option>
+                <mat-option *ngFor="let item of ClientList" [value]="item.idClient">
+                  {{item.raisonSociale}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field> -->
+
+            <div style="text-align:center;margin-top: 10px;">
+              <input class="form-control" list="Client" placeholder="{{'Client'}}" formControlName="clientId">
+              <datalist id="Client">
+                <option *ngFor="let item of ClientList" [value]='item.raisonSociale'>{{ item.raisonSociale }} </option>
+              </datalist>
+            </div>
+
+          </div>
+          <div class="col-xl-3 col-md-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Date début</mat-label>
+              <input matInput formControlName="dateDebut" type="date">
+              <mat-error>la Date début doit être inférieur ou égale à la date fin </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-xl-3 col-md-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Date Fin</mat-label>
+              <input matInput formControlName="dateFin" type="date">
+              <mat-error>la Date fin doit être supérieur ou égale à la date début </mat-error>
+            </mat-form-field>
+          </div>
+          <!-- <div class="col-xl-3 col-md-6">
+                <mat-form-field appearance="outline">
+                    <mat-label>Statut</mat-label>
+                    <mat-select formControlName="status">
+                        <mat-option value=""> Tous  </mat-option>
+                        <mat-option value="confirmer"> confirmer  </mat-option>
+                        <mat-option value="demandé"> demander </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div> -->
+          <div class="col-xl-3 col-md-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Type solde</mat-label>
+              <mat-select formControlName="typeCompte">
+                <mat-option value="">Tous</mat-option>
+                <mat-option value="prépayé">Prépayé</mat-option>
+                <mat-option value="prépayé à terme">Prépayé à terme</mat-option>
+                <mat-option value="postpayé">Postpayé</mat-option>
+              </mat-select>
+            </mat-form-field>&nbsp;
+          </div>
+          <!-- <div class="col-xl-3 col-md-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Type opération</mat-label>
+              <mat-select formControlName="typeTransaction">
+                <mat-option value="">Tous</mat-option>
+                <mat-option value="Recharge PP">Recharge Prépayé</mat-option>
+                <mat-option value="Recharge PPE">Recharge Prépayé à terme</mat-option>
+                <mat-option value="transfert PP">transfert Prépayé</mat-option>
+                <mat-option value="transfert PS->PP">transfert Postpayé -> Prépayé</mat-option>
+
+              </mat-select>
+            </mat-form-field>&nbsp;
+          </div> -->
+          <div class="col-xl-3 col-md-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Numéro carte </mat-label>
+              <input type="text" matInput formControlName="NumCarte" placeholder="Num Carte ">
+            </mat-form-field>
+          </div>
+
+          <div class="col-xl-3 col-md-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Porteur carte</mat-label>
+              <input type="text" matInput formControlName="porteur" placeholder="Nom Porteur">
+            </mat-form-field>
+          </div>
+          <div class="col-md-12 text-right">
+            <button class="btn btn-primary btn-ladda" data-style="expand-left" (click)="getLogTransactionRecharge()">
+              <i class="fa fa-search"> Chercher </i>
+            </button>
+          </div>
+          <div>&nbsp;</div>
+          <div class="col-md-12 text-right" > 
+            <button (click)="getLogTransactionRechargeEXCEL()" class="btn btn-success"> Export excel</button> 
+          </div>
+        </div>
+      </form>
+      <div style="overflow-x:auto;">
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover display nowrap example"
+        width="100%">          <thead>
+            <tr>
+
+              <th>Date</th>
+              <th>ID client</th>
+              <th>Client</th>
+              <th>ID Porteur</th>
+              <th>Porteur carte </th>
+              <th>Numéro carte </th>
+              <th>Type</th>
+              <th>ID station</th>
+              <th>Nom station</th>
+              <th>N° ticket</th>
+              <th><i class="fa fa-history" aria-hidden="true"></i> Transactions</th>
+              <th><i class="fa fa-history" aria-hidden="true"></i> Recharge</th>
+
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of LogTransactionRecharge ">
+              <td>{{item.dateTimeSystem | dateSql}}</td>
+              <td>{{item.iDclient}}</td>
+              <td>{{item.client}}</td>
+              <td>{{item.idPorteur }}</td>
+              <td>{{item.porteur }}</td>
+              <td>{{item.numCarte }}</td>
+              <td>{{item.typeCarte }}</td>
+              <td> {{item.idStation }} </td>
+              <td> {{item.nomStation }} </td>
+              <td> {{item.numticket }} </td>
+
+              <td align="center" class="form-horizontal"><span><i class="fa fa-eye"
+                    [ngClass]="{'fa-eye': !showtransaction,'fa-eye-slash': showtransaction }"
+                    (click)="selectClientTransaction(item, 'Transaction');  getLogDetailClientTransactions(item, 'Transaction')"
+                    aria-hidden="true"></i></span>
+              </td>
+              <td align="center" class="form-horizontal"><span><i class="fa fa-eye"
+                    [ngClass]="{'fa-eye': !showRecharge,'fa-eye-slash': showRecharge }"
+                    (click)="selectClientRecharge(item, 'Recharge');  getLogDetailClientRecharge(item, 'Recharge')"
+                    aria-hidden="true"></i></span>
+              </td>
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ************************************* LOG Transaction ************************************************** -->
+
+<div class="animated fadeIn" *ngIf="showtransaction">
+  <div class="card">
+    <div class="card-header">
+      <h4><strong> Historique Transactions </strong></h4>
+    </div>
+    <div class="card-body" class="cadre-table-scroll">
+      <br>
+      <div align="left">
+        <h5><b>&nbsp;&nbsp;&nbsp; Nombre total des transactions : {{nbTotalResults}} </b></h5> 
+      </div>
+      <div class="col-md-12 text-right" > <button (click)="getLogDetailClientTransactionsEXCEL()" class="btn btn-success"> Export excel</button> </div>
+      <br>
+      <table class="table table-striped table-scroll" *ngIf="resultTransactionClients && resultTransactionClients.length > 0">
+        <thead>
+          <tr>
+            <th style="width: 50px;">Date</th>
+            <th>Client</th>
+            <th>Porteur</th>
+            <th>Num°carte</th>
+            <th>Type carte</th>
+            <th>ID station</th>
+            <th>Station</th>
+            <th>Produit</th>
+            <th>Numéro TPE</th>
+            <th>Numéro ticket</th>
+            <th>Montant transaction</th>
+            <th>Commercant</th>
+            <!-- <th>Date transaction</th> -->
+            <th>Code autorisation</th>
+            <th>Code retour</th>
+            <th>Kilométrage</th>
+            <th>Solde Carte Disponible</th>
+            <th>Solde restant Prépayé</th>
+            <th>Solde restant Prépayé à terme</th>
+            <th>Solde restant Postpayé</th>
+            <th>Solde global </th>
+
+        </thead>
+        <tbody>
+          
+          <tr *ngFor="let item of resultTransactionClients ">
+            <td style="width: 50px;">{{item.date }}</td>
+            <td>{{item.client}}</td>
+            <td>{{item.nomPorteur}}</td>
+            <td>{{item.numCarte}}</td>
+            <td>{{item.typeCarte}}</td>
+            <td>{{item.idStation }}</td>
+            <td>{{item.nomStation}}</td>
+            <td>{{item.produit}}</td>
+            <td>{{item.idterminal}}</td>
+            <td>{{item.numTicket}}</td>
+            <td>{{item.montant | amountmillierpipe}}</td>
+            <td>{{item.nomAdresseCommercant}}</td>
+            <!-- <td>{{item.datetransaction}}</td> -->
+            <td>{{item.codeAutorisation}}</td>
+            <td>{{item.codeReponse == '00 '? 'Approuvée' : item.codeReponseDes }}</td>
+            <td>{{item.kilometrage}}</td>
+            <td>{{item.soldeCarteDispo | amountmillierpipe}}</td>
+            <td>{{item.soldeRestantpp | amountmillierpipe }}</td>
+            <td>{{item.soldeRestantppe | amountmillierpipe }} </td>
+            <td>{{item.soldeRestantps | amountmillierpipe }} </td>
+            <td>{{item.soldeGlobale | amountmillierpipe}} </td>
+          </tr>
+          
+          
+        </tbody>
+      </table>
+      <div *ngIf="displayNoDataMessage">
+        <br><br><br>
+        <div align="center"><h4> Aucune donnée disponible. </h4></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<!-- ************************************* LOG Recharge ***************************************************** -->
+
+<div class="animated fadeIn" *ngIf="showRecharge">
+  <div class="card">
+    <div class="card-header">
+      <h4><strong> Historique Recharge </strong></h4>
+    </div>
+
+    <div class="card-body" class="cadre-table-scroll">
+      <br>
+      <div class="col-md-12 text-right" > <button (click)="getLogDetailClientRechargeEXCEL()" class="btn btn-success"> Export excel</button> </div>
+      <br>
+      <table class="table table-striped table-scroll" *ngIf="resultRechargeClients && resultRechargeClients.length > 0">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>ID Client</th>
+            <th>Client</th>
+            <th>Num°carte Emettrice</th>
+            <th>Num°carte Réceptrice</th>
+            <th>Porteur</th>
+            <th>Bon Recharge</th>
+            <th>Montant Recharge</th>
+            <th>Type carte</th>
+            <th>Type transaction</th>
+            <th>Type solde</th>
+        </thead>
+        <tbody>
+         
+            <tr *ngFor="let item of resultRechargeClients ">
+              <td>{{item.dateTimeSystem | dateSql}}</td>
+              <td>{{item.iDclient}}</td>
+              <td>{{item.client}}</td>
+              <td>{{item.numCarteEmetteur}}</td>
+              <td>{{item.numCarteRecp}}</td>
+              <td>{{item.porteur}}</td>
+              <td>{{item.bonRecharge}}</td>
+              <td>{{item.montantRecharge | amountmillierpipe }}</td>
+              <td>{{item.typeCarte}}</td>
+              <td>{{item.typeTransaction}}</td>
+              <td>{{item.typesolde}}</td>
+            </tr>
+      
+        </tbody>
+      </table>
+      <div *ngIf="NoDataMessage">
+        <br><br><br>
+        <div align="center"><h4> Aucune donnée disponible. </h4></div>
+      </div>
+    </div>
+  </div>
+</div>

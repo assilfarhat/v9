@@ -1,0 +1,164 @@
+<div class="animated fadeIn">
+  <div class="animated fadeIn">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card">
+          <h5 class="card-title">
+            <div class="card-header"><strong>Suivi des stations</strong></div>
+          </h5>
+          <div class="card-body">
+
+            <!-- <form class="form-horizontal" [formGroup]="form">
+                <div class="form-group row" style="margin-top: 10px;">
+
+                    <div class="col-xl-3 col-md-6">
+                        <mat-form-field  appearance="outline">
+                            <mat-label>Date début </mat-label>
+                            <input formControlName="dateDebut"  matInput [matDatepicker]="picker">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                          </mat-form-field>
+
+                  </div>
+                  <div  class="col-xl-3 col-md-6">
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Date Fin</mat-label>
+                        <input matInput  formControlName="dateFin"  [matDatepicker]="picker1">
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                      </mat-form-field>
+
+
+                </div>
+                    <div class="col-xl-3 col-md-6">
+                        <mat-form-field class="example-full-width" appearance="outline">
+                            <mat-label>produit</mat-label>
+                            <input matInput formControlName="produit"   >
+                          </mat-form-field>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <mat-form-field appearance="outline">
+                            <mat-label>type</mat-label>
+                            <mat-select formControlName="type" >
+                                <mat-option  >
+
+       Tous
+     </mat-option>
+                              <mat-option  value='Carburant'>
+
+                               Carburant
+                              </mat-option>
+                              <mat-option  value='Hors Carburant'>
+
+                               Hors Carburant
+                               </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+
+                    <div class="col-xl-3 col-md-6" *ngIf="f.type.value=='Carburant'">
+
+                        <mat-form-field appearance="outline">
+
+                            <mat-label>Famille</mat-label>
+                            <mat-select formControlName="famille" >
+                                <mat-option   >
+
+                              Tous
+                                   </mat-option>
+                              <mat-option *ngFor="let item of ListFamillles" [value]="item.id">
+                                {{item.titre}}
+                              </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                  </div>
+
+
+
+
+                    <div class="col-md-12 text-right">
+                        <button class="btn btn-primary btn-ladda"
+
+                          data-style="expand-left" [ladda]='isLoading' (click)="getListProduits()">
+                          <i class="fa fa-search"> Chercher </i>
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                  <div class="row">
+                    <div class="col-sm-12 text-right">
+                      <a class="btn btn-success btn-ladda" data-style="expand-left" [routerLink]="['/produits/add']">
+                        <i class="fa fa-plus"></i>  Ajouter
+                      </a>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-12 text-right">
+                      <a class="btn btn-success btn-ladda" data-style="expand-left" [routerLink]="['/stations/add']">
+                        <i class="fa fa-plus"></i>  Ajouter
+                      </a>
+                    </div>
+                  </div> -->
+            <div style="overflow-x:auto; margin-top: 20px;">
+              <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover display nowrap"
+                width="100%">
+                <thead >
+                  <tr>
+                    <th>ID station</th>
+                    <th> Nom</th>
+                    <th> Matricule fiscal </th>
+                    <th> Téléphone fixe </th>
+                    <th>GSM </th>
+                    <th>Fax </th>
+                    
+                    <th> Nom/Prénom Gérant </th>
+                    <th> Adresse </th>
+                    <th>Compte Facturation </th>
+                    <th>Email</th>
+                    <!-- <th> Etat</th> -->
+                  
+                  
+              
+                  <th  *ngIf="  modifStation =='modification' && accessModifStation == true">
+                    <i class="icon-pencil"
+                    aria-hidden="true"></i></th>
+              </tr>
+                </thead>
+                <tbody *ngIf="stations?.length != 0" >
+
+                  <tr *ngFor="let item of stations">
+                    <td> {{item.idStation }} </td>
+                    <td>{{item.nom}}</td>
+                    <td>{{item.matriculeFiscal}}</td>
+                    <td>{{item.fixe}}</td>
+                    <td>{{item.gsm}}</td>
+                    <td>{{item.fax}}</td>
+                    
+                    <td>{{item.nomGerant}}</td>
+                    <td>{{item.adresse}}</td>
+                    <td>{{item.compteFacturation}}</td>
+                    <td>{{item.email}}</td>
+                    <!-- <td>{{item.actif}}</td> -->
+                    
+                    
+                    
+                    
+
+                    <td *ngIf="  modifStation =='modification' && accessModifStation == true">
+                      <i class="icon-pencil" aria-hidden="true" [routerLink]="['/stations/add', item.idStation]">
+                      </i>
+                    </td>
+                  </tr>
+                </tbody>
+                <tbody *ngIf="stations?.length == 0">
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

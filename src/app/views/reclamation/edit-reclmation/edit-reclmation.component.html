@@ -1,0 +1,63 @@
+<form class="form-horizontal" [formGroup]="formUpdate" *ngIf="formUpdate">
+    <div class="row" >
+      <div class="col-sm-8">
+        <div class="form-group row">
+          <label class="col-form-label col-sm-4" for="name"> <b>Nom d'utilisateur</b></label>
+          <div class="col-sm-8">
+            <input formControlName="PrenomClient"   disabled type="text" class="form-control" />
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-8">
+        <div class="form-group row">
+          <label class="col-form-label col-sm-4" for="name"> <b>Object</b></label>
+          <div class="col-sm-8">
+            <input formControlName="object" disabled type="text" class="form-control" />
+          </div>
+        </div>
+      </div>
+    </div>
+     
+      <div class="row">
+        <div class="col-sm-8">
+          <div class="form-group row">
+            <label class="col-form-label col-sm-4" for="name"> <b>Message</b></label>
+            <div class="col-sm-8">
+                <textarea formControlName="Message" disabled id="textarea-input" name="textarea-input" rows="9" class="form-control"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+<br>
+      <div class=" col-md-4">
+        <b>Image : </b> 
+        <br>
+      <img [src]="'data:image/png;base64,' + image " class="logo" height="250px" width="650px" alt="Image" />
+      </div>
+<br>
+      <div class="row" *ngIf="roleUser=='ADMIN STAROIL'">
+        <div class="col-sm-8">
+            <div class="form-group row">
+                <label class="col-form-label col-sm-4" for="name"><b>Statut</b></label>
+                <div class="col-sm-8">
+                    <select class="form-control" formControlName="Statut" >
+                        <option value="" selected="selected"> - Choisir - </option>
+
+                          <option value="Nouvelle">Nouvelle</option>
+                          <option value="En cours de traitement">En cours de traitement</option>
+                          <option value="Traitée">Traitée</option>
+
+                    </select>
+                    <div class="help-block text-danger" *ngIf="Statut.errors && Statut.errors.required && submitted">
+                        Ce champ est obligatoire.
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+      
+     </form>

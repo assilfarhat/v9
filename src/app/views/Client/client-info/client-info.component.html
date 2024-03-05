@@ -1,0 +1,188 @@
+<div class="card">
+  <h5 class="card-title">
+    <div class="card-header"><b> Informations du client </b> </div>
+  </h5>
+  <div class="card-body">
+    <div class="row">
+      <div class=" col-md-4" style=" font-size: 14px;">
+        <span> <b>Numéro du compte : </b> {{ client?.numCompte }} </span>
+        <br><span><b>Raison Sociale : </b>{{ client?.raisonSociale }}</span>
+        <br>
+
+        <span style="text-decoration: underline;color:  #2870D8;">
+          <b>Garantie </b>
+        </span>
+        <br>
+        <span> <b>Caution : </b> {{client?.caution}} </span>
+        <br>
+        <span> <b>Assurance : </b> {{client?.assurance }} </span>
+        <br>
+        <span> <b>Autre : </b> {{client?.autre }} </span>
+        <br>
+        <br>
+        <br>
+        <span style="text-decoration: underline;color: #2870D8;">
+          <b>Date échéance garanties </b>
+        </span>
+        <br>
+        <div *ngIf="Autre!=0">
+          <span> <b>Date autre : </b> {{client?.dateAutre |date:'dd/MM/yyyy ' }} </span>
+        </div>
+        <span> <b>Date caution : </b> {{client?.dateCaution |date:'dd/MM/yyyy' }} </span>
+        <br>
+        <br>
+
+        <span> <b>Nombre jours alerte expiration caution : </b> {{client?.nbJrAlerte }} </span>
+        <br>
+        <span> <b> Délai de paiement : </b> {{ client?.echeance}}</span>
+      </div>
+
+
+      <style type="text/css">
+        .tg {
+          border-collapse: collapse;
+          border-spacing: 0;
+        }
+
+        .tg td {
+          border-color: black;
+          border-style: solid;
+          border-width: 1px;
+          font-family: Arial, sans-serif;
+          font-size: 14px;
+          overflow: hidden;
+          padding: 10px 0px;
+          word-break: normal;
+        }
+
+        .tg th {
+          border-color: black;
+          border-style: solid;
+          border-width: 1px;
+          font-family: Arial, sans-serif;
+          font-size: 14px;
+          font-weight: normal;
+          overflow: hidden;
+          padding: 10px 0px;
+          word-break: normal;
+        }
+
+        .tg .tg-zv4m {
+          border-color: #ffffff;
+          text-align: left;
+          vertical-align: top
+        }
+
+        .tg .tg-8jgo {
+          border-color: #ffffff;
+          text-align: left;
+          vertical-align: top
+        }
+      </style>
+      <table class="tg">
+        <thead>
+          <tr>
+            <th class="tg-8jgo" ></th>
+            <th class="tg-8jgo" style="text-decoration: underline;color: #2870D8;"> <b>Dma Globale : </b> {{client?.encoursGlobal | amountmillierpipe }} </th>
+            <th class="tg-8jgo" ></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="tg-zv4m"> <b>Dma PS : </b> {{client?.dmaps | amountpipe }} </td>
+            <td class="tg-8jgo"> <b>Dma PPE : </b> {{client?.dmappe | amountpipe }}</td>
+            <td class="tg-zv4m"> <b>Dma PP : </b>{{client?.dmapp | amountpipe }} </td>
+          </tr>
+          <tr>
+            <td class="tg-8jgo" ></td>
+            <td class="tg-8jgo"  style="text-decoration: underline;color: #2870D8;" > <b> Total encours: </b> {{client?.totalEncours  | amountmillierpipe }} </td>
+            <td class="tg-8jgo" ></td>
+          </tr>
+          <tr>
+            <td class="tg-zv4m"> <b> Encours Ps : </b> {{client?.encoursPs | amountmillierpipe }} </td>
+            <td class="tg-8jgo"> <mark style="background-color:gold;color: black;"> <b>Encours PPE : </b> {{client?.encoursPpe | amountmillierpipe }}</mark> </td>
+            <td class="tg-zv4m"><b>Encours PP : </b> {{client?.encoursPp | amountmillierpipe }} </td>
+          </tr>
+          <tr>
+            <td class="tg-8jgo" ></td>
+            <td class="tg-8jgo"  style="text-decoration: underline;color: #2870D8;" > <b>Solde Carte Globale : </b> {{client?.encoursGlobal | amountmillierpipe }} </td>
+            <td class="tg-8jgo" ></td>
+          </tr>
+          <tr>
+            <td class="tg-zv4m"> <b> Solde carte PS : </b> {{ client?.plafondPs | amountmillierpipe }} &nbsp;&nbsp;</td>
+            <td class="tg-8jgo"> <b>Solde carte PPE : </b> {{client?.soldePPE | amountmillierpipe }} &nbsp;&nbsp;&nbsp;&nbsp; </td>
+            <td class="tg-zv4m"> <b> Solde carte PP : </b> {{client?.soldePP | amountmillierpipe }}</td>
+          </tr>
+          <br>
+        
+          <tr>
+            <td  class="tg-zv4m" colspan="2"> <span><b> Plafond mensuel PS: </b>{{ client?.plafondPs | amountmillierpipe}} </span> </td>
+            <td  class="tg-zv4m" ><span>
+                <b><mark style="background-color:red;color: black;"> Montant autorisé PPE</mark> : </b> {{ montantAutorisePpe | amountmillierpipe }} </span></td>
+              
+          </tr>
+          <tr>
+            <td  class="tg-zv4m"> <span><b> Montant autorisé PS : </b> {{ montantAutorisePS | amountmillierpipe }} </span></td>
+          </tr>
+
+        </tbody>
+      </table>
+      <!-- <div class=" col-md-6">
+        <table>
+          <thead>
+            <tr>
+              <th colspan="2" style="text-decoration: underline;color: #2870D8;"> Dma Globale :
+                {{client?.encoursGlobal }}</th>
+              <th></th>
+              <th></th>
+            </tr>
+            <tr>
+              <td><b>Dma PS : </b> {{client?.dmaps }} </td>
+              <td><b>Dma PPE : </b> {{client?.dmappe }}</td>
+              <td><b>Dma PP : </b>{{client?.dmapp }}</td>
+            </tr>
+            <tr>
+              <th colspan="3" style="text-decoration: underline;color: #2870D8;"> Total encours:
+                {{client?.totalEncours }} </th>
+            </tr>
+            <tr>
+              <td><b> Encours Ps : </b> {{client?.encoursPs }}</td>
+              <td><mark style="background-color:gold;color: black;"> <b>Encours PPE : </b> {{client?.encoursPpe
+                  }}</mark></td>
+              <td> <b>Encours PP : </b> {{client?.encoursPp }}</td>
+            </tr>
+            <tr colspan="3">
+              <th colspan="3" style="text-decoration: underline;color: #2870D8;"> Solde Carte Globale : 
+                {{client?.encoursGlobal }} </th>
+            </tr>
+            <tr>
+              <td> <b> Solde carte PS : </b> {{ client?.plafondPs}} &nbsp;&nbsp;&nbsp;</td>
+              <td> <b> Solde carte PPE : </b> {{client?.soldePPE }} &nbsp;&nbsp;&nbsp; </td>
+              <td> <b> Solde carte PP : </b> {{client?.soldePP }} </td>
+            </tr>
+            <br>
+            <br>
+            <tr>
+              <th>
+                <span><b> Plafond mensuel PS: </b>{{ client?.plafondPs}} </span> &nbsp;&nbsp;&nbsp;
+              </th>
+              <th>
+                <span>
+                  <b><mark style="background-color:red;color: black;"> Montant autorisé PPE</mark> : </b> {{
+                  montantAutorisePpe }} </span>
+                &nbsp;&nbsp;&nbsp;
+              </th>
+              <th> <span><b> Montant autorisé PS : </b> {{ montantAutorisePS }} </span></th>
+            </tr>
+          </thead>
+        </table>
+      </div> -->
+      <br>
+      <br>
+    </div>
+
+    <!-- <div class=" col-md-4">
+            <span><b> Dma PS : </b>{{ client?.dmaps  | amount }}</span>
+            </div> -->
+  </div>
+</div>
