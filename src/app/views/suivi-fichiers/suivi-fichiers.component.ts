@@ -9,7 +9,7 @@ import { Subject } from 'rxjs';
 import { ClientService } from 'app/services/client.service';
 import { BonFilesService } from 'app/services/bon-files.service';
 import { CarteService } from 'app/services/carte.service';
-import { clear } from 'console';
+
 import { TokenService } from 'app/services/token.service';
 
 

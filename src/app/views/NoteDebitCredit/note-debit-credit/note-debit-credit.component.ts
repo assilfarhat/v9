@@ -49,7 +49,7 @@ export class NoteDebitCreditComponent implements OnInit {
   selectedNote: any;
   selectedNoteC: any;
   selectedNoteD: any;
-  station = {}
+  station : any = {}
   listTransaction: any;
   jointure: any;
   TotalTVA: number = 0;

@@ -8,7 +8,7 @@ import { ClientService } from 'app/services/client.service';
 })
 export class ClientInfoComponent implements OnInit {
   @Input() idClient;
-  client
+  client: any;
   montantAutorisePpe: number;
   montantAutorisePS : number;
   @Output() sendNumCompteEvent = new EventEmitter<string>();

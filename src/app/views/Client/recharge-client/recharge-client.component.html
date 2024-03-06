@@ -110,7 +110,7 @@
                 <div  (click)="openFileInput()"   >
                   <input formControlName="imagePJ"  (change)="fileChange($event)" id="name" placeholder="image"  accept=".jpeg, .jpg, .png"type="file" required
                     class="form-control" />
-                    <div class="help-block text-danger" *ngIf="f.imagePJ.errors && f.imagePJ.errors.required && submitted">
+                    <div class="help-block text-danger" *ngIf="f.imagePJ.errors && f.imagePJ.errors.required ">
                       Ce champs est obligatoire
                     </div>
                     <img [src]="imagePreview" width="100%" height="100%" style="margin-top:20px" />

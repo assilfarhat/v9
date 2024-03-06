@@ -15,7 +15,7 @@ import { UpdateProfileComponent } from './views/Account/update-profile/update-pr
 import { AddAffilComponent } from './views/affil/add-affil/add-affil.component';
 import { EditAffilComponent } from './views/affil/edit-affil/edit-affil.component';
 import { CarteAddComponent } from './views/carte/carte-add/carte-add.component';
-import { CarteDetailsComponent } from './views/Carte/carte-details/carte-details.component';
+import { CarteDetailsComponent } from './views/carte/carte-details/carte-details.component';
 import { CarteListComponent } from './views/carte/carte-list/carte-list.component';
 import { CarteSettingsComponent } from './views/carte/carte-settings/carte-settings.component';
 import { ClientAddComponent } from './views/Client/client-add/client-add.component';
@@ -43,7 +43,7 @@ import { AddTpeComponent } from './views/tpe/add-tpe/add-tpe.component';
 import { ListTpeComponent } from './views/tpe/list-tpe/list-tpe.component';
 import { ListOperationComponent } from './views/list-operation/list-operation.component';
 import { HistoriqueRechargeTransfertCarteComponent } from './views/carte/historique-recharge-transfert-carte/historique-recharge-transfert-carte.component';
-import { StationDetailComponent } from './views/station/station-detail/station-detail.component';
+import { StationDetailComponent } from './views/Station/station-detail/station-detail.component';
 import { SuiviTransactionComponent } from './views/suivi-transaction/suivi-transaction.component';
 import { NoteDebitComponent } from './views/NoteDebitCredit/note-debit/note-debit.component';
 import { ReclamationAddComponent } from './views/reclamations/reclamation-add/reclamation-add.component';
@@ -52,7 +52,7 @@ import { PaiementPSComponent } from './views/Client/paiement-ps/paiement-ps.comp
 import { SuiviFichiersComponent } from './views/suivi-fichiers/suivi-fichiers.component';
 import { NoteCreditComponent } from './views/NoteDebitCredit/note-credit/note-credit.component';
 import { NoteDebitCreditComponent } from './views/NoteDebitCredit/note-debit-credit/note-debit-credit.component';
-import { EditPlafondPSComponent } from './views/client/edit-plafond-ps/edit-plafond-ps.component';
+import { EditPlafondPSComponent } from './views/Client/edit-plafond-ps/edit-plafond-ps.component';
 import { DemandePersComponent } from './views/demande-pers/demande-pers.component';
 import { HistoriqueClientComponent } from './views/historique-client/historique-client.component';
 import { SoldeDepartComponent } from './views/Solde-depart/solde-depart/solde-depart.component';

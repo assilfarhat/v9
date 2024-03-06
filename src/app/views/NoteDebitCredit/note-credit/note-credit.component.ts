@@ -44,7 +44,7 @@ export class NoteCreditComponent implements OnInit {
   selectedNote: any;
   selectedNoteC: any;
   selectedNoteD: any;
-  station = {}
+  station :any = {}
   listTransaction: any;
   TotalTVA: number = 0;
   TotalHTVA: number = 0;

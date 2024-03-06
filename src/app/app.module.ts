@@ -66,14 +66,14 @@ import { AppRoutingModule } from './app.routing';
 // Import 3rd party components
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TabsModule } from 'ngx-bootstrap/tabs';
-import { ChartsModule } from 'ng2-charts/ng2-charts';
+//import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { ToasterModule } from 'angular2-toaster';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { DataFilterPipe } from './pipes/datafilter.pipe';
 import { LoginComponent } from './views/Account/login/login.component';
-//import {DataTableModule} from 'angular2-datatable';
+import { DataTableModule } from 'angular2-datatable';
 import { RecoverPasswordComponent } from './views/Account/recover-password/recover-password.component';
 import { DataTablesModule } from 'angular-datatables';
 import { FabComponent } from './components/fab/fab.component';
@@ -126,10 +126,10 @@ import { AddTpeComponent } from './views/tpe/add-tpe/add-tpe.component';
 import { ListTpeComponent } from './views/tpe/list-tpe/list-tpe.component';
 import { UploadFilesComponent } from './views/upload-files/upload-files.component';
 import { ClientDetailsComponent } from './views/Client/client-details/client-details.component';
-import { CarteDetailsComponent } from './views/Carte/carte-details/carte-details.component';
+import { CarteDetailsComponent } from './views/carte/carte-details/carte-details.component';
 import { ListOperationComponent } from './views/list-operation/list-operation.component';
 import { HistoriqueRechargeTransfertCarteComponent } from './views/carte/historique-recharge-transfert-carte/historique-recharge-transfert-carte.component';
-import { StationDetailComponent } from './views/station/station-detail/station-detail.component';
+import { StationDetailComponent } from './views/Station/station-detail/station-detail.component';
 import { SuiviTransactionComponent } from './views/suivi-transaction/suivi-transaction.component';
 import { NoteDebitComponent } from './views/NoteDebitCredit/note-debit/note-debit.component';
 import { ReclamationAddComponent } from './views/reclamations/reclamation-add/reclamation-add.component';
@@ -144,7 +144,7 @@ import { NoteCreditComponent } from './views/NoteDebitCredit/note-credit/note-cr
 import { TransactionsNoteDebitCreditComponent } from './views/NoteDebitCredit/transactions-note-debit-credit/transactions-note-debit-credit.component';
 import { NoteDebitCreditComponent } from './views/NoteDebitCredit/note-debit-credit/note-debit-credit.component';
 import { LongMsgPipe } from './pipes/long-msg.pipe';
-import { EditPlafondPSComponent } from './views/client/edit-plafond-ps/edit-plafond-ps.component';
+import { EditPlafondPSComponent } from './views/Client/edit-plafond-ps/edit-plafond-ps.component';
 import { RepartitionPlafondComponent } from './views/Client/edit-plafond-ps/repartition-plafond/repartition-plafond.component';
 import { DemandePersComponent } from './views/demande-pers/demande-pers.component';
 import { HistoriqueClientComponent } from './views/historique-client/historique-client.component';
@@ -180,17 +180,17 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 
     }),
+    
     BrowserAnimationsModule,
     AppRoutingModule,
     BsDropdownModule.forRoot(),
     TabsModule.forRoot(),
-    ChartsModule,
     ReactiveFormsModule,
     LaddaModule,
     ToasterModule,
     FormsModule,
     HttpClientModule,
-   // DataTableModule,
+    //DataTableModule,
     ModalModule,
     LaddaModule,
     DataTablesModule,
@@ -289,7 +289,7 @@ export function HttpLoaderFactory(http: HttpClient) {
    
     TndFormatPipe, CustomDateFormatPipe
   ],
-  providers: [DatePipe, AmountPipe,AmountpipePipe,AmountmillierpipePipe, AmountmillierpipePipeVirgule,DecimalPipe, AmountInputPipe, {
+  providers: [ToasterService, DatePipe, AmountPipe,AmountpipePipe,AmountmillierpipePipe, AmountmillierpipePipeVirgule,DecimalPipe, AmountInputPipe, {
     provide: LocationStrategy,
     useClass: HashLocationStrategy
   },

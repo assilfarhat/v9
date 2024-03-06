@@ -45,7 +45,7 @@ export class NoteDebitComponent implements OnInit, AfterViewInit {
   selectedNote: any;
   selectedNoteC: any;
   selectedNoteD: any;
-  station = {}
+  station:any = {}
   listTransaction: any;
   TotalTVA: number = 0;
   TotalHTVA: number = 0;
